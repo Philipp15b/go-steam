@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoSteamLanguageGenerator", "GoSteamLanguageGenerator.csproj", "{3D9A7297-6008-47C5-A386-8A0D1AD82035}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamLanguageParser", "..\SteamKit\Resources\SteamLanguageParser\SteamLanguageParser.csproj", "{EBF5B7D5-58F4-4F68-A997-1BE71A72F078}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3D9A7297-6008-47C5-A386-8A0D1AD82035}.Debug|x86.ActiveCfg = Debug|x86
+		{3D9A7297-6008-47C5-A386-8A0D1AD82035}.Debug|x86.Build.0 = Debug|x86
+		{3D9A7297-6008-47C5-A386-8A0D1AD82035}.Release|x86.ActiveCfg = Release|x86
+		{3D9A7297-6008-47C5-A386-8A0D1AD82035}.Release|x86.Build.0 = Release|x86
+		{EBF5B7D5-58F4-4F68-A997-1BE71A72F078}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EBF5B7D5-58F4-4F68-A997-1BE71A72F078}.Debug|x86.Build.0 = Debug|Any CPU
+		{EBF5B7D5-58F4-4F68-A997-1BE71A72F078}.Release|x86.ActiveCfg = Release|Any CPU
+		{EBF5B7D5-58F4-4F68-A997-1BE71A72F078}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = GoSteamLanguageGenerator.csproj
+	EndGlobalSection
+EndGlobal

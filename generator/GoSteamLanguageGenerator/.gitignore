@@ -1,0 +1,4 @@
+*.userprefs
+bin
+obj
+*.cs~
