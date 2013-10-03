@@ -15,22 +15,24 @@ var _ = &json.SyntaxError{}
 var _ = math.Inf
 
 type CMsgProtoBufHeader struct {
-	Steamid          *uint64 `protobuf:"fixed64,1,opt,name=steamid" json:"steamid,omitempty"`
-	ClientSessionid  *int32  `protobuf:"varint,2,opt,name=client_sessionid" json:"client_sessionid,omitempty"`
-	RoutingAppid     *uint32 `protobuf:"varint,3,opt,name=routing_appid" json:"routing_appid,omitempty"`
-	JobidSource      *uint64 `protobuf:"fixed64,10,opt,name=jobid_source,def=18446744073709551615" json:"jobid_source,omitempty"`
-	JobidTarget      *uint64 `protobuf:"fixed64,11,opt,name=jobid_target,def=18446744073709551615" json:"jobid_target,omitempty"`
-	TargetJobName    *string `protobuf:"bytes,12,opt,name=target_job_name" json:"target_job_name,omitempty"`
-	Eresult          *int32  `protobuf:"varint,13,opt,name=eresult,def=2" json:"eresult,omitempty"`
-	ErrorMessage     *string `protobuf:"bytes,14,opt,name=error_message" json:"error_message,omitempty"`
-	Ip               *uint32 `protobuf:"varint,15,opt,name=ip" json:"ip,omitempty"`
-	AuthAccountFlags *uint32 `protobuf:"varint,16,opt,name=auth_account_flags" json:"auth_account_flags,omitempty"`
-	TransportError   *int32  `protobuf:"varint,17,opt,name=transport_error,def=1" json:"transport_error,omitempty"`
-	Messageid        *uint64 `protobuf:"varint,18,opt,name=messageid,def=18446744073709551615" json:"messageid,omitempty"`
-	PublisherGroupId *uint32 `protobuf:"varint,19,opt,name=publisher_group_id" json:"publisher_group_id,omitempty"`
-	Sysid            *uint32 `protobuf:"varint,20,opt,name=sysid" json:"sysid,omitempty"`
-	TraceTag         *uint64 `protobuf:"varint,21,opt,name=trace_tag" json:"trace_tag,omitempty"`
-	XXX_unrecognized []byte  `json:"-"`
+	Steamid           *uint64 `protobuf:"fixed64,1,opt,name=steamid" json:"steamid,omitempty"`
+	ClientSessionid   *int32  `protobuf:"varint,2,opt,name=client_sessionid" json:"client_sessionid,omitempty"`
+	RoutingAppid      *uint32 `protobuf:"varint,3,opt,name=routing_appid" json:"routing_appid,omitempty"`
+	JobidSource       *uint64 `protobuf:"fixed64,10,opt,name=jobid_source,def=18446744073709551615" json:"jobid_source,omitempty"`
+	JobidTarget       *uint64 `protobuf:"fixed64,11,opt,name=jobid_target,def=18446744073709551615" json:"jobid_target,omitempty"`
+	TargetJobName     *string `protobuf:"bytes,12,opt,name=target_job_name" json:"target_job_name,omitempty"`
+	Eresult           *int32  `protobuf:"varint,13,opt,name=eresult,def=2" json:"eresult,omitempty"`
+	ErrorMessage      *string `protobuf:"bytes,14,opt,name=error_message" json:"error_message,omitempty"`
+	Ip                *uint32 `protobuf:"varint,15,opt,name=ip" json:"ip,omitempty"`
+	AuthAccountFlags  *uint32 `protobuf:"varint,16,opt,name=auth_account_flags" json:"auth_account_flags,omitempty"`
+	TokenSource       *uint32 `protobuf:"varint,22,opt,name=token_source" json:"token_source,omitempty"`
+	AdminSpoofingUser *bool   `protobuf:"varint,24,opt,name=admin_spoofing_user" json:"admin_spoofing_user,omitempty"`
+	TransportError    *int32  `protobuf:"varint,17,opt,name=transport_error,def=1" json:"transport_error,omitempty"`
+	Messageid         *uint64 `protobuf:"varint,18,opt,name=messageid,def=18446744073709551615" json:"messageid,omitempty"`
+	PublisherGroupId  *uint32 `protobuf:"varint,19,opt,name=publisher_group_id" json:"publisher_group_id,omitempty"`
+	Sysid             *uint32 `protobuf:"varint,20,opt,name=sysid" json:"sysid,omitempty"`
+	TraceTag          *uint64 `protobuf:"varint,21,opt,name=trace_tag" json:"trace_tag,omitempty"`
+	XXX_unrecognized  []byte  `json:"-"`
 }
 
 func (m *CMsgProtoBufHeader) Reset()         { *m = CMsgProtoBufHeader{} }
@@ -111,6 +113,20 @@ func (m *CMsgProtoBufHeader) GetAuthAccountFlags() uint32 {
 		return *m.AuthAccountFlags
 	}
 	return 0
+}
+
+func (m *CMsgProtoBufHeader) GetTokenSource() uint32 {
+	if m != nil && m.TokenSource != nil {
+		return *m.TokenSource
+	}
+	return 0
+}
+
+func (m *CMsgProtoBufHeader) GetAdminSpoofingUser() bool {
+	if m != nil && m.AdminSpoofingUser != nil {
+		return *m.AdminSpoofingUser
+	}
+	return false
 }
 
 func (m *CMsgProtoBufHeader) GetTransportError() int32 {

@@ -1410,9 +1410,13 @@ const (
 	EMsg_GameServerOutOfDate                                           = 6407
 	EMsg_ClientAuthorizeLocalDeviceRequest                             = 6501
 	EMsg_ClientAuthorizeLocalDevice                                    = 6502
-	EMsg_ClientDeauthorizeLocalDeviceRequest                           = 6503
-	EMsg_ClientDeauthorizeLocalDevice                                  = 6504
+	EMsg_ClientDeauthorizeLocalDeviceRequest                           = 6503 // Deprecated: renamed to ClientDeauthorizeDeviceRequest
+	EMsg_ClientDeauthorizeLocalDevice                                  = 6504 // Deprecated: renamed to ClientDeauthorizeDevice
+	EMsg_ClientDeauthorizeDeviceRequest                                = 6503
+	EMsg_ClientDeauthorizeDevice                                       = 6504
 	EMsg_ClientUseLocalDeviceAuthorizations                            = 6505
+	EMsg_ClientGetAuthorizedDevices                                    = 6506
+	EMsg_ClientGetAuthorizedDevicesResponse                            = 6507
 	EMsg_MMSBase                                                       = 6600
 	EMsg_ClientMMSCreateLobby                                          = 6601
 	EMsg_ClientMMSCreateLobbyResponse                                  = 6602
@@ -1548,6 +1552,7 @@ const (
 	EMsg_ClientUCMEnumerateUserSubscribedFilesWithUpdates              = 7378
 	EMsg_ClientUCMEnumerateUserSubscribedFilesWithUpdatesResponse      = 7379
 	EMsg_UCMPublishedFileContentUpdated                                = 7380
+	EMsg_UCMPublishedFileUpdated                                       = 7381
 	EMsg_FSBase                                                        = 7500
 	EMsg_ClientRichPresenceUpload                                      = 7501
 	EMsg_ClientRichPresenceRequest                                     = 7502
@@ -1715,9 +1720,11 @@ const (
 	EMsg_TestWorkerProcessServiceModuleCallResponse                    = 9203
 	EMsg_ClientGetEmoticonList                                         = 9330
 	EMsg_ClientEmoticonList                                            = 9331
-	EMsg_ClientSharedLicenses                                          = 9400
-	EMsg_ClientSharedLicensesLockStatus                                = 9403
-	EMsg_ClientSharedLicensesStopPlaying                               = 9404
+	EMsg_ClientSharedLibraryBase                                       = 9400
+	EMsg_ClientSharedLicensesLockStatus                                = 9403 // Deprecated
+	EMsg_ClientSharedLicensesStopPlaying                               = 9404 // Deprecated
+	EMsg_ClientSharedLibraryLockStatus                                 = 9405
+	EMsg_ClientSharedLibraryStopPlaying                                = 9406
 )
 
 type EResult int32

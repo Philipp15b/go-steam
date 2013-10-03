@@ -1205,6 +1205,7 @@ func (m *CMsgGSDisconnectNotice) GetSteamId() uint64 {
 
 type CMsgClientGamesPlayed struct {
 	GamesPlayed      []*CMsgClientGamesPlayed_GamePlayed `protobuf:"bytes,1,rep,name=games_played" json:"games_played,omitempty"`
+	ClientOsType     *uint32                             `protobuf:"varint,2,opt,name=client_os_type" json:"client_os_type,omitempty"`
 	XXX_unrecognized []byte                              `json:"-"`
 }
 
@@ -1217,6 +1218,13 @@ func (m *CMsgClientGamesPlayed) GetGamesPlayed() []*CMsgClientGamesPlayed_GamePl
 		return m.GamesPlayed
 	}
 	return nil
+}
+
+func (m *CMsgClientGamesPlayed) GetClientOsType() uint32 {
+	if m != nil && m.ClientOsType != nil {
+		return *m.ClientOsType
+	}
+	return 0
 }
 
 type CMsgClientGamesPlayed_GamePlayed struct {
@@ -2793,7 +2801,6 @@ type CMsgClientFriendProfileInfoResponse struct {
 	CountryName      *string `protobuf:"bytes,7,opt,name=country_name" json:"country_name,omitempty"`
 	Headline         *string `protobuf:"bytes,8,opt,name=headline" json:"headline,omitempty"`
 	Summary          *string `protobuf:"bytes,9,opt,name=summary" json:"summary,omitempty"`
-	RecentPlaytime   *uint32 `protobuf:"varint,10,opt,name=recent_playtime" json:"recent_playtime,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
@@ -2864,13 +2871,6 @@ func (m *CMsgClientFriendProfileInfoResponse) GetSummary() string {
 		return *m.Summary
 	}
 	return ""
-}
-
-func (m *CMsgClientFriendProfileInfoResponse) GetRecentPlaytime() uint32 {
-	if m != nil && m.RecentPlaytime != nil {
-		return *m.RecentPlaytime
-	}
-	return 0
 }
 
 type CMsgClientServerList struct {
@@ -8576,6 +8576,7 @@ type CMsgClientUCMGetPublishedFileDetailsResponse struct {
 	PreviewFileSize  *uint32  `protobuf:"varint,17,opt,name=preview_file_size" json:"preview_file_size,omitempty"`
 	Url              *string  `protobuf:"bytes,18,opt,name=url" json:"url,omitempty"`
 	FileType         *uint32  `protobuf:"varint,19,opt,name=file_type" json:"file_type,omitempty"`
+	AcceptedForUse   *bool    `protobuf:"varint,20,opt,name=accepted_for_use" json:"accepted_for_use,omitempty"`
 	XXX_unrecognized []byte   `json:"-"`
 }
 
@@ -8723,6 +8724,13 @@ func (m *CMsgClientUCMGetPublishedFileDetailsResponse) GetFileType() uint32 {
 		return *m.FileType
 	}
 	return 0
+}
+
+func (m *CMsgClientUCMGetPublishedFileDetailsResponse) GetAcceptedForUse() bool {
+	if m != nil && m.AcceptedForUse != nil {
+		return *m.AcceptedForUse
+	}
+	return false
 }
 
 type CMsgClientUCMDeletePublishedFile struct {
@@ -11832,6 +11840,7 @@ func (m *CMsgClientUpdateAppJobReport) GetStartAppState() uint32 {
 
 type CMsgClientSteam2AppStarted struct {
 	AppId            *uint32 `protobuf:"varint,1,opt,name=app_id" json:"app_id,omitempty"`
+	CommandLine      *string `protobuf:"bytes,2,opt,name=command_line" json:"command_line,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
@@ -11844,6 +11853,13 @@ func (m *CMsgClientSteam2AppStarted) GetAppId() uint32 {
 		return *m.AppId
 	}
 	return 0
+}
+
+func (m *CMsgClientSteam2AppStarted) GetCommandLine() string {
+	if m != nil && m.CommandLine != nil {
+		return *m.CommandLine
+	}
+	return ""
 }
 
 type CMsgClientGetCDNAuthTokenResponse struct {
@@ -14814,44 +14830,50 @@ func (m *CMsgClientAuthorizeLocalDevice) GetAuthedDeviceToken() uint64 {
 	return 0
 }
 
-type CMsgClientDeauthorizeLocalDeviceRequest struct {
-	DeauthorizationAccountId *uint32 `protobuf:"varint,1,opt,name=deauthorization_account_id" json:"deauthorization_account_id,omitempty"`
-	XXX_unrecognized         []byte  `json:"-"`
+type CMsgClientDeauthorizeDeviceRequest struct {
+	DeauthorizationAccountId   *uint32 `protobuf:"varint,1,opt,name=deauthorization_account_id" json:"deauthorization_account_id,omitempty"`
+	DeauthorizationDeviceToken *uint64 `protobuf:"varint,2,opt,name=deauthorization_device_token" json:"deauthorization_device_token,omitempty"`
+	XXX_unrecognized           []byte  `json:"-"`
 }
 
-func (m *CMsgClientDeauthorizeLocalDeviceRequest) Reset() {
-	*m = CMsgClientDeauthorizeLocalDeviceRequest{}
-}
-func (m *CMsgClientDeauthorizeLocalDeviceRequest) String() string { return proto.CompactTextString(m) }
-func (*CMsgClientDeauthorizeLocalDeviceRequest) ProtoMessage()    {}
+func (m *CMsgClientDeauthorizeDeviceRequest) Reset()         { *m = CMsgClientDeauthorizeDeviceRequest{} }
+func (m *CMsgClientDeauthorizeDeviceRequest) String() string { return proto.CompactTextString(m) }
+func (*CMsgClientDeauthorizeDeviceRequest) ProtoMessage()    {}
 
-func (m *CMsgClientDeauthorizeLocalDeviceRequest) GetDeauthorizationAccountId() uint32 {
+func (m *CMsgClientDeauthorizeDeviceRequest) GetDeauthorizationAccountId() uint32 {
 	if m != nil && m.DeauthorizationAccountId != nil {
 		return *m.DeauthorizationAccountId
 	}
 	return 0
 }
 
-type CMsgClientDeauthorizeLocalDevice struct {
+func (m *CMsgClientDeauthorizeDeviceRequest) GetDeauthorizationDeviceToken() uint64 {
+	if m != nil && m.DeauthorizationDeviceToken != nil {
+		return *m.DeauthorizationDeviceToken
+	}
+	return 0
+}
+
+type CMsgClientDeauthorizeDevice struct {
 	Eresult                  *int32  `protobuf:"varint,1,opt,name=eresult,def=2" json:"eresult,omitempty"`
 	DeauthorizationAccountId *uint32 `protobuf:"varint,2,opt,name=deauthorization_account_id" json:"deauthorization_account_id,omitempty"`
 	XXX_unrecognized         []byte  `json:"-"`
 }
 
-func (m *CMsgClientDeauthorizeLocalDevice) Reset()         { *m = CMsgClientDeauthorizeLocalDevice{} }
-func (m *CMsgClientDeauthorizeLocalDevice) String() string { return proto.CompactTextString(m) }
-func (*CMsgClientDeauthorizeLocalDevice) ProtoMessage()    {}
+func (m *CMsgClientDeauthorizeDevice) Reset()         { *m = CMsgClientDeauthorizeDevice{} }
+func (m *CMsgClientDeauthorizeDevice) String() string { return proto.CompactTextString(m) }
+func (*CMsgClientDeauthorizeDevice) ProtoMessage()    {}
 
-const Default_CMsgClientDeauthorizeLocalDevice_Eresult int32 = 2
+const Default_CMsgClientDeauthorizeDevice_Eresult int32 = 2
 
-func (m *CMsgClientDeauthorizeLocalDevice) GetEresult() int32 {
+func (m *CMsgClientDeauthorizeDevice) GetEresult() int32 {
 	if m != nil && m.Eresult != nil {
 		return *m.Eresult
 	}
-	return Default_CMsgClientDeauthorizeLocalDevice_Eresult
+	return Default_CMsgClientDeauthorizeDevice_Eresult
 }
 
-func (m *CMsgClientDeauthorizeLocalDevice) GetDeauthorizationAccountId() uint32 {
+func (m *CMsgClientDeauthorizeDevice) GetDeauthorizationAccountId() uint32 {
 	if m != nil && m.DeauthorizationAccountId != nil {
 		return *m.DeauthorizationAccountId
 	}

@@ -50,6 +50,7 @@ type ParentalSettings struct {
 	Salt                   []byte         `protobuf:"bytes,7,opt,name=salt" json:"salt,omitempty"`
 	Passwordhash           []byte         `protobuf:"bytes,8,opt,name=passwordhash" json:"passwordhash,omitempty"`
 	IsEnabled              *bool          `protobuf:"varint,9,opt,name=is_enabled" json:"is_enabled,omitempty"`
+	EnabledFeatures        *uint32        `protobuf:"varint,10,opt,name=enabled_features" json:"enabled_features,omitempty"`
 	XXX_unrecognized       []byte         `json:"-"`
 }
 
@@ -118,6 +119,13 @@ func (m *ParentalSettings) GetIsEnabled() bool {
 		return *m.IsEnabled
 	}
 	return false
+}
+
+func (m *ParentalSettings) GetEnabledFeatures() uint32 {
+	if m != nil && m.EnabledFeatures != nil {
+		return *m.EnabledFeatures
+	}
+	return 0
 }
 
 type CParental_EnableParentalSettings_Request struct {
