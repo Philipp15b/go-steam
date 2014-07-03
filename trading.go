@@ -31,6 +31,15 @@ type TradeResultEvent struct {
 	RequestId TradeRequestId
 	Response  EEconTradeResponse
 	Other     SteamId
+
+	// Number of days Steam Guard is required to have been active
+	NumDaysSteamGuardRequired uint32
+	// Number of days a new device cannot trade for.
+	NumDaysNewDeviceCooldown uint32
+	// Default number of days one cannot trade after a password reset.
+	DefaultNumDaysPasswordResetProbation uint32
+	// See above.
+	NumDaysPasswordResetProbation uint32
 }
 
 type TradeSessionStartEvent struct {
@@ -54,6 +63,11 @@ func (t *Trading) HandlePacket(packet *Packet) {
 			RequestId: TradeRequestId(msg.GetTradeRequestId()),
 			Response:  EEconTradeResponse(msg.GetResponse()),
 			Other:     SteamId(msg.GetOtherSteamid()),
+
+			NumDaysSteamGuardRequired:            msg.GetSteamguardRequiredDays(),
+			NumDaysNewDeviceCooldown:             msg.GetNewDeviceCooldownDays(),
+			DefaultNumDaysPasswordResetProbation: msg.GetDefaultPasswordResetProbationDays(),
+			NumDaysPasswordResetProbation:        msg.GetPasswordResetProbationDays(),
 		})
 	case EMsg_EconTrading_StartSession:
 		msg := new(CMsgTrading_StartSession)
