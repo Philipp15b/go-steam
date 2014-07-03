@@ -2,18 +2,16 @@
 // source: steammessages_credentials.steamclient.proto
 // DO NOT EDIT!
 
-package internal
+package unified
 
 import proto "code.google.com/p/goprotobuf/proto"
-import json "encoding/json"
 import math "math"
 
 // discarding unused import google_protobuf "code.google.com/p/goprotobuf/protoc-gen-go/descriptor"
 // discarding unused import steammessages_unified_base_steamclient "steammessages_unified_base.steamclient.pb"
 
-// Reference proto, json, and math imports to suppress error if they are not otherwise used.
+// Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
-var _ = &json.SyntaxError{}
 var _ = math.Inf
 
 type CCredentials_TestAvailablePassword_Request struct {
@@ -117,13 +115,15 @@ func (m *CCredentials_GetSteamGuardDetails_Request) GetIpaddress() int32 {
 }
 
 type CCredentials_GetSteamGuardDetails_Response struct {
-	IsSteamguardEnabled                         *bool                                                           `protobuf:"varint,1,opt,name=is_steamguard_enabled" json:"is_steamguard_enabled,omitempty"`
-	TimestampSteamguardEnabled                  *uint32                                                         `protobuf:"fixed32,2,opt,name=timestamp_steamguard_enabled" json:"timestamp_steamguard_enabled,omitempty"`
-	Newauthentication                           []*CCredentials_GetSteamGuardDetails_Response_NewAuthentication `protobuf:"bytes,3,rep,name=newauthentication" json:"newauthentication,omitempty"`
-	MachineNameUserchosen                       *string                                                         `protobuf:"bytes,4,opt,name=machine_name_userchosen" json:"machine_name_userchosen,omitempty"`
-	TimestampMachineSteamguardEnabled           *uint32                                                         `protobuf:"fixed32,5,opt,name=timestamp_machine_steamguard_enabled" json:"timestamp_machine_steamguard_enabled,omitempty"`
-	AuthenticationExistsFromGeolocBeforeMintime *bool                                                           `protobuf:"varint,6,opt,name=authentication_exists_from_geoloc_before_mintime" json:"authentication_exists_from_geoloc_before_mintime,omitempty"`
-	XXX_unrecognized                            []byte                                                          `json:"-"`
+	IsSteamguardEnabled                                   *bool                                                           `protobuf:"varint,1,opt,name=is_steamguard_enabled" json:"is_steamguard_enabled,omitempty"`
+	TimestampSteamguardEnabled                            *uint32                                                         `protobuf:"fixed32,2,opt,name=timestamp_steamguard_enabled" json:"timestamp_steamguard_enabled,omitempty"`
+	DeprecatedNewauthentication                           []*CCredentials_GetSteamGuardDetails_Response_NewAuthentication `protobuf:"bytes,3,rep,name=deprecated_newauthentication" json:"deprecated_newauthentication,omitempty"`
+	DeprecatedMachineNameUserchosen                       *string                                                         `protobuf:"bytes,4,opt,name=deprecated_machine_name_userchosen" json:"deprecated_machine_name_userchosen,omitempty"`
+	DeprecatedTimestampMachineSteamguardEnabled           *uint32                                                         `protobuf:"fixed32,5,opt,name=deprecated_timestamp_machine_steamguard_enabled" json:"deprecated_timestamp_machine_steamguard_enabled,omitempty"`
+	DeprecatedAuthenticationExistsFromGeolocBeforeMintime *bool                                                           `protobuf:"varint,6,opt,name=deprecated_authentication_exists_from_geoloc_before_mintime" json:"deprecated_authentication_exists_from_geoloc_before_mintime,omitempty"`
+	DeprecatedMachineId                                   *uint64                                                         `protobuf:"varint,7,opt,name=deprecated_machine_id" json:"deprecated_machine_id,omitempty"`
+	SessionData                                           []*CCredentials_GetSteamGuardDetails_Response_SessionData       `protobuf:"bytes,8,rep,name=session_data" json:"session_data,omitempty"`
+	XXX_unrecognized                                      []byte                                                          `json:"-"`
 }
 
 func (m *CCredentials_GetSteamGuardDetails_Response) Reset() {
@@ -148,32 +148,46 @@ func (m *CCredentials_GetSteamGuardDetails_Response) GetTimestampSteamguardEnabl
 	return 0
 }
 
-func (m *CCredentials_GetSteamGuardDetails_Response) GetNewauthentication() []*CCredentials_GetSteamGuardDetails_Response_NewAuthentication {
+func (m *CCredentials_GetSteamGuardDetails_Response) GetDeprecatedNewauthentication() []*CCredentials_GetSteamGuardDetails_Response_NewAuthentication {
 	if m != nil {
-		return m.Newauthentication
+		return m.DeprecatedNewauthentication
 	}
 	return nil
 }
 
-func (m *CCredentials_GetSteamGuardDetails_Response) GetMachineNameUserchosen() string {
-	if m != nil && m.MachineNameUserchosen != nil {
-		return *m.MachineNameUserchosen
+func (m *CCredentials_GetSteamGuardDetails_Response) GetDeprecatedMachineNameUserchosen() string {
+	if m != nil && m.DeprecatedMachineNameUserchosen != nil {
+		return *m.DeprecatedMachineNameUserchosen
 	}
 	return ""
 }
 
-func (m *CCredentials_GetSteamGuardDetails_Response) GetTimestampMachineSteamguardEnabled() uint32 {
-	if m != nil && m.TimestampMachineSteamguardEnabled != nil {
-		return *m.TimestampMachineSteamguardEnabled
+func (m *CCredentials_GetSteamGuardDetails_Response) GetDeprecatedTimestampMachineSteamguardEnabled() uint32 {
+	if m != nil && m.DeprecatedTimestampMachineSteamguardEnabled != nil {
+		return *m.DeprecatedTimestampMachineSteamguardEnabled
 	}
 	return 0
 }
 
-func (m *CCredentials_GetSteamGuardDetails_Response) GetAuthenticationExistsFromGeolocBeforeMintime() bool {
-	if m != nil && m.AuthenticationExistsFromGeolocBeforeMintime != nil {
-		return *m.AuthenticationExistsFromGeolocBeforeMintime
+func (m *CCredentials_GetSteamGuardDetails_Response) GetDeprecatedAuthenticationExistsFromGeolocBeforeMintime() bool {
+	if m != nil && m.DeprecatedAuthenticationExistsFromGeolocBeforeMintime != nil {
+		return *m.DeprecatedAuthenticationExistsFromGeolocBeforeMintime
 	}
 	return false
+}
+
+func (m *CCredentials_GetSteamGuardDetails_Response) GetDeprecatedMachineId() uint64 {
+	if m != nil && m.DeprecatedMachineId != nil {
+		return *m.DeprecatedMachineId
+	}
+	return 0
+}
+
+func (m *CCredentials_GetSteamGuardDetails_Response) GetSessionData() []*CCredentials_GetSteamGuardDetails_Response_SessionData {
+	if m != nil {
+		return m.SessionData
+	}
+	return nil
 }
 
 type CCredentials_GetSteamGuardDetails_Response_NewAuthentication struct {
@@ -244,6 +258,66 @@ func (m *CCredentials_GetSteamGuardDetails_Response_NewAuthentication) GetStatus
 	return 0
 }
 
+type CCredentials_GetSteamGuardDetails_Response_SessionData struct {
+	MachineId                                   *uint64                                                         `protobuf:"varint,1,opt,name=machine_id" json:"machine_id,omitempty"`
+	MachineNameUserchosen                       *string                                                         `protobuf:"bytes,2,opt,name=machine_name_userchosen" json:"machine_name_userchosen,omitempty"`
+	TimestampMachineSteamguardEnabled           *uint32                                                         `protobuf:"fixed32,3,opt,name=timestamp_machine_steamguard_enabled" json:"timestamp_machine_steamguard_enabled,omitempty"`
+	AuthenticationExistsFromGeolocBeforeMintime *bool                                                           `protobuf:"varint,4,opt,name=authentication_exists_from_geoloc_before_mintime" json:"authentication_exists_from_geoloc_before_mintime,omitempty"`
+	Newauthentication                           []*CCredentials_GetSteamGuardDetails_Response_NewAuthentication `protobuf:"bytes,5,rep,name=newauthentication" json:"newauthentication,omitempty"`
+	AuthenticationExistsFromSameIpBeforeMintime *bool                                                           `protobuf:"varint,6,opt,name=authentication_exists_from_same_ip_before_mintime" json:"authentication_exists_from_same_ip_before_mintime,omitempty"`
+	XXX_unrecognized                            []byte                                                          `json:"-"`
+}
+
+func (m *CCredentials_GetSteamGuardDetails_Response_SessionData) Reset() {
+	*m = CCredentials_GetSteamGuardDetails_Response_SessionData{}
+}
+func (m *CCredentials_GetSteamGuardDetails_Response_SessionData) String() string {
+	return proto.CompactTextString(m)
+}
+func (*CCredentials_GetSteamGuardDetails_Response_SessionData) ProtoMessage() {}
+
+func (m *CCredentials_GetSteamGuardDetails_Response_SessionData) GetMachineId() uint64 {
+	if m != nil && m.MachineId != nil {
+		return *m.MachineId
+	}
+	return 0
+}
+
+func (m *CCredentials_GetSteamGuardDetails_Response_SessionData) GetMachineNameUserchosen() string {
+	if m != nil && m.MachineNameUserchosen != nil {
+		return *m.MachineNameUserchosen
+	}
+	return ""
+}
+
+func (m *CCredentials_GetSteamGuardDetails_Response_SessionData) GetTimestampMachineSteamguardEnabled() uint32 {
+	if m != nil && m.TimestampMachineSteamguardEnabled != nil {
+		return *m.TimestampMachineSteamguardEnabled
+	}
+	return 0
+}
+
+func (m *CCredentials_GetSteamGuardDetails_Response_SessionData) GetAuthenticationExistsFromGeolocBeforeMintime() bool {
+	if m != nil && m.AuthenticationExistsFromGeolocBeforeMintime != nil {
+		return *m.AuthenticationExistsFromGeolocBeforeMintime
+	}
+	return false
+}
+
+func (m *CCredentials_GetSteamGuardDetails_Response_SessionData) GetNewauthentication() []*CCredentials_GetSteamGuardDetails_Response_NewAuthentication {
+	if m != nil {
+		return m.Newauthentication
+	}
+	return nil
+}
+
+func (m *CCredentials_GetSteamGuardDetails_Response_SessionData) GetAuthenticationExistsFromSameIpBeforeMintime() bool {
+	if m != nil && m.AuthenticationExistsFromSameIpBeforeMintime != nil {
+		return *m.AuthenticationExistsFromSameIpBeforeMintime
+	}
+	return false
+}
+
 type CCredentials_NewMachineNotificationDialog_Request struct {
 	IsApproved       *bool  `protobuf:"varint,1,opt,name=is_approved" json:"is_approved,omitempty"`
 	IsWizardComplete *bool  `protobuf:"varint,2,opt,name=is_wizard_complete" json:"is_wizard_complete,omitempty"`
@@ -286,7 +360,6 @@ func (*CCredentials_NewMachineNotificationDialog_Response) ProtoMessage() {}
 
 type CCredentials_ValidateEmailAddress_Request struct {
 	Stoken           *string `protobuf:"bytes,1,opt,name=stoken" json:"stoken,omitempty"`
-	Appid            *int32  `protobuf:"varint,2,opt,name=appid" json:"appid,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
@@ -301,13 +374,6 @@ func (m *CCredentials_ValidateEmailAddress_Request) GetStoken() string {
 		return *m.Stoken
 	}
 	return ""
-}
-
-func (m *CCredentials_ValidateEmailAddress_Request) GetAppid() int32 {
-	if m != nil && m.Appid != nil {
-		return *m.Appid
-	}
-	return 0
 }
 
 type CCredentials_ValidateEmailAddress_Response struct {
@@ -367,6 +433,7 @@ type CCredentials_SteamGuardPhishingReport_Response struct {
 	CountrynameActual       *string `protobuf:"bytes,6,opt,name=countryname_actual" json:"countryname_actual,omitempty"`
 	StatenameActual         *string `protobuf:"bytes,7,opt,name=statename_actual" json:"statename_actual,omitempty"`
 	CitynameActual          *string `protobuf:"bytes,8,opt,name=cityname_actual" json:"cityname_actual,omitempty"`
+	SteamguardCode          *string `protobuf:"bytes,9,opt,name=steamguard_code" json:"steamguard_code,omitempty"`
 	XXX_unrecognized        []byte  `json:"-"`
 }
 
@@ -434,6 +501,81 @@ func (m *CCredentials_SteamGuardPhishingReport_Response) GetCitynameActual() str
 	return ""
 }
 
+func (m *CCredentials_SteamGuardPhishingReport_Response) GetSteamguardCode() string {
+	if m != nil && m.SteamguardCode != nil {
+		return *m.SteamguardCode
+	}
+	return ""
+}
+
+type CCredentials_AccountLockRequest_Request struct {
+	ParamString      *string `protobuf:"bytes,1,opt,name=param_string" json:"param_string,omitempty"`
+	IpaddressActual  *uint32 `protobuf:"varint,2,opt,name=ipaddress_actual" json:"ipaddress_actual,omitempty"`
+	QueryOnly        *bool   `protobuf:"varint,3,opt,name=query_only" json:"query_only,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CCredentials_AccountLockRequest_Request) Reset() {
+	*m = CCredentials_AccountLockRequest_Request{}
+}
+func (m *CCredentials_AccountLockRequest_Request) String() string { return proto.CompactTextString(m) }
+func (*CCredentials_AccountLockRequest_Request) ProtoMessage()    {}
+
+func (m *CCredentials_AccountLockRequest_Request) GetParamString() string {
+	if m != nil && m.ParamString != nil {
+		return *m.ParamString
+	}
+	return ""
+}
+
+func (m *CCredentials_AccountLockRequest_Request) GetIpaddressActual() uint32 {
+	if m != nil && m.IpaddressActual != nil {
+		return *m.IpaddressActual
+	}
+	return 0
+}
+
+func (m *CCredentials_AccountLockRequest_Request) GetQueryOnly() bool {
+	if m != nil && m.QueryOnly != nil {
+		return *m.QueryOnly
+	}
+	return false
+}
+
+type CCredentials_AccountLockRequest_Response struct {
+	Success              *bool  `protobuf:"varint,1,opt,name=success" json:"success,omitempty"`
+	AccountAlreadyLocked *bool  `protobuf:"varint,2,opt,name=account_already_locked" json:"account_already_locked,omitempty"`
+	ExpiredLink          *bool  `protobuf:"varint,3,opt,name=expired_link" json:"expired_link,omitempty"`
+	XXX_unrecognized     []byte `json:"-"`
+}
+
+func (m *CCredentials_AccountLockRequest_Response) Reset() {
+	*m = CCredentials_AccountLockRequest_Response{}
+}
+func (m *CCredentials_AccountLockRequest_Response) String() string { return proto.CompactTextString(m) }
+func (*CCredentials_AccountLockRequest_Response) ProtoMessage()    {}
+
+func (m *CCredentials_AccountLockRequest_Response) GetSuccess() bool {
+	if m != nil && m.Success != nil {
+		return *m.Success
+	}
+	return false
+}
+
+func (m *CCredentials_AccountLockRequest_Response) GetAccountAlreadyLocked() bool {
+	if m != nil && m.AccountAlreadyLocked != nil {
+		return *m.AccountAlreadyLocked
+	}
+	return false
+}
+
+func (m *CCredentials_AccountLockRequest_Response) GetExpiredLink() bool {
+	if m != nil && m.ExpiredLink != nil {
+		return *m.ExpiredLink
+	}
+	return false
+}
+
 type CCredentials_SteamGuardCode_Request struct {
 	PanicButton      *bool  `protobuf:"varint,1,opt,name=panic_button" json:"panic_button,omitempty"`
 	XXX_unrecognized []byte `json:"-"`
@@ -464,6 +606,92 @@ func (m *CCredentials_SteamGuardCode_Response) GetSteamguardCode() string {
 		return *m.SteamguardCode
 	}
 	return ""
+}
+
+type CCredentials_LastCredentialChangeTime_Request struct {
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *CCredentials_LastCredentialChangeTime_Request) Reset() {
+	*m = CCredentials_LastCredentialChangeTime_Request{}
+}
+func (m *CCredentials_LastCredentialChangeTime_Request) String() string {
+	return proto.CompactTextString(m)
+}
+func (*CCredentials_LastCredentialChangeTime_Request) ProtoMessage() {}
+
+type CCredentials_LastCredentialChangeTime_Response struct {
+	TimestampLastPasswordChange *uint32 `protobuf:"fixed32,1,opt,name=timestamp_last_password_change" json:"timestamp_last_password_change,omitempty"`
+	TimestampLastEmailChange    *uint32 `protobuf:"fixed32,2,opt,name=timestamp_last_email_change" json:"timestamp_last_email_change,omitempty"`
+	TimestampLastPasswordReset  *uint32 `protobuf:"fixed32,3,opt,name=timestamp_last_password_reset" json:"timestamp_last_password_reset,omitempty"`
+	XXX_unrecognized            []byte  `json:"-"`
+}
+
+func (m *CCredentials_LastCredentialChangeTime_Response) Reset() {
+	*m = CCredentials_LastCredentialChangeTime_Response{}
+}
+func (m *CCredentials_LastCredentialChangeTime_Response) String() string {
+	return proto.CompactTextString(m)
+}
+func (*CCredentials_LastCredentialChangeTime_Response) ProtoMessage() {}
+
+func (m *CCredentials_LastCredentialChangeTime_Response) GetTimestampLastPasswordChange() uint32 {
+	if m != nil && m.TimestampLastPasswordChange != nil {
+		return *m.TimestampLastPasswordChange
+	}
+	return 0
+}
+
+func (m *CCredentials_LastCredentialChangeTime_Response) GetTimestampLastEmailChange() uint32 {
+	if m != nil && m.TimestampLastEmailChange != nil {
+		return *m.TimestampLastEmailChange
+	}
+	return 0
+}
+
+func (m *CCredentials_LastCredentialChangeTime_Response) GetTimestampLastPasswordReset() uint32 {
+	if m != nil && m.TimestampLastPasswordReset != nil {
+		return *m.TimestampLastPasswordReset
+	}
+	return 0
+}
+
+type CCredentials_GetAccountAuthSecret_Request struct {
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *CCredentials_GetAccountAuthSecret_Request) Reset() {
+	*m = CCredentials_GetAccountAuthSecret_Request{}
+}
+func (m *CCredentials_GetAccountAuthSecret_Request) String() string { return proto.CompactTextString(m) }
+func (*CCredentials_GetAccountAuthSecret_Request) ProtoMessage()    {}
+
+type CCredentials_GetAccountAuthSecret_Response struct {
+	SecretId         *int32 `protobuf:"varint,1,opt,name=secret_id" json:"secret_id,omitempty"`
+	Secret           []byte `protobuf:"bytes,2,opt,name=secret" json:"secret,omitempty"`
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *CCredentials_GetAccountAuthSecret_Response) Reset() {
+	*m = CCredentials_GetAccountAuthSecret_Response{}
+}
+func (m *CCredentials_GetAccountAuthSecret_Response) String() string {
+	return proto.CompactTextString(m)
+}
+func (*CCredentials_GetAccountAuthSecret_Response) ProtoMessage() {}
+
+func (m *CCredentials_GetAccountAuthSecret_Response) GetSecretId() int32 {
+	if m != nil && m.SecretId != nil {
+		return *m.SecretId
+	}
+	return 0
+}
+
+func (m *CCredentials_GetAccountAuthSecret_Response) GetSecret() []byte {
+	if m != nil {
+		return m.Secret
+	}
+	return nil
 }
 
 type CCredentials_SteamGuardLoginAttempt_Notification struct {

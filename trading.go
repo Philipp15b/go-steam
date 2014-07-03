@@ -3,6 +3,8 @@ package steam
 import (
 	"code.google.com/p/goprotobuf/proto"
 	. "github.com/Philipp15b/go-steam/internal"
+	. "github.com/Philipp15b/go-steam/internal/protobuf"
+	. "github.com/Philipp15b/go-steam/internal/steamlang"
 	. "github.com/Philipp15b/go-steam/steamid"
 )
 
@@ -35,7 +37,7 @@ type TradeSessionStartEvent struct {
 	Other SteamId
 }
 
-func (t *Trading) HandlePacket(packet *PacketMsg) {
+func (t *Trading) HandlePacket(packet *Packet) {
 	switch packet.EMsg {
 	case EMsg_EconTrading_InitiateTradeProposed:
 		msg := new(CMsgTrading_InitiateTradeRequest)

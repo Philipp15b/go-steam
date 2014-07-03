@@ -4,12 +4,14 @@ import (
 	"bytes"
 	"code.google.com/p/goprotobuf/proto"
 	"encoding/binary"
+	"fmt"
+	. "github.com/Philipp15b/go-steam/internal/steamlang"
 )
 
 // TODO: Headers are always deserialized twice.
 
-// Represents an incoming, partially unread packet message.
-type PacketMsg struct {
+// Represents an incoming, partially unread message.
+type Packet struct {
 	EMsg        EMsg
 	IsProto     bool
 	TargetJobId JobId
@@ -17,7 +19,7 @@ type PacketMsg struct {
 	Data        []byte
 }
 
-func NewPacketMsg(data []byte) (*PacketMsg, error) {
+func NewPacket(data []byte) (*Packet, error) {
 	var rawEMsg uint32
 	err := binary.Read(bytes.NewReader(data), binary.LittleEndian, &rawEMsg)
 	if err != nil {
@@ -32,7 +34,7 @@ func NewPacketMsg(data []byte) (*PacketMsg, error) {
 		if err != nil {
 			return nil, err
 		}
-		return &PacketMsg{
+		return &Packet{
 			EMsg:        eMsg,
 			IsProto:     false,
 			TargetJobId: JobId(header.TargetJobID),
@@ -46,7 +48,7 @@ func NewPacketMsg(data []byte) (*PacketMsg, error) {
 		if err != nil {
 			return nil, err
 		}
-		return &PacketMsg{
+		return &Packet{
 			EMsg:        eMsg,
 			IsProto:     true,
 			TargetJobId: JobId(header.Proto.GetJobidTarget()),
@@ -60,7 +62,7 @@ func NewPacketMsg(data []byte) (*PacketMsg, error) {
 		if err != nil {
 			return nil, err
 		}
-		return &PacketMsg{
+		return &Packet{
 			EMsg:        eMsg,
 			IsProto:     false,
 			TargetJobId: JobId(header.TargetJobID),
@@ -70,7 +72,11 @@ func NewPacketMsg(data []byte) (*PacketMsg, error) {
 	}
 }
 
-func (p *PacketMsg) ReadProtoMsg(body proto.Message) *ClientMsgProtobuf {
+func (p *Packet) String() string {
+	return fmt.Sprintf("Packet{EMsg = %v, Proto = %v, Len = %v, TargetJobId = %v, SourceJobId = %v}", p.EMsg, p.IsProto, len(p.Data), p.TargetJobId, p.SourceJobId)
+}
+
+func (p *Packet) ReadProtoMsg(body proto.Message) *ClientMsgProtobuf {
 	header := NewMsgHdrProtoBuf()
 	buf := bytes.NewBuffer(p.Data)
 	header.Deserialize(buf)
@@ -81,7 +87,7 @@ func (p *PacketMsg) ReadProtoMsg(body proto.Message) *ClientMsgProtobuf {
 	}
 }
 
-func (p *PacketMsg) ReadClientMsg(body MessageBody) *ClientMsg {
+func (p *Packet) ReadClientMsg(body MessageBody) *ClientMsg {
 	header := NewExtendedClientMsgHdr()
 	buf := bytes.NewReader(p.Data)
 	header.Deserialize(buf)
@@ -95,7 +101,7 @@ func (p *PacketMsg) ReadClientMsg(body MessageBody) *ClientMsg {
 	}
 }
 
-func (p *PacketMsg) ReadMsg(body MessageBody) *Msg {
+func (p *Packet) ReadMsg(body MessageBody) *Msg {
 	header := NewMsgHdr()
 	buf := bytes.NewReader(p.Data)
 	header.Deserialize(buf)

@@ -1,8 +1,10 @@
-package internal
+package gamecoordinator
 
 import (
-	"bytes"
 	"code.google.com/p/goprotobuf/proto"
+	. "github.com/Philipp15b/go-steam/internal"
+	. "github.com/Philipp15b/go-steam/internal/protobuf"
+	. "github.com/Philipp15b/go-steam/internal/steamlang"
 	"io"
 )
 
@@ -119,56 +121,4 @@ func (g *GCMsg) Serialize(w io.Writer) error {
 	}
 	err = g.Body.Serialize(w)
 	return err
-}
-
-// An incoming, partially unread message from the Game Coordinator.
-type GCPacketMsg struct {
-	AppId       uint32
-	MsgType     uint32
-	IsProto     bool
-	GCName      string
-	Body        []byte
-	TargetJobId JobId
-}
-
-func NewGCPacketMsg(wrapper *CMsgGCClient) (*GCPacketMsg, error) {
-	packet := &GCPacketMsg{
-		AppId:   wrapper.GetAppid(),
-		MsgType: wrapper.GetMsgtype(),
-		GCName:  wrapper.GetGcname(),
-	}
-
-	r := bytes.NewReader(wrapper.GetPayload())
-	if IsProto(wrapper.GetMsgtype()) {
-		packet.MsgType = packet.MsgType & eMsgMask
-		packet.IsProto = true
-
-		header := NewMsgGCHdrProtoBuf()
-		err := header.Deserialize(r)
-		if err != nil {
-			return nil, err
-		}
-		packet.TargetJobId = JobId(header.Proto.GetJobidTarget())
-	} else {
-		header := NewMsgGCHdr()
-		err := header.Deserialize(r)
-		if err != nil {
-			return nil, err
-		}
-		packet.TargetJobId = JobId(header.TargetJobID)
-	}
-
-	body := make([]byte, r.Len())
-	r.Read(body)
-	packet.Body = body
-
-	return packet, nil
-}
-
-func (g *GCPacketMsg) ReadProtoMsg(body proto.Message) {
-	proto.Unmarshal(g.Body, body)
-}
-
-func (g *GCPacketMsg) ReadMsg(body MessageBody) {
-	body.Deserialize(bytes.NewReader(g.Body))
 }

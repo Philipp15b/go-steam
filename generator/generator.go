@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"go/parser"
 	"go/token"
+	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -43,7 +44,7 @@ func main() {
 
 func clean() {
 	print("# Cleaning")
-	protos, _ := filepath.Glob("../internal/*.pb.go")
+	protos, _ := filepath.Glob("../internal/**/*.pb.go")
 	for _, proto := range protos {
 		err := os.Remove(proto)
 		if err != nil {
@@ -51,8 +52,8 @@ func clean() {
 		}
 	}
 
-	os.Remove("../internal/steam_language_enums.go")
-	os.Remove("../internal/steam_language_internal.go")
+	os.Remove("../internal/steamlang/enums.go")
+	os.Remove("../internal/steamlang/messages.go")
 }
 
 func buildSteamLanguage(debug bool) {
@@ -63,107 +64,193 @@ func buildSteamLanguage(debug bool) {
 		d = "debug"
 	}
 	if runtime.GOOS != "windows" {
-		execute("mono", exePath, "./SteamKit", "../internal", d)
+		execute("mono", exePath, "./SteamKit", "../internal/steamlang", d)
 	} else {
-		execute(exePath, "./SteamKit", "../internal", d)
+		execute(exePath, "./SteamKit", "../internal/steamlang", d)
 	}
-	execute("gofmt", "-w", "../internal/steam_language_enums.go", "../internal/steam_language_internal.go")
+	execute("gofmt", "-w", "../internal/steamlang/enums.go", "../internal/steamlang/messages.go")
 }
 
-var pkgRegex = regexp.MustCompile("(package \\w+)")
-
 func buildProto() {
-	print("# Building Proto")
+	print("# Building Protobufs")
 
-	print("## Compiling")
-	protobufs := "SteamKit/Resources/Protobufs"
-	protos, err := filepath.Glob(protobufs + "/steamclient/*.proto")
+	base := "SteamKit/Resources/Protobufs"
+	outDir := "../internal/protobuf"
+	os.MkdirAll(outDir, os.ModePerm)
+	for proto, out := range protoFiles {
+		full := filepath.Join(outDir, out)
+		compileProto(base, proto, full)
+		fixProto(full)
+	}
+}
+
+// Maps the proto files to their target files.
+// See `SteamKit/Resources/Protobufs/steamclient/generate-base.bat` for reference.
+var protoFiles = map[string]string{
+	"steammessages_base.proto":   "base.pb.go",
+	"encrypted_app_ticket.proto": "app_ticket.pb.go",
+
+	"steammessages_clientserver.proto":   "client_server.pb.go",
+	"steammessages_clientserver_2.proto": "client_server_2.pb.go",
+
+	"content_manifest.proto": "content_manifest.pb.go",
+
+	"iclient_objects.proto": "iclient_objects.pb.go",
+
+	"steammessages_unified_base.steamclient.proto":      "unified/base.pb.go",
+	"steammessages_cloud.steamclient.proto":             "unified/cloud.pb.go",
+	"steammessages_credentials.steamclient.proto":       "unified/credentials.pb.go",
+	"steammessages_deviceauth.steamclient.proto":        "unified/deviceauth.pb.go",
+	"steammessages_gamenotifications.steamclient.proto": "unified/gamenotifications.pb.go",
+	"steammessages_offline.steamclient.proto":           "unified/offline.pb.go",
+	"steammessages_parental.steamclient.proto":          "unified/parental.pb.go",
+	"steammessages_partnerapps.steamclient.proto":       "unified/partnerapps.pb.go",
+	"steammessages_player.steamclient.proto":            "unified/player.pb.go",
+	"steammessages_publishedfile.steamclient.proto":     "unified/publishedfile.pb.go",
+}
+
+func compileProto(base, proto, target string) {
+	outDir, _ := filepath.Split(target)
+	err := os.MkdirAll(outDir, os.ModePerm)
+	if err != nil {
+		panic(err)
+	}
+	execute("protoc", "--go_out="+outDir, "-I="+base+"/steamclient", "-I="+base, filepath.Join(base, "steamclient", proto))
+	out := strings.Replace(filepath.Join(outDir, proto), ".proto", ".pb.go", 1)
+	err = forceRename(out, target)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func forceRename(from, to string) error {
+	if from != to {
+		os.Remove(to)
+	}
+	return os.Rename(from, to)
+}
+
+var pkgRegex = regexp.MustCompile(`(package \w+)`)
+var pkgCommentRegex = regexp.MustCompile(`(?s)(\/\*.*?\*\/\n)package`)
+
+func fixProto(path string) {
+	// goprotobuf is really bad at dependencies, so we must fix them manually...
+	// It tries to load each dependency of a file as a seperate package (but in a very, very wrong way).
+	// Because we want some files in the same package, we'll remove those imports to local files.
+
+	file, err := ioutil.ReadFile(path)
 	if err != nil {
 		panic(err)
 	}
 
-	filteredProtos := make([]string, 0, 0)
-	for _, proto := range protos {
-		if strings.Contains(proto, "unified") {
-			continue
-		}
-		filteredProtos = append(filteredProtos, proto)
-	}
-	protos = filteredProtos
-
-	for _, proto := range protos {
-		execute("protoc", "--go_out=../internal", "-I="+protobufs+"/steamclient", "-I="+protobufs, proto)
+	fset := token.NewFileSet()
+	f, err := parser.ParseFile(fset, path, file, parser.ImportsOnly)
+	if err != nil {
+		panic("Error parsing " + path + ": " + err.Error())
 	}
 
-	goprotos, _ := filepath.Glob("../internal/*.pb.go")
-
-	print("## Fixing imports")
-	// goprotobuf is really bad at dependencies, so we must fix them manually...
-	// It tries to load each dependency of a file as a seperate package (but in a very, very wrong way).
-	// Because we want each file in the same package, we'll remove all references to
-	// imported protobuf packages.
-	for _, proto := range goprotos {
-		file, err := ioutil.ReadFile(proto)
-		if err != nil {
-			panic(err)
-		}
-
-		// find the protobuf imports by parsing the file
-		fset := token.NewFileSet()
-		f, err := parser.ParseFile(fset, proto, file, parser.ImportsOnly)
-		if err != nil {
-			panic("Error parsing " + proto + ": " + err.Error())
-		}
-
-		importsToRemove := make([]string, 0, 0)
-		for _, i := range f.Imports {
-			// google's protobuf stays in a seperate package
-			if i.Name.Name == "google_protobuf" {
-				continue
-			}
-			// only search for .pb imports
-			if matched, _ := filepath.Match("*.pb", strings.Replace(i.Path.Value, "\"", "", -1)); matched {
-				importsToRemove = append(importsToRemove, i.Name.Name)
-			}
-		}
-
-		for _, itr := range importsToRemove {
-			// remove the package name from all types
-			file = bytes.Replace(file, []byte(itr+"."), []byte{}, -1)
-			// and remove the import itself
-			file = bytes.Replace(file, []byte("import "+itr+" \"pb\"\n"), []byte{}, -1)
-		}
-
-		// make the package local
-		file = pkgRegex.ReplaceAll(file, []byte("package internal"))
-
-		// fix the google dependency
-		// we just reuse the one from protoc-gen-go
-		file = bytes.Replace(file, []byte("google/protobuf/descriptor.pb"), []byte("code.google.com/p/goprotobuf/protoc-gen-go/descriptor"), -1)
-
-		err = ioutil.WriteFile(proto, file, 0666)
-		if err != nil {
-			panic(err)
+	importsToRemove := make([]string, 0)
+	for _, i := range f.Imports {
+		// We remove all imports that include ".pb". This assumes unified and protobuf packages don't share anything.
+		if i.Name.Name != "google_protobuf" && strings.Contains(i.Path.Value, ".pb") {
+			importsToRemove = append(importsToRemove, i.Name.Name)
 		}
 	}
 
-	print("## Formatting")
-	for _, proto := range goprotos {
-		execute("gofmt", "-w", proto)
+	for _, itr := range importsToRemove {
+		// remove the package name from all types
+		file = bytes.Replace(file, []byte(itr+"."), []byte{}, -1)
+		// and remove the import itself
+		file = bytes.Replace(file, []byte("import "+itr+" \"pb\"\n"), []byte{}, -1)
 	}
+
+	// remove the package comment because it just includes a list of all messages and
+	// creates collisions between the others.
+	file = cutAllSubmatch(pkgCommentRegex, file, 1)
+
+	// fix the package name
+	file = pkgRegex.ReplaceAll(file, []byte("package "+inferPackageName(path)))
+
+	// fix the google dependency;
+	// we just reuse the one from protoc-gen-go
+	file = bytes.Replace(file, []byte("google/protobuf/descriptor.pb"), []byte("code.google.com/p/goprotobuf/protoc-gen-go/descriptor"), -1)
+
+	err = ioutil.WriteFile(path, file, os.ModePerm)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func inferPackageName(path string) string {
+	pieces := strings.Split(path, string(filepath.Separator))
+	return pieces[len(pieces)-2]
+}
+
+func cutAllSubmatch(r *regexp.Regexp, b []byte, n int) []byte {
+	i := r.FindSubmatchIndex(b)
+	return bytesCut(b, i[2*n], i[2*n+1])
+}
+
+// Removes the given section from the byte array
+func bytesCut(b []byte, from, to int) []byte {
+	buf := new(bytes.Buffer)
+	buf.Write(b[:from])
+	buf.Write(b[to:])
+	return buf.Bytes()
 }
 
 func print(text string) { os.Stdout.WriteString(text + "\n") }
 
 func printerr(text string) { os.Stderr.WriteString(text + "\n") }
 
+// This writer appends a "> " after every newline so that the outpout appears quoted.
+type QuotedWriter struct {
+	w       io.Writer
+	started bool
+}
+
+func NewQuotedWriter(w io.Writer) *QuotedWriter {
+	return &QuotedWriter{w, false}
+}
+
+func (w *QuotedWriter) Write(p []byte) (n int, err error) {
+	if !w.started {
+		_, err = w.w.Write([]byte("> "))
+		if err != nil {
+			return n, err
+		}
+		w.started = true
+	}
+
+	for i, c := range p {
+		if c == '\n' {
+			nw, err := w.w.Write(p[n : i+1])
+			n += nw
+			if err != nil {
+				return n, err
+			}
+
+			_, err = w.w.Write([]byte("> "))
+			if err != nil {
+				return n, err
+			}
+		}
+	}
+	if n != len(p) {
+		nw, err := w.w.Write(p[n:len(p)])
+		n += nw
+		return n, err
+	}
+	return
+}
+
 func execute(command string, args ...string) {
 	if printCommands {
 		print(command + " " + strings.Join(args, " "))
 	}
 	cmd := exec.Command(command, args...)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	cmd.Stdout = NewQuotedWriter(os.Stdout)
+	cmd.Stderr = NewQuotedWriter(os.Stderr)
 	err := cmd.Run()
 	if err != nil {
 		printerr(err.Error())

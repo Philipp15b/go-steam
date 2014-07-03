@@ -40,8 +40,10 @@ namespace GoSteamLanguageGenerator
 			codeGen.EmitEnums(rootEnumNode, enumBuilder);
 			codeGen.EmitClasses(rootMessageNode, messageBuilder);
 
-			string outputEnumFile = Path.Combine(outputPath, "steam_language_enums.go");
-			string outputMessageFile = Path.Combine(outputPath, "steam_language_internal.go");
+			string outputEnumFile = Path.Combine(outputPath, "enums.go");
+			string outputMessageFile = Path.Combine(outputPath, "messages.go");
+
+            Directory.CreateDirectory(Path.GetDirectoryName(outputEnumFile));
 
 			File.WriteAllText(Path.Combine(steamKitPath, outputEnumFile), enumBuilder.ToString());
 			File.WriteAllText(Path.Combine(steamKitPath, outputMessageFile), messageBuilder.ToString());

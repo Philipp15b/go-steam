@@ -1,13 +1,15 @@
 package steam
 
 import (
-	"archive/zip"
 	"bytes"
+	"compress/gzip"
 	"crypto/rand"
 	"encoding/binary"
 	"fmt"
 	"github.com/Philipp15b/go-steam/cryptoutil"
 	. "github.com/Philipp15b/go-steam/internal"
+	. "github.com/Philipp15b/go-steam/internal/protobuf"
+	. "github.com/Philipp15b/go-steam/internal/steamlang"
 	. "github.com/Philipp15b/go-steam/steamid"
 	"hash/crc32"
 	"io/ioutil"
@@ -21,7 +23,7 @@ import (
 // Always poll events from the channel returned by Events() or receiving messages will stop.
 // All access, unless otherwise noted, should be threadsafe.
 //
-// When a FatalError is emitted, the connection is automatically closed. The same client can be used to reconnect.
+// When a FatalErrorEvent is emitted, the connection is automatically closed. The same client can be used to reconnect.
 // Other errors don't have any effect.
 type Client struct {
 	Auth    *Auth
@@ -35,8 +37,9 @@ type Client struct {
 
 	currentJobId uint64
 
-	events   chan interface{}
-	handlers []PacketHandler
+	events        chan interface{}
+	handlers      []PacketHandler
+	handlersMutex sync.RWMutex
 
 	tempSessionKey []byte
 
@@ -50,7 +53,7 @@ type Client struct {
 }
 
 type PacketHandler interface {
-	HandlePacket(*PacketMsg)
+	HandlePacket(*Packet)
 }
 
 func NewClient() *Client {
@@ -81,13 +84,13 @@ func (c *Client) Emit(event interface{}) {
 	c.events <- event
 }
 
-// When this error is emitted by the Client, the connection is automatically closed.
-// This may be a network error, for example.
-type FatalError error
+// When this event is emitted by the Client, the connection is automatically closed.
+// This may be caused by a network error, for example.
+type FatalErrorEvent error
 
-// Emits a FatalError formatted with fmt.Errorf and disconnects.
+// Emits a FatalErrorEvent formatted with fmt.Errorf and disconnects.
 func (c *Client) Fatalf(format string, a ...interface{}) {
-	c.Emit(FatalError(fmt.Errorf(format, a...)))
+	c.Emit(FatalErrorEvent(fmt.Errorf(format, a...)))
 	c.Disconnect()
 }
 
@@ -98,6 +101,8 @@ func (c *Client) Errorf(format string, a ...interface{}) {
 
 // Registers a PacketHandler that receives all incoming packets.
 func (c *Client) RegisterPacketHandler(handler PacketHandler) {
+	c.handlersMutex.Lock()
+	defer c.handlersMutex.Unlock()
 	c.handlers = append(c.handlers, handler)
 }
 
@@ -119,8 +124,11 @@ func (c *Client) Connected() bool {
 	return c.conn != nil
 }
 
-// Connects to a random server of the Steam network and returns the server.
+// Connects to a random server of the included list of connection managers and returns the address.
 // If this client is already connected, it is disconnected first.
+//
+// You will receive a ServerListEvent after logging in which contains a new list of servers of which you
+// should choose one yourself and connect with ConnectTo since the included list may not always be up to date.
 func (c *Client) Connect() string {
 	server := getRandomCM()
 	c.ConnectTo(server)
@@ -238,7 +246,7 @@ func (c *Client) heartbeatLoop(seconds time.Duration) {
 	c.heartbeat = nil
 }
 
-func (c *Client) handlePacket(packet *PacketMsg) {
+func (c *Client) handlePacket(packet *Packet) {
 	switch packet.EMsg {
 	case EMsg_ChannelEncryptRequest:
 		c.handleChannelEncryptRequest(packet)
@@ -247,12 +255,15 @@ func (c *Client) handlePacket(packet *PacketMsg) {
 	case EMsg_Multi:
 		c.handleMulti(packet)
 	}
+
+	c.handlersMutex.RLock()
+	defer c.handlersMutex.RUnlock()
 	for _, handler := range c.handlers {
 		handler.HandlePacket(packet)
 	}
 }
 
-func (c *Client) handleChannelEncryptRequest(packet *PacketMsg) {
+func (c *Client) handleChannelEncryptRequest(packet *Packet) {
 	body := NewMsgChannelEncryptRequest()
 	packet.ReadMsg(body)
 
@@ -277,7 +288,7 @@ func (c *Client) handleChannelEncryptRequest(packet *PacketMsg) {
 
 type ConnectedEvent struct{}
 
-func (c *Client) handleChannelEncryptResult(packet *PacketMsg) {
+func (c *Client) handleChannelEncryptResult(packet *Packet) {
 	body := NewMsgChannelEncryptResult()
 	packet.ReadMsg(body)
 
@@ -291,30 +302,24 @@ func (c *Client) handleChannelEncryptResult(packet *PacketMsg) {
 	c.Emit(new(ConnectedEvent))
 }
 
-func (c *Client) handleMulti(packet *PacketMsg) {
+func (c *Client) handleMulti(packet *Packet) {
 	body := new(CMsgMulti)
 	packet.ReadProtoMsg(body)
 
 	payload := body.GetMessageBody()
 
 	if body.GetSizeUnzipped() > 0 {
-		archive, err := zip.NewReader(bytes.NewReader(payload), int64(len(payload)))
+		r, err := gzip.NewReader(bytes.NewReader(payload))
 		if err != nil {
-			panic(err)
+			c.Errorf("handleMulti: Error while decompressing: %v", err)
+			return
 		}
 
-		for _, f := range archive.File {
-			if f.Name == "z" {
-				r, _ := f.Open()
-				payload, _ = ioutil.ReadAll(r)
-				goto okay
-			}
+		payload, err = ioutil.ReadAll(r)
+		if err != nil {
+			c.Errorf("handleMulti: Error while decompressing: %v", err)
+			return
 		}
-
-		c.Errorf("Invalid Multi packet %v: Could not find 'z' file!", packet)
-		return
-
-	okay: // jump over error
 	}
 
 	pr := bytes.NewReader(payload)
@@ -323,7 +328,7 @@ func (c *Client) handleMulti(packet *PacketMsg) {
 		binary.Read(pr, binary.LittleEndian, &length)
 		packetData := make([]byte, length)
 		pr.Read(packetData)
-		p, err := NewPacketMsg(packetData)
+		p, err := NewPacket(packetData)
 		if err != nil {
 			c.Errorf("Error reading packet in Multi msg %v: %v", packet, err)
 			continue

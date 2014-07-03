@@ -1,5 +1,5 @@
 /*
-This package provides access to Steam as if it was an actual Steam client.
+This package allows you to automate actions on Valve's Steam network. It is a Go port of SteamKit.
 
 To login, you'll have to create a new Client first. Then connect to the Steam network
 and wait for a ConnectedCallback. This means you can now call the Login method in the Auth module
@@ -15,14 +15,19 @@ received the LoggedOnEvent, you should set your persona state to online to recei
 		case *steam.MachineAuthUpdateEvent:
 			ioutil.WriteFile("sentry", e.Hash, 0666)
 		case *steam.LoggedOnEvent:
-			client.Social.SetPersonaState(internal.EPersonaState_Online)
-		case steam.FatalError:
+			client.Social.SetPersonaState(steamlang.EPersonaState_Online)
+		case steam.FatalErrorEvent:
 			client.Connect() // please do some real error handling here
 			log.Print(e)
 		case error:
 			log.Print(e)
 		}
 	}
+
+Events
+
+go-steam emits events that can be read via Client.Events(). Although the channel has the type interface{},
+only types from this package ending with "Event" will be emitted. Additionally objects of type "error" will be emitted in case of an error.
 
 */
 package steam

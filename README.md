@@ -14,9 +14,9 @@ You can view the documentation with the `godoc` tool or
 
 When updating, always check the [`CHANGELOG.md`](CHANGELOG.md) first.
 
-## Updating go-steam for a new SteamKit version
+## Updating go-steam to a new SteamKit version
 
-To update go-steam for a new version of SteamKit, do the following:
+To update go-steam to a new version of SteamKit, do the following:
 
 	go get code.google.com/p/goprotobuf/protoc-gen-go
     git submodule init && git submodule update
@@ -24,12 +24,12 @@ To update go-steam for a new version of SteamKit, do the following:
     go run generator.go clean proto steamlang
 
 Replace `steamlang` with `steamlang:nodebug` if you want to exclude the `String() string` methods
-for the generated SteamLanguage enums.
+for the generated SteamLanguage enums. They make debugging much easier, but do increase binary size a bit.
 
 Make sure that `protoc-gen-go`/`$GOPATH/bin` is in your `$PATH`.
-On Windows you also have to have [.NET Framework](https://www.microsoft.com/net/downloads) installed,
-on other operating systems [mono](http://www.go-mono.com/mono-downloads/download.html)
-is used (must be in `$PATH` too).
+
+To compile the Steam Langugae files, you also need the [.NET Framework](https://www.microsoft.com/net/downloads)
+on Windows or [mono](http://www.go-mono.com/mono-downloads/download.html) on other operating systems.
 
 Apply the protocol changes where necessary.
 

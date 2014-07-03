@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"code.google.com/p/goprotobuf/proto"
 	. "github.com/Philipp15b/go-steam/internal"
+	. "github.com/Philipp15b/go-steam/internal/protobuf"
+	. "github.com/Philipp15b/go-steam/internal/steamlang"
 	. "github.com/Philipp15b/go-steam/steamid"
 	"sync"
 )
@@ -34,7 +36,7 @@ func newSocial(client *Client) *Social {
 	}
 }
 
-func (s *Social) HandlePacket(packet *PacketMsg) {
+func (s *Social) HandlePacket(packet *Packet) {
 	switch packet.EMsg {
 	case EMsg_ClientFriendsList:
 		s.handleFriendsList(packet)
@@ -102,7 +104,7 @@ func (f *FriendStateEvent) IsMember() bool {
 	return f.Relationship == EClanRelationship_Member
 }
 
-func (s *Social) handleFriendsList(packet *PacketMsg) {
+func (s *Social) handleFriendsList(packet *Packet) {
 	list := new(CMsgClientFriendsList)
 	packet.ReadProtoMsg(list)
 
@@ -156,7 +158,7 @@ func (c *ChatMsgEvent) IsMessage() bool {
 	return c.Type == EChatEntryType_ChatMsg
 }
 
-func (s *Social) handleFriendMsg(packet *PacketMsg) {
+func (s *Social) handleFriendMsg(packet *Packet) {
 	body := new(CMsgClientFriendMsgIncoming)
 	packet.ReadProtoMsg(body)
 	message := string(bytes.Split(body.GetMessage(), []byte{0x0})[0])

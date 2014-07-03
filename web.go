@@ -8,6 +8,8 @@ import (
 	"encoding/json"
 	"github.com/Philipp15b/go-steam/cryptoutil"
 	. "github.com/Philipp15b/go-steam/internal"
+	. "github.com/Philipp15b/go-steam/internal/protobuf"
+	. "github.com/Philipp15b/go-steam/internal/steamlang"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -28,7 +30,7 @@ type Web struct {
 	client *Client
 }
 
-func (w *Web) HandlePacket(packet *PacketMsg) {
+func (w *Web) HandlePacket(packet *Packet) {
 	switch packet.EMsg {
 	case EMsg_ClientNewLoginKey:
 		w.handleNewLoginKey(packet)
@@ -110,7 +112,7 @@ func (w *Web) apiLogOn() error {
 
 type WebSessionIdEvent struct{}
 
-func (w *Web) handleNewLoginKey(packet *PacketMsg) {
+func (w *Web) handleNewLoginKey(packet *Packet) {
 	msg := new(CMsgClientNewLoginKey)
 	packet.ReadProtoMsg(msg)
 
@@ -125,7 +127,7 @@ func (w *Web) handleNewLoginKey(packet *PacketMsg) {
 	w.client.Emit(new(WebSessionIdEvent))
 }
 
-func (w *Web) handleAuthNonceResponse(packet *PacketMsg) {
+func (w *Web) handleAuthNonceResponse(packet *Packet) {
 	// this has to be the best name for a message yet.
 	msg := new(CMsgClientRequestWebAPIAuthenticateUserNonceResponse)
 	packet.ReadProtoMsg(msg)

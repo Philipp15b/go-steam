@@ -4,6 +4,9 @@ import (
 	"bytes"
 	"code.google.com/p/goprotobuf/proto"
 	. "github.com/Philipp15b/go-steam/internal"
+	. "github.com/Philipp15b/go-steam/internal/gamecoordinator"
+	. "github.com/Philipp15b/go-steam/internal/protobuf"
+	. "github.com/Philipp15b/go-steam/internal/steamlang"
 )
 
 type GameCoordinator struct {
@@ -19,14 +22,14 @@ func newGC(client *Client) *GameCoordinator {
 }
 
 type GCPacketHandler interface {
-	HandleGCPacket(*GCPacketMsg)
+	HandleGCPacket(*GCPacket)
 }
 
 func (g *GameCoordinator) RegisterPacketHandler(handler GCPacketHandler) {
 	g.handlers = append(g.handlers, handler)
 }
 
-func (g *GameCoordinator) HandlePacket(packet *PacketMsg) {
+func (g *GameCoordinator) HandlePacket(packet *Packet) {
 	if packet.EMsg != EMsg_ClientFromGC {
 		return
 	}
@@ -34,7 +37,7 @@ func (g *GameCoordinator) HandlePacket(packet *PacketMsg) {
 	msg := new(CMsgGCClient)
 	packet.ReadProtoMsg(msg)
 
-	p, err := NewGCPacketMsg(msg)
+	p, err := NewGCPacket(msg)
 	if err != nil {
 		g.client.Errorf("Error reading GC message: %v", err)
 		return

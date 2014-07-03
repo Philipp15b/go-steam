@@ -4,8 +4,9 @@ import (
 	"code.google.com/p/goprotobuf/proto"
 	"crypto/sha1"
 	. "github.com/Philipp15b/go-steam/internal"
+	. "github.com/Philipp15b/go-steam/internal/protobuf"
+	. "github.com/Philipp15b/go-steam/internal/steamlang"
 	"github.com/Philipp15b/go-steam/steamid"
-	"log"
 	"sync/atomic"
 	"time"
 )
@@ -15,7 +16,7 @@ type Auth struct {
 	details *LogOnDetails
 }
 
-func (a *Auth) HandlePacket(packet *PacketMsg) {
+func (a *Auth) HandlePacket(packet *Packet) {
 	switch packet.EMsg {
 	case EMsg_ClientLogOnResponse:
 		a.handleClientLogOnResponse(packet)
@@ -24,11 +25,13 @@ func (a *Auth) HandlePacket(packet *PacketMsg) {
 	}
 }
 
+type SentryHash []byte
+
 type LogOnDetails struct {
 	Username       string
 	Password       string
 	AuthCode       string
-	SentryFileHash []byte
+	SentryFileHash SentryHash
 }
 
 // Log on with the given details. You must always specify username and
@@ -60,7 +63,7 @@ func (a *Auth) LogOn(details *LogOnDetails) {
 
 type LoggedOnEvent struct{}
 
-func (a *Auth) handleClientLogOnResponse(packet *PacketMsg) {
+func (a *Auth) handleClientLogOnResponse(packet *Packet) {
 	if !packet.IsProto {
 		a.client.Fatalf("Got non-proto logon response!")
 		return
@@ -70,7 +73,6 @@ func (a *Auth) handleClientLogOnResponse(packet *PacketMsg) {
 	msg := packet.ReadProtoMsg(body)
 
 	result := EResult(body.GetEresult())
-	log.Println(result)
 	if result == EResult_OK {
 		atomic.StoreInt32(&a.client.sessionId, msg.Header.Proto.GetClientSessionid())
 		atomic.StoreUint64(&a.client.steamId, msg.Header.Proto.GetSteamid())
@@ -86,10 +88,10 @@ func (a *Auth) handleClientLogOnResponse(packet *PacketMsg) {
 }
 
 type MachineAuthUpdateEvent struct {
-	Hash []byte
+	Hash SentryHash
 }
 
-func (a *Auth) handleClientUpdateMachineAuth(packet *PacketMsg) {
+func (a *Auth) handleClientUpdateMachineAuth(packet *Packet) {
 	body := new(CMsgClientUpdateMachineAuth)
 	packet.ReadProtoMsg(body)
 

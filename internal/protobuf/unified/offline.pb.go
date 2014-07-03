@@ -2,18 +2,16 @@
 // source: steammessages_offline.steamclient.proto
 // DO NOT EDIT!
 
-package internal
+package unified
 
 import proto "code.google.com/p/goprotobuf/proto"
-import json "encoding/json"
 import math "math"
 
 // discarding unused import google_protobuf "code.google.com/p/goprotobuf/protoc-gen-go/descriptor"
 // discarding unused import steammessages_unified_base_steamclient "steammessages_unified_base.steamclient.pb"
 
-// Reference proto, json, and math imports to suppress error if they are not otherwise used.
+// Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
-var _ = &json.SyntaxError{}
 var _ = math.Inf
 
 type COffline_GetOfflineLogonTicket_Request struct {

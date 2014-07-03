@@ -13,7 +13,7 @@ import (
 )
 
 type connection interface {
-	Read() (*PacketMsg, error)
+	Read() (*Packet, error)
 	Write([]byte) error
 	Close() error
 	SetEncryptionKey([]byte)
@@ -43,7 +43,7 @@ func dialTCP(addr string) (*tcpConnection, error) {
 	}, nil
 }
 
-func (c *tcpConnection) Read() (*PacketMsg, error) {
+func (c *tcpConnection) Read() (*Packet, error) {
 	// All packets begin with a packet length
 	var packetLen uint32
 	err := binary.Read(c.conn, binary.LittleEndian, &packetLen)
@@ -51,7 +51,7 @@ func (c *tcpConnection) Read() (*PacketMsg, error) {
 		return nil, err
 	}
 
-	// A magic follows for validation
+	// A magic value follows for validation
 	var packetMagic uint32
 	err = binary.Read(c.conn, binary.LittleEndian, &packetMagic)
 	if err != nil {
@@ -77,7 +77,7 @@ func (c *tcpConnection) Read() (*PacketMsg, error) {
 	}
 	c.cipherMutex.RUnlock()
 
-	return NewPacketMsg(buf)
+	return NewPacket(buf)
 }
 
 // Writes a message. This may only be used by one goroutine at a time.
@@ -113,7 +113,7 @@ func (c *tcpConnection) SetEncryptionKey(key []byte) {
 		return
 	}
 	if len(key) != 32 {
-		panic("Connection AES Key is not 32 bytes long!")
+		panic("Connection AES key is not 32 bytes long!")
 	}
 
 	var err error

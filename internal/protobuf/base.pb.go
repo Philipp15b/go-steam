@@ -2,16 +2,14 @@
 // source: steammessages_base.proto
 // DO NOT EDIT!
 
-package internal
+package protobuf
 
 import proto "code.google.com/p/goprotobuf/proto"
-import json "encoding/json"
 import math "math"
 import google_protobuf "code.google.com/p/goprotobuf/protoc-gen-go/descriptor"
 
-// Reference proto, json, and math imports to suppress error if they are not otherwise used.
+// Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
-var _ = &json.SyntaxError{}
 var _ = math.Inf
 
 type CMsgProtoBufHeader struct {
@@ -21,12 +19,13 @@ type CMsgProtoBufHeader struct {
 	JobidSource       *uint64 `protobuf:"fixed64,10,opt,name=jobid_source,def=18446744073709551615" json:"jobid_source,omitempty"`
 	JobidTarget       *uint64 `protobuf:"fixed64,11,opt,name=jobid_target,def=18446744073709551615" json:"jobid_target,omitempty"`
 	TargetJobName     *string `protobuf:"bytes,12,opt,name=target_job_name" json:"target_job_name,omitempty"`
+	SeqNum            *int32  `protobuf:"varint,24,opt,name=seq_num" json:"seq_num,omitempty"`
 	Eresult           *int32  `protobuf:"varint,13,opt,name=eresult,def=2" json:"eresult,omitempty"`
 	ErrorMessage      *string `protobuf:"bytes,14,opt,name=error_message" json:"error_message,omitempty"`
 	Ip                *uint32 `protobuf:"varint,15,opt,name=ip" json:"ip,omitempty"`
 	AuthAccountFlags  *uint32 `protobuf:"varint,16,opt,name=auth_account_flags" json:"auth_account_flags,omitempty"`
 	TokenSource       *uint32 `protobuf:"varint,22,opt,name=token_source" json:"token_source,omitempty"`
-	AdminSpoofingUser *bool   `protobuf:"varint,24,opt,name=admin_spoofing_user" json:"admin_spoofing_user,omitempty"`
+	AdminSpoofingUser *bool   `protobuf:"varint,23,opt,name=admin_spoofing_user" json:"admin_spoofing_user,omitempty"`
 	TransportError    *int32  `protobuf:"varint,17,opt,name=transport_error,def=1" json:"transport_error,omitempty"`
 	Messageid         *uint64 `protobuf:"varint,18,opt,name=messageid,def=18446744073709551615" json:"messageid,omitempty"`
 	PublisherGroupId  *uint32 `protobuf:"varint,19,opt,name=publisher_group_id" json:"publisher_group_id,omitempty"`
@@ -85,6 +84,13 @@ func (m *CMsgProtoBufHeader) GetTargetJobName() string {
 		return *m.TargetJobName
 	}
 	return ""
+}
+
+func (m *CMsgProtoBufHeader) GetSeqNum() int32 {
+	if m != nil && m.SeqNum != nil {
+		return *m.SeqNum
+	}
+	return 0
 }
 
 func (m *CMsgProtoBufHeader) GetEresult() int32 {
@@ -282,6 +288,7 @@ type CCDDBAppDetailCommon struct {
 	CommunityVisibleStats *bool   `protobuf:"varint,9,opt,name=community_visible_stats" json:"community_visible_stats,omitempty"`
 	FriendlyName          *string `protobuf:"bytes,10,opt,name=friendly_name" json:"friendly_name,omitempty"`
 	Propagation           *string `protobuf:"bytes,11,opt,name=propagation" json:"propagation,omitempty"`
+	HasAdultContent       *bool   `protobuf:"varint,12,opt,name=has_adult_content" json:"has_adult_content,omitempty"`
 	XXX_unrecognized      []byte  `json:"-"`
 }
 
@@ -364,6 +371,13 @@ func (m *CCDDBAppDetailCommon) GetPropagation() string {
 		return *m.Propagation
 	}
 	return ""
+}
+
+func (m *CCDDBAppDetailCommon) GetHasAdultContent() bool {
+	if m != nil && m.HasAdultContent != nil {
+		return *m.HasAdultContent
+	}
+	return false
 }
 
 type CMsgAppRights struct {

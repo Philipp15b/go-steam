@@ -2,18 +2,16 @@
 // source: steammessages_parental.steamclient.proto
 // DO NOT EDIT!
 
-package internal
+package unified
 
 import proto "code.google.com/p/goprotobuf/proto"
-import json "encoding/json"
 import math "math"
 
 // discarding unused import google_protobuf "code.google.com/p/goprotobuf/protoc-gen-go/descriptor"
 // discarding unused import steammessages_unified_base_steamclient "steammessages_unified_base.steamclient.pb"
 
-// Reference proto, json, and math imports to suppress error if they are not otherwise used.
+// Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
-var _ = &json.SyntaxError{}
 var _ = math.Inf
 
 type ParentalApp struct {
@@ -131,6 +129,8 @@ func (m *ParentalSettings) GetEnabledFeatures() uint32 {
 type CParental_EnableParentalSettings_Request struct {
 	Password         *string           `protobuf:"bytes,1,opt,name=password" json:"password,omitempty"`
 	Settings         *ParentalSettings `protobuf:"bytes,2,opt,name=settings" json:"settings,omitempty"`
+	Sessionid        *string           `protobuf:"bytes,3,opt,name=sessionid" json:"sessionid,omitempty"`
+	Steamid          *uint64           `protobuf:"fixed64,10,opt,name=steamid" json:"steamid,omitempty"`
 	XXX_unrecognized []byte            `json:"-"`
 }
 
@@ -154,6 +154,20 @@ func (m *CParental_EnableParentalSettings_Request) GetSettings() *ParentalSettin
 	return nil
 }
 
+func (m *CParental_EnableParentalSettings_Request) GetSessionid() string {
+	if m != nil && m.Sessionid != nil {
+		return *m.Sessionid
+	}
+	return ""
+}
+
+func (m *CParental_EnableParentalSettings_Request) GetSteamid() uint64 {
+	if m != nil && m.Steamid != nil {
+		return *m.Steamid
+	}
+	return 0
+}
+
 type CParental_EnableParentalSettings_Response struct {
 	XXX_unrecognized []byte `json:"-"`
 }
@@ -166,6 +180,7 @@ func (*CParental_EnableParentalSettings_Response) ProtoMessage()    {}
 
 type CParental_DisableParentalSettings_Request struct {
 	Password         *string `protobuf:"bytes,1,opt,name=password" json:"password,omitempty"`
+	Steamid          *uint64 `protobuf:"fixed64,10,opt,name=steamid" json:"steamid,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
@@ -182,6 +197,13 @@ func (m *CParental_DisableParentalSettings_Request) GetPassword() string {
 	return ""
 }
 
+func (m *CParental_DisableParentalSettings_Request) GetSteamid() uint64 {
+	if m != nil && m.Steamid != nil {
+		return *m.Steamid
+	}
+	return 0
+}
+
 type CParental_DisableParentalSettings_Response struct {
 	XXX_unrecognized []byte `json:"-"`
 }
@@ -195,12 +217,20 @@ func (m *CParental_DisableParentalSettings_Response) String() string {
 func (*CParental_DisableParentalSettings_Response) ProtoMessage() {}
 
 type CParental_GetParentalSettings_Request struct {
-	XXX_unrecognized []byte `json:"-"`
+	Steamid          *uint64 `protobuf:"fixed64,10,opt,name=steamid" json:"steamid,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
 }
 
 func (m *CParental_GetParentalSettings_Request) Reset()         { *m = CParental_GetParentalSettings_Request{} }
 func (m *CParental_GetParentalSettings_Request) String() string { return proto.CompactTextString(m) }
 func (*CParental_GetParentalSettings_Request) ProtoMessage()    {}
+
+func (m *CParental_GetParentalSettings_Request) GetSteamid() uint64 {
+	if m != nil && m.Steamid != nil {
+		return *m.Steamid
+	}
+	return 0
+}
 
 type CParental_GetParentalSettings_Response struct {
 	Settings         *ParentalSettings `protobuf:"bytes,1,opt,name=settings" json:"settings,omitempty"`
@@ -271,6 +301,9 @@ func (m *CParental_GetSignedParentalSettings_Response) GetSignature() []byte {
 type CParental_SetParentalSettings_Request struct {
 	Password         *string           `protobuf:"bytes,1,opt,name=password" json:"password,omitempty"`
 	Settings         *ParentalSettings `protobuf:"bytes,2,opt,name=settings" json:"settings,omitempty"`
+	NewPassword      *string           `protobuf:"bytes,3,opt,name=new_password" json:"new_password,omitempty"`
+	Sessionid        *string           `protobuf:"bytes,4,opt,name=sessionid" json:"sessionid,omitempty"`
+	Steamid          *uint64           `protobuf:"fixed64,10,opt,name=steamid" json:"steamid,omitempty"`
 	XXX_unrecognized []byte            `json:"-"`
 }
 
@@ -292,6 +325,27 @@ func (m *CParental_SetParentalSettings_Request) GetSettings() *ParentalSettings 
 	return nil
 }
 
+func (m *CParental_SetParentalSettings_Request) GetNewPassword() string {
+	if m != nil && m.NewPassword != nil {
+		return *m.NewPassword
+	}
+	return ""
+}
+
+func (m *CParental_SetParentalSettings_Request) GetSessionid() string {
+	if m != nil && m.Sessionid != nil {
+		return *m.Sessionid
+	}
+	return ""
+}
+
+func (m *CParental_SetParentalSettings_Request) GetSteamid() uint64 {
+	if m != nil && m.Steamid != nil {
+		return *m.Steamid
+	}
+	return 0
+}
+
 type CParental_SetParentalSettings_Response struct {
 	XXX_unrecognized []byte `json:"-"`
 }
@@ -302,10 +356,108 @@ func (m *CParental_SetParentalSettings_Response) Reset() {
 func (m *CParental_SetParentalSettings_Response) String() string { return proto.CompactTextString(m) }
 func (*CParental_SetParentalSettings_Response) ProtoMessage()    {}
 
+type CParental_ValidateToken_Request struct {
+	UnlockToken      *string `protobuf:"bytes,1,opt,name=unlock_token" json:"unlock_token,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CParental_ValidateToken_Request) Reset()         { *m = CParental_ValidateToken_Request{} }
+func (m *CParental_ValidateToken_Request) String() string { return proto.CompactTextString(m) }
+func (*CParental_ValidateToken_Request) ProtoMessage()    {}
+
+func (m *CParental_ValidateToken_Request) GetUnlockToken() string {
+	if m != nil && m.UnlockToken != nil {
+		return *m.UnlockToken
+	}
+	return ""
+}
+
+type CParental_ValidateToken_Response struct {
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *CParental_ValidateToken_Response) Reset()         { *m = CParental_ValidateToken_Response{} }
+func (m *CParental_ValidateToken_Response) String() string { return proto.CompactTextString(m) }
+func (*CParental_ValidateToken_Response) ProtoMessage()    {}
+
+type CParental_ValidatePassword_Request struct {
+	Password            *string `protobuf:"bytes,1,opt,name=password" json:"password,omitempty"`
+	Session             *string `protobuf:"bytes,2,opt,name=session" json:"session,omitempty"`
+	SendUnlockOnSuccess *bool   `protobuf:"varint,3,opt,name=send_unlock_on_success" json:"send_unlock_on_success,omitempty"`
+	XXX_unrecognized    []byte  `json:"-"`
+}
+
+func (m *CParental_ValidatePassword_Request) Reset()         { *m = CParental_ValidatePassword_Request{} }
+func (m *CParental_ValidatePassword_Request) String() string { return proto.CompactTextString(m) }
+func (*CParental_ValidatePassword_Request) ProtoMessage()    {}
+
+func (m *CParental_ValidatePassword_Request) GetPassword() string {
+	if m != nil && m.Password != nil {
+		return *m.Password
+	}
+	return ""
+}
+
+func (m *CParental_ValidatePassword_Request) GetSession() string {
+	if m != nil && m.Session != nil {
+		return *m.Session
+	}
+	return ""
+}
+
+func (m *CParental_ValidatePassword_Request) GetSendUnlockOnSuccess() bool {
+	if m != nil && m.SendUnlockOnSuccess != nil {
+		return *m.SendUnlockOnSuccess
+	}
+	return false
+}
+
+type CParental_ValidatePassword_Response struct {
+	Token            *string `protobuf:"bytes,1,opt,name=token" json:"token,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CParental_ValidatePassword_Response) Reset()         { *m = CParental_ValidatePassword_Response{} }
+func (m *CParental_ValidatePassword_Response) String() string { return proto.CompactTextString(m) }
+func (*CParental_ValidatePassword_Response) ProtoMessage()    {}
+
+func (m *CParental_ValidatePassword_Response) GetToken() string {
+	if m != nil && m.Token != nil {
+		return *m.Token
+	}
+	return ""
+}
+
+type CParental_LockClient_Request struct {
+	Session          *string `protobuf:"bytes,1,opt,name=session" json:"session,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CParental_LockClient_Request) Reset()         { *m = CParental_LockClient_Request{} }
+func (m *CParental_LockClient_Request) String() string { return proto.CompactTextString(m) }
+func (*CParental_LockClient_Request) ProtoMessage()    {}
+
+func (m *CParental_LockClient_Request) GetSession() string {
+	if m != nil && m.Session != nil {
+		return *m.Session
+	}
+	return ""
+}
+
+type CParental_LockClient_Response struct {
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *CParental_LockClient_Response) Reset()         { *m = CParental_LockClient_Response{} }
+func (m *CParental_LockClient_Response) String() string { return proto.CompactTextString(m) }
+func (*CParental_LockClient_Response) ProtoMessage()    {}
+
 type CParental_ParentalSettingsChange_Notification struct {
-	SerializedSettings []byte `protobuf:"bytes,1,opt,name=serialized_settings" json:"serialized_settings,omitempty"`
-	Signature          []byte `protobuf:"bytes,2,opt,name=signature" json:"signature,omitempty"`
-	XXX_unrecognized   []byte `json:"-"`
+	SerializedSettings []byte  `protobuf:"bytes,1,opt,name=serialized_settings" json:"serialized_settings,omitempty"`
+	Signature          []byte  `protobuf:"bytes,2,opt,name=signature" json:"signature,omitempty"`
+	Password           *string `protobuf:"bytes,3,opt,name=password" json:"password,omitempty"`
+	Sessionid          *string `protobuf:"bytes,4,opt,name=sessionid" json:"sessionid,omitempty"`
+	XXX_unrecognized   []byte  `json:"-"`
 }
 
 func (m *CParental_ParentalSettingsChange_Notification) Reset() {
@@ -328,6 +480,60 @@ func (m *CParental_ParentalSettingsChange_Notification) GetSignature() []byte {
 		return m.Signature
 	}
 	return nil
+}
+
+func (m *CParental_ParentalSettingsChange_Notification) GetPassword() string {
+	if m != nil && m.Password != nil {
+		return *m.Password
+	}
+	return ""
+}
+
+func (m *CParental_ParentalSettingsChange_Notification) GetSessionid() string {
+	if m != nil && m.Sessionid != nil {
+		return *m.Sessionid
+	}
+	return ""
+}
+
+type CParental_ParentalUnlock_Notification struct {
+	Password         *string `protobuf:"bytes,1,opt,name=password" json:"password,omitempty"`
+	Sessionid        *string `protobuf:"bytes,2,opt,name=sessionid" json:"sessionid,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CParental_ParentalUnlock_Notification) Reset()         { *m = CParental_ParentalUnlock_Notification{} }
+func (m *CParental_ParentalUnlock_Notification) String() string { return proto.CompactTextString(m) }
+func (*CParental_ParentalUnlock_Notification) ProtoMessage()    {}
+
+func (m *CParental_ParentalUnlock_Notification) GetPassword() string {
+	if m != nil && m.Password != nil {
+		return *m.Password
+	}
+	return ""
+}
+
+func (m *CParental_ParentalUnlock_Notification) GetSessionid() string {
+	if m != nil && m.Sessionid != nil {
+		return *m.Sessionid
+	}
+	return ""
+}
+
+type CParental_ParentalLock_Notification struct {
+	Sessionid        *string `protobuf:"bytes,1,opt,name=sessionid" json:"sessionid,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CParental_ParentalLock_Notification) Reset()         { *m = CParental_ParentalLock_Notification{} }
+func (m *CParental_ParentalLock_Notification) String() string { return proto.CompactTextString(m) }
+func (*CParental_ParentalLock_Notification) ProtoMessage()    {}
+
+func (m *CParental_ParentalLock_Notification) GetSessionid() string {
+	if m != nil && m.Sessionid != nil {
+		return *m.Sessionid
+	}
+	return ""
 }
 
 func init() {

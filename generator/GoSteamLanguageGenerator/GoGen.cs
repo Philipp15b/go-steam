@@ -39,7 +39,7 @@ namespace GoSteamLanguageGenerator
 			sb.AppendLine("// Generated code");
 			sb.AppendLine("// DO NOT EDIT");
 			sb.AppendLine();
-			sb.AppendLine("package internal");
+			sb.AppendLine("package steamlang");
 			sb.AppendLine();
 			foreach (Node n in root.childNodes) {
 				EmitEnumNode(n as EnumNode, sb);
@@ -51,13 +51,14 @@ namespace GoSteamLanguageGenerator
 			sb.AppendLine("// Generated code");
 			sb.AppendLine("// DO NOT EDIT");
 			sb.AppendLine();
-			sb.AppendLine("package internal");
+			sb.AppendLine("package steamlang");
 			sb.AppendLine();
 			sb.AppendLine("import (");
 			sb.AppendLine("    \"io\"");
 			sb.AppendLine("    \"encoding/binary\"");
 			sb.AppendLine("    \"code.google.com/p/goprotobuf/proto\"");
-			sb.AppendLine("    . \"github.com/Philipp15b/go-steam/steamid\"");
+			sb.AppendLine("     \"github.com/Philipp15b/go-steam/steamid\"");
+            sb.AppendLine("    . \"github.com/Philipp15b/go-steam/internal/protobuf\"");
 			sb.AppendLine(")");
 			sb.AppendLine();
 
@@ -235,7 +236,7 @@ namespace GoSteamLanguageGenerator
 				} else if (node.Flags == "boolmarshal" && EmitSymbol(node.Type) == "byte") {
 					sb.AppendLine("    " + GetUpperName(node.Name) + " bool");
 				} else if (node.Flags == "steamidmarshal" && EmitSymbol(node.Type) == "ulong") {
-					sb.AppendLine("    " + GetUpperName(node.Name) + " SteamId");
+					sb.AppendLine("    " + GetUpperName(node.Name) + " steamid.SteamId");
 				} else if (node.Flags == "proto") {
 					sb.AppendLine("    " + GetUpperName(node.Name) + " *" + EmitType(node.Type));
 				} else {
@@ -319,9 +320,9 @@ namespace GoSteamLanguageGenerator
 				} else if (node.Flags == "steamidmarshal") {
 					sb.AppendLine("    err = binary.Write(w, binary.LittleEndian, d." + GetUpperName(node.Name) + ")");
 				} else if (node.Flags == "protomask") {
-					sb.AppendLine("    err = binary.Write(w, binary.LittleEndian, EMsg(uint32(d." + GetUpperName(node.Name) + ") | protoMask))");
+					sb.AppendLine("    err = binary.Write(w, binary.LittleEndian, EMsg(uint32(d." + GetUpperName(node.Name) + ") | ProtoMask))");
 				} else if (node.Flags == "protomaskgc") {
-					sb.AppendLine("    err = binary.Write(w, binary.LittleEndian, EMsg(uint32(d." + GetUpperName(node.Name) + ") | protoMask))");
+					sb.AppendLine("    err = binary.Write(w, binary.LittleEndian, EMsg(uint32(d." + GetUpperName(node.Name) + ") | ProtoMask))");
 				} else if (node.Flags == "proto") {
 					sb.AppendLine("    _, err = w.Write(" + nodeToBuf[node] + ")");
 				} else {
@@ -348,7 +349,7 @@ namespace GoSteamLanguageGenerator
 				} else if (node.Flags == "steamidmarshal") {
 					sb.AppendLine("    t" + tempNum + ", err := readUint64(r)");
 					sb.AppendLine("    if err != nil { return err }");
-					sb.AppendLine("    d." + GetUpperName(node.Name) + " = SteamId(t" + tempNum + ")");
+					sb.AppendLine("    d." + GetUpperName(node.Name) + " = steamid.SteamId(t" + tempNum + ")");
 					tempNum++;
 					continue;
 				} else if (node.Flags == "protomask") {
@@ -357,13 +358,13 @@ namespace GoSteamLanguageGenerator
 						type = enumTypes[type];
 					sb.AppendLine("    t" + tempNum + ", err := read" + GetUpperName(type) + "(r)");
 					sb.AppendLine("    if err != nil { return err }");
-					sb.AppendLine("    d." + GetUpperName(node.Name) + " = EMsg(uint32(t" + tempNum + ") & eMsgMask)");
+					sb.AppendLine("    d." + GetUpperName(node.Name) + " = EMsg(uint32(t" + tempNum + ") & EMsgMask)");
 					tempNum++;
 					continue;
 				} else if (node.Flags == "protomaskgc") {
 					sb.AppendLine("    t" + tempNum + ", err := read" + GetUpperName(EmitType(node.Type)) + "(r)");
 					sb.AppendLine("    if err != nil { return err }");
-					sb.AppendLine("    d." + GetUpperName(node.Name) + " = uint32(t" + tempNum + ") & eMsgMask");
+                    sb.AppendLine("    d." + GetUpperName(node.Name) + " = uint32(t" + tempNum + ") & EMsgMask");
 					tempNum++;
 					continue;
 				} else if (node.Flags == "proto") {
