@@ -91,6 +91,8 @@ type MachineAuthUpdateEvent struct {
 
 func (a *Auth) handleClientUpdateMachineAuth(packet *PacketMsg) {
 	body := new(CMsgClientUpdateMachineAuth)
+	packet.ReadProtoMsg(body)
+
 	hash := sha1.New()
 	hash.Write(body.GetBytes())
 	sha := hash.Sum(nil)
