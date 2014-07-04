@@ -76,6 +76,7 @@ func NewClient() *Client {
 }
 
 // Get the event channel. By convention all events are pointers, except for errors.
+// It is never closed.
 func (c *Client) Events() <-chan interface{} {
 	return c.events
 }
@@ -162,7 +163,6 @@ func (c *Client) Disconnect() {
 	c.conn = nil
 	if c.heartbeat != nil {
 		c.heartbeat.Stop()
-		c.heartbeat = nil
 	}
 	close(c.writeChan)
 }
@@ -186,9 +186,15 @@ func (c *Client) Write(msg IMsg) {
 
 func (c *Client) readLoop() {
 	for {
+		// This *should* be atomic on most platforms, but the Go spec doesn't guarantee it
 		c.mutex.RLock()
-		packet, err := c.conn.Read()
+		conn := c.conn
 		c.mutex.RUnlock()
+		if conn == nil {
+			return
+		}
+		packet, err := conn.Read()
+
 		if err != nil {
 			c.Fatalf("Error reading from the connection: %v", err)
 			return
@@ -198,14 +204,16 @@ func (c *Client) readLoop() {
 }
 
 func (c *Client) writeLoop() {
+	defer c.Disconnect()
 	for {
 		c.mutex.RLock()
-		if c.conn == nil {
-			c.mutex.RUnlock()
+		conn := c.conn
+		c.mutex.RUnlock()
+		if conn == nil {
 			return
 		}
+
 		msg, ok := <-c.writeChan
-		c.mutex.RUnlock()
 		if !ok {
 			return
 		}
@@ -217,14 +225,11 @@ func (c *Client) writeLoop() {
 			return
 		}
 
-		c.mutex.RLock()
-		err = c.conn.Write(c.writeBuf.Bytes())
-		c.mutex.RLock()
+		err = conn.Write(c.writeBuf.Bytes())
 
 		c.writeBuf.Reset()
 
 		if err != nil {
-			c.writeBuf.Reset()
 			c.Errorf("Error writing message %v: %v", msg, err)
 			return
 		}
@@ -335,5 +340,4 @@ func (c *Client) handleMulti(packet *Packet) {
 		}
 		c.handlePacket(p)
 	}
-
 }
