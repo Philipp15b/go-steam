@@ -26,11 +26,12 @@ import (
 // When a FatalErrorEvent is emitted, the connection is automatically closed. The same client can be used to reconnect.
 // Other errors don't have any effect.
 type Client struct {
-	Auth    *Auth
-	Social  *Social
-	Web     *Web
-	Trading *Trading
-	GC      *GameCoordinator
+	Auth          *Auth
+	Social        *Social
+	Web           *Web
+	Notifications *Notifications
+	Trading       *Trading
+	GC            *GameCoordinator
 
 	sessionId int32
 	steamId   uint64
@@ -68,6 +69,8 @@ func NewClient() *Client {
 	client.RegisterPacketHandler(client.Social)
 	client.Web = &Web{client: client}
 	client.RegisterPacketHandler(client.Web)
+	client.Notifications = newNotifications(client)
+	client.RegisterPacketHandler(client.Notifications)
 	client.Trading = &Trading{client: client}
 	client.RegisterPacketHandler(client.Trading)
 	client.GC = newGC(client)
