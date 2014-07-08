@@ -41,6 +41,10 @@ func (g *GCMsgProtobuf) IsProto() bool {
 	return true
 }
 
+func (g *GCMsgProtobuf) GetAppId() uint32 {
+	return g.AppId
+}
+
 func (g *GCMsgProtobuf) GetMsgType() uint32 {
 	return g.Header.Msg
 }
@@ -92,6 +96,10 @@ func (g *GCMsg) NewGCMsg(appId, msgType uint32, body Serializable) *GCMsg {
 
 func (g *GCMsg) GetMsgType() uint32 {
 	return g.MsgType
+}
+
+func (g *GCMsg) GetAppId() uint32 {
+	return g.AppId
 }
 
 func (g *GCMsg) IsProto() bool {
