@@ -12,8 +12,6 @@ It's a port of [SteamKit2](https://github.com/SteamRE/SteamKit) to Go.
 You can view the documentation with the `godoc` tool or
 [online on godoc.org](http://godoc.org/github.com/Philipp15b/go-steam).
 
-When updating, always check the [`CHANGELOG.md`](CHANGELOG.md) first.
-
 ## Updating go-steam to a new SteamKit version
 
 To update go-steam to a new version of SteamKit, do the following:
