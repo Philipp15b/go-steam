@@ -46,7 +46,7 @@ type Client struct {
 
 	ConnectionTimeout time.Duration
 
-	mutex     sync.RWMutex // guarding connection, heartbeat and writeChan
+	mutex     sync.RWMutex // guarding conn and writeChan
 	conn      connection
 	writeChan chan IMsg
 	writeBuf  *bytes.Buffer
