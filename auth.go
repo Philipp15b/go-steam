@@ -1,13 +1,13 @@
 package steam
 
 import (
-	"code.google.com/p/goprotobuf/proto"
 	"crypto/sha1"
-	. "github.com/Philipp15b/go-steam/internal"
-	. "github.com/Philipp15b/go-steam/internal/protobuf"
-	. "github.com/Philipp15b/go-steam/internal/steamlang"
-	"github.com/Philipp15b/go-steam/steamid"
-	"sync/atomic"
+	. "github.com/smithfox/go-steam/internal"
+	. "github.com/smithfox/go-steam/internal/protobuf"
+	. "github.com/smithfox/go-steam/internal/steamlang"
+	"github.com/smithfox/go-steam/steamid"
+	"github.com/smithfox/goprotobuf/proto"
+	// "sync/atomic"
 	"time"
 )
 
@@ -46,6 +46,10 @@ func (a *Auth) LogOn(details *LogOnDetails) {
 		panic("Username and password must be set!")
 	}
 
+	uuu := uint64(steamid.New(0, 1, int32(EUniverse_Public), EAccountType_Individual))
+
+	a.client.steamId = uuu
+	//atomic.StoreUint64(&(a.client.steamId), uuu)
 	logon := new(CMsgClientLogon)
 	logon.AccountName = &details.Username
 	logon.Password = &details.Password
@@ -55,8 +59,6 @@ func (a *Auth) LogOn(details *LogOnDetails) {
 	logon.ShaSentryfile = details.SentryFileHash
 
 	logon.ProtocolVersion = proto.Uint32(MsgClientLogon_CurrentProtocol)
-
-	atomic.StoreUint64(&a.client.steamId, uint64(steamid.New(0, 1, int32(EUniverse_Public), EAccountType_Individual)))
 
 	a.client.Write(NewClientMsgProtobuf(EMsg_ClientLogon, logon))
 }
@@ -74,8 +76,10 @@ func (a *Auth) handleClientLogOnResponse(packet *Packet) {
 
 	result := EResult(body.GetEresult())
 	if result == EResult_OK {
-		atomic.StoreInt32(&a.client.sessionId, msg.Header.Proto.GetClientSessionid())
-		atomic.StoreUint64(&a.client.steamId, msg.Header.Proto.GetSteamid())
+		a.client.sessionId = msg.Header.Proto.GetClientSessionid()
+		//atomic.StoreInt32(&a.client.sessionId, msg.Header.Proto.GetClientSessionid())
+		a.client.steamId = msg.Header.Proto.GetSteamid()
+		//atomic.StoreUint64(&a.client.steamId, msg.Header.Proto.GetSteamid())
 
 		go a.client.heartbeatLoop(time.Duration(body.GetOutOfGameHeartbeatSeconds()))
 

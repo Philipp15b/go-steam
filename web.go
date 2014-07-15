@@ -1,15 +1,15 @@
 package steam
 
 import (
-	"code.google.com/p/goprotobuf/proto"
+	"github.com/smithfox/goprotobuf/proto"
 	"crypto/aes"
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
-	"github.com/Philipp15b/go-steam/cryptoutil"
-	. "github.com/Philipp15b/go-steam/internal"
-	. "github.com/Philipp15b/go-steam/internal/protobuf"
-	. "github.com/Philipp15b/go-steam/internal/steamlang"
+	"github.com/smithfox/go-steam/cryptoutil"
+	. "github.com/smithfox/go-steam/internal"
+	. "github.com/smithfox/go-steam/internal/protobuf"
+	. "github.com/smithfox/go-steam/internal/steamlang"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -84,7 +84,8 @@ func (w *Web) apiLogOn() error {
 	if resp.StatusCode != 200 {
 		// our web session id has expired, request a new one
 		w.client.Write(NewClientMsgProtobuf(EMsg_ClientRequestWebAPIAuthenticateUserNonce, new(CMsgClientRequestWebAPIAuthenticateUserNonce)))
-		atomic.StoreUint32(&w.relogOnNonce, 1)
+//		atomic.StoreUint32(&w.relogOnNonce, 1)
+		w.relogOnNonce = 1
 		return nil
 	}
 

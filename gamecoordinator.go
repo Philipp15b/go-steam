@@ -2,11 +2,12 @@ package steam
 
 import (
 	"bytes"
-	"code.google.com/p/goprotobuf/proto"
-	. "github.com/Philipp15b/go-steam/internal"
-	. "github.com/Philipp15b/go-steam/internal/gamecoordinator"
-	. "github.com/Philipp15b/go-steam/internal/protobuf"
-	. "github.com/Philipp15b/go-steam/internal/steamlang"
+	"fmt"
+	. "github.com/smithfox/go-steam/internal"
+	. "github.com/smithfox/go-steam/internal/gamecoordinator"
+	. "github.com/smithfox/go-steam/internal/protobuf"
+	. "github.com/smithfox/go-steam/internal/steamlang"
+	"github.com/smithfox/goprotobuf/proto"
 )
 
 type GameCoordinator struct {
@@ -42,7 +43,7 @@ func (g *GameCoordinator) HandlePacket(packet *Packet) {
 		g.client.Errorf("Error reading GC message: %v", err)
 		return
 	}
-
+	fmt.Printf("!!!GCPacket.MsgId=%d\n", p.MsgType)
 	for _, handler := range g.handlers {
 		handler.HandleGCPacket(p)
 	}

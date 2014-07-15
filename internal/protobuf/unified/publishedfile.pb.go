@@ -4,10 +4,10 @@
 
 package unified
 
-import proto "code.google.com/p/goprotobuf/proto"
+import proto "github.com/smithfox/goprotobuf/proto"
 import math "math"
 
-// discarding unused import google_protobuf "code.google.com/p/goprotobuf/protoc-gen-go/descriptor"
+// discarding unused import google_protobuf "github.com/smithfox/goprotobuf/protoc-gen-go/descriptor"
 // discarding unused import steammessages_unified_base_steamclient "steammessages_unified_base.steamclient.pb"
 
 // Reference imports to suppress errors if they are not otherwise used.

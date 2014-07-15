@@ -4,10 +4,10 @@
 package steamlang
 
 import (
-	"code.google.com/p/goprotobuf/proto"
 	"encoding/binary"
-	. "github.com/Philipp15b/go-steam/internal/protobuf"
-	"github.com/Philipp15b/go-steam/steamid"
+	. "github.com/smithfox/go-steam/internal/protobuf"
+	"github.com/smithfox/go-steam/steamid"
+	"github.com/smithfox/goprotobuf/proto"
 	"io"
 )
 

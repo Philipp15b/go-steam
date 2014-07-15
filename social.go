@@ -2,11 +2,11 @@ package steam
 
 import (
 	"bytes"
-	"code.google.com/p/goprotobuf/proto"
-	. "github.com/Philipp15b/go-steam/internal"
-	. "github.com/Philipp15b/go-steam/internal/protobuf"
-	. "github.com/Philipp15b/go-steam/internal/steamlang"
-	. "github.com/Philipp15b/go-steam/steamid"
+	"github.com/smithfox/goprotobuf/proto"
+	. "github.com/smithfox/go-steam/internal"
+	. "github.com/smithfox/go-steam/internal/protobuf"
+	. "github.com/smithfox/go-steam/internal/steamlang"
+	. "github.com/smithfox/go-steam/steamid"
 	"sync"
 )
 

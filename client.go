@@ -6,16 +6,16 @@ import (
 	"crypto/rand"
 	"encoding/binary"
 	"fmt"
-	"github.com/Philipp15b/go-steam/cryptoutil"
-	. "github.com/Philipp15b/go-steam/internal"
-	. "github.com/Philipp15b/go-steam/internal/protobuf"
-	. "github.com/Philipp15b/go-steam/internal/steamlang"
-	. "github.com/Philipp15b/go-steam/steamid"
+	"github.com/smithfox/go-steam/cryptoutil"
+	. "github.com/smithfox/go-steam/internal"
+	. "github.com/smithfox/go-steam/internal/protobuf"
+	. "github.com/smithfox/go-steam/internal/steamlang"
+	. "github.com/smithfox/go-steam/steamid"
 	"hash/crc32"
 	"io/ioutil"
 	"log"
 	"sync"
-	"sync/atomic"
+	// "sync/atomic"
 	"time"
 )
 
@@ -32,9 +32,8 @@ type Client struct {
 	Notifications *Notifications
 	Trading       *Trading
 	GC            *GameCoordinator
-
-	sessionId int32
-	steamId   uint64
+	sessionId     int32
+	steamId       uint64
 
 	currentJobId uint64
 
@@ -111,15 +110,19 @@ func (c *Client) RegisterPacketHandler(handler PacketHandler) {
 }
 
 func (c *Client) GetNextJobId() JobId {
-	return JobId(atomic.AddUint64(&c.currentJobId, 1))
+	//return JobId(atomic.AddUint64(&c.currentJobId, 1))
+	c.currentJobId += 1
+	return JobId(c.currentJobId)
 }
 
 func (c *Client) SteamId() SteamId {
-	return SteamId(atomic.LoadUint64(&c.steamId))
+	//	return SteamId(atomic.LoadUint64(&c.steamId))
+	return SteamId(c.steamId)
 }
 
 func (c *Client) SessionId() int32 {
-	return atomic.LoadInt32(&c.sessionId)
+	//return atomic.LoadInt32(&c.sessionId)
+	return c.sessionId
 }
 
 func (c *Client) Connected() bool {
@@ -167,6 +170,7 @@ func (c *Client) Disconnect() {
 	if c.heartbeat != nil {
 		c.heartbeat.Stop()
 	}
+
 	close(c.writeChan)
 }
 
@@ -202,6 +206,7 @@ func (c *Client) readLoop() {
 			c.Fatalf("Error reading from the connection: %v", err)
 			return
 		}
+		fmt.Printf("!!!!!!!get packet, EMsg=%d\n", packet.EMsg)
 		c.handlePacket(packet)
 	}
 }
@@ -255,6 +260,7 @@ func (c *Client) heartbeatLoop(seconds time.Duration) {
 }
 
 func (c *Client) handlePacket(packet *Packet) {
+	fmt.Printf("client.handlePacket, packet.EMsg=%d\n", packet.EMsg)
 	switch packet.EMsg {
 	case EMsg_ChannelEncryptRequest:
 		c.handleChannelEncryptRequest(packet)

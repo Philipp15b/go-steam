@@ -1,7 +1,7 @@
 package internal
 
 import (
-	. "github.com/Philipp15b/go-steam/internal/steamlang"
+	. "github.com/smithfox/go-steam/internal/steamlang"
 	"io"
 )
 
