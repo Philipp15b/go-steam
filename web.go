@@ -6,11 +6,11 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"github.com/Philipp15b/go-steam/cryptoutil"
 	. "github.com/Philipp15b/go-steam/internal"
 	. "github.com/Philipp15b/go-steam/internal/protobuf"
 	. "github.com/Philipp15b/go-steam/internal/steamlang"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -19,7 +19,7 @@ import (
 
 type Web struct {
 	// The `sessionid` cookie required to use the steam website.
-	WebSessionId string
+	SessionId string
 	// The `steamLogin` cookie required to use the steam website.
 	// It is only available after calling LogOn().
 	SteamLogin string
@@ -45,7 +45,7 @@ type WebLoggedOnEvent struct{}
 // WebSessionIdEvent or it will panic.
 func (w *Web) LogOn() {
 	if w.webLoginKey == "" {
-		panic("SteamWeb: webLoginKey not initialized!")
+		panic("Web: webLoginKey not initialized!")
 	}
 
 	go func() {
@@ -58,7 +58,7 @@ func (w *Web) LogOn() {
 			}
 		}
 		if err != nil {
-			w.client.Errorf("web: Error logging on: %v", err)
+			w.client.Errorf("Web: Error logging on: %v", err)
 			return
 		}
 	}()
@@ -70,7 +70,7 @@ func (w *Web) apiLogOn() error {
 
 	cryptedSessionKey := cryptoutil.RSAEncrypt(GetPublicKey(EUniverse_Public), sessionKey)
 	ciph, _ := aes.NewCipher(sessionKey)
-	cryptedLoginKey := cryptoutil.SymmetricEncrypt(ciph, []byte(w.WebSessionId))
+	cryptedLoginKey := cryptoutil.SymmetricEncrypt(ciph, []byte(w.SessionId))
 	data := make(url.Values)
 	data.Add("format", "json")
 	data.Add("steamid", strconv.FormatUint(uint64(w.client.SteamId()), 10))
@@ -80,12 +80,15 @@ func (w *Web) apiLogOn() error {
 	if err != nil {
 		return err
 	}
+	defer resp.Body.Close()
 
-	if resp.StatusCode != 200 {
+	if resp.StatusCode == 401 {
 		// our web session id has expired, request a new one
-		w.client.Write(NewClientMsgProtobuf(EMsg_ClientRequestWebAPIAuthenticateUserNonce, new(CMsgClientRequestWebAPIAuthenticateUserNonce)))
 		atomic.StoreUint32(&w.relogOnNonce, 1)
+		w.client.Write(NewClientMsgProtobuf(EMsg_ClientRequestWebAPIAuthenticateUserNonce, new(CMsgClientRequestWebAPIAuthenticateUserNonce)))
 		return nil
+	} else if resp.StatusCode != 200 {
+		return errors.New("steam.Web.apiLogOn: request failed with status " + resp.Status)
 	}
 
 	result := new(struct {
@@ -93,16 +96,10 @@ func (w *Web) apiLogOn() error {
 			Token string
 		}
 	})
-	b, err := ioutil.ReadAll(resp.Body)
-	resp.Body.Close()
+	err = json.NewDecoder(resp.Body).Decode(result)
 	if err != nil {
 		return err
 	}
-	err = json.Unmarshal(b, result)
-	if err != nil {
-		return err
-	}
-
 	w.SteamLogin = result.Authenticateuser.Token
 
 	w.client.Emit(new(WebLoggedOnEvent))
@@ -121,7 +118,7 @@ func (w *Web) handleNewLoginKey(packet *Packet) {
 
 	w.webLoginKey = msg.GetLoginKey()
 	// number -> string -> bytes -> base64
-	w.WebSessionId = base64.StdEncoding.EncodeToString([]byte(strconv.FormatUint(uint64(msg.GetUniqueId()), 10)))
+	w.SessionId = base64.StdEncoding.EncodeToString([]byte(strconv.FormatUint(uint64(msg.GetUniqueId()), 10)))
 
 	w.client.Emit(new(WebSessionIdEvent))
 }
@@ -130,7 +127,7 @@ func (w *Web) handleAuthNonceResponse(packet *Packet) {
 	// this has to be the best name for a message yet.
 	msg := new(CMsgClientRequestWebAPIAuthenticateUserNonceResponse)
 	packet.ReadProtoMsg(msg)
-	w.WebSessionId = msg.GetWebapiAuthenticateUserNonce()
+	w.SessionId = msg.GetWebapiAuthenticateUserNonce()
 
 	// if the nonce was specifically requested in apiLogOn(),
 	// don't emit an event.
