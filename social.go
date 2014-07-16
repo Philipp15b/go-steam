@@ -257,12 +257,8 @@ type Friend struct {
 	prev *Friend
 	next *Friend
 
-	steamId           SteamId
-	name              string
-	relationship      EFriendRelationship
-	personaStateFlags EPersonaStateFlag
-
-	gameAppId uint64
+	steamId      SteamId
+	relationship EFriendRelationship
 }
 
 func (f *Friend) Next() *Friend {
@@ -282,28 +278,10 @@ func (f *Friend) SteamId() SteamId {
 	return f.steamId
 }
 
-func (f *Friend) Name() string {
-	f.mutex.RLock()
-	defer f.mutex.RUnlock()
-	return f.name
-}
-
 func (f *Friend) Relationship() EFriendRelationship {
 	f.mutex.RLock()
 	defer f.mutex.RUnlock()
 	return f.relationship
-}
-
-func (f *Friend) PersonaStateFlags() EPersonaStateFlag {
-	f.mutex.RLock()
-	defer f.mutex.RUnlock()
-	return f.personaStateFlags
-}
-
-func (f *Friend) GameAppId() uint64 {
-	f.mutex.RLock()
-	defer f.mutex.RUnlock()
-	return f.gameAppId
 }
 
 type GroupsList struct {
@@ -382,7 +360,6 @@ type Group struct {
 	next *Group
 
 	steamId      SteamId
-	name         string
 	relationship EClanRelationship
 }
 
@@ -403,12 +380,6 @@ func (g *Group) Next() *Group {
 func (g *Group) SteamId() SteamId {
 	// the steam id of a group never changes, so we don't need to lock here
 	return g.steamId
-}
-
-func (g *Group) Name() string {
-	g.mutex.RLock()
-	defer g.mutex.RUnlock()
-	return g.name
 }
 
 func (g *Group) Relationship() EClanRelationship {
