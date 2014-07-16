@@ -14,6 +14,7 @@ import (
 	"hash/crc32"
 	"io/ioutil"
 	"log"
+	"net"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -134,18 +135,18 @@ func (c *Client) Connected() bool {
 //
 // You will receive a ServerListEvent after logging in which contains a new list of servers of which you
 // should choose one yourself and connect with ConnectTo since the included list may not always be up to date.
-func (c *Client) Connect() string {
-	server := getRandomCM()
+func (c *Client) Connect() *PortAddr {
+	server := GetRandomCM()
 	c.ConnectTo(server)
 	return server
 }
 
 // Connects to a specific server.
 // If this client is already connected, it is disconnected first.
-func (c *Client) ConnectTo(address string) {
+func (c *Client) ConnectTo(addr *PortAddr) {
 	c.Disconnect()
 
-	conn, err := dialTCP(address)
+	conn, err := dialTCP(addr.ToTCPAddr())
 	if err != nil {
 		log.Fatal(err)
 	}
