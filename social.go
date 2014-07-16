@@ -45,7 +45,19 @@ func (s *Social) HandlePacket(packet *Packet) {
 	}
 }
 
+func (s *Social) SetName(name string) {
+	s.mutex.RLock()
+	defer s.mutex.RUnlock()
+	s.client.Write(NewClientMsgProtobuf(EMsg_ClientChangeStatus, &CMsgClientChangeStatus{
+		PlayerName:   proto.String(name),
+		PersonaState: proto.Uint32(uint32(s.personaState)),
+	}))
+}
+
 func (s *Social) SetPersonaState(state EPersonaState) {
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
+	s.personaState = state
 	s.client.Write(NewClientMsgProtobuf(EMsg_ClientChangeStatus, &CMsgClientChangeStatus{
 		PersonaState: proto.Uint32(uint32(state)),
 	}))
