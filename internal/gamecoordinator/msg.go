@@ -82,10 +82,10 @@ type GCMsg struct {
 	AppId   uint32
 	MsgType uint32
 	Header  *MsgGCHdr
-	Body    Serializable
+	Body    Serializer
 }
 
-func (g *GCMsg) NewGCMsg(appId, msgType uint32, body Serializable) *GCMsg {
+func (g *GCMsg) NewGCMsg(appId, msgType uint32, body Serializer) *GCMsg {
 	return &GCMsg{
 		AppId:   appId,
 		MsgType: msgType,
