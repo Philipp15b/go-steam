@@ -264,6 +264,8 @@ func (c *Client) handlePacket(packet *Packet) {
 		c.handleChannelEncryptResult(packet)
 	case EMsg_Multi:
 		c.handleMulti(packet)
+	case EMsg_ClientCMList:
+		c.handleClientCMList(packet)
 	}
 
 	c.handlersMutex.RLock()
@@ -345,4 +347,35 @@ func (c *Client) handleMulti(packet *Packet) {
 		}
 		c.handlePacket(p)
 	}
+}
+
+// A list of connection manager addresses to connect to in the future.
+// You should always save them and then select one of these
+// instead of the builtin ones for the next connection.
+type ClientCMListEvent struct {
+	Addresses []*PortAddr
+}
+
+func (c *Client) handleClientCMList(packet *Packet) {
+	body := new(CMsgClientCMList)
+	packet.ReadProtoMsg(body)
+
+	l := make([]*PortAddr, 0)
+	for i, ip := range body.GetCmAddresses() {
+		l = append(l, &PortAddr{
+			readIp(ip),
+			uint16(body.GetCmPorts()[i]),
+		})
+	}
+
+	c.Emit(&ClientCMListEvent{l})
+}
+
+func readIp(ip uint32) net.IP {
+	r := make(net.IP, 4)
+	r[3] = byte(ip)
+	r[2] = byte(ip >> 8)
+	r[1] = byte(ip >> 16)
+	r[0] = byte(ip >> 24)
+	return r
 }
