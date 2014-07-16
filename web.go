@@ -18,14 +18,16 @@ import (
 )
 
 type Web struct {
+	// 64 bit alignment
+	relogOnNonce uint32
+
 	// The `sessionid` cookie required to use the steam website.
 	SessionId string
 	// The `steamLogin` cookie required to use the steam website.
 	// It is only available after calling LogOn().
 	SteamLogin string
 
-	webLoginKey  string
-	relogOnNonce uint32
+	webLoginKey string
 
 	client *Client
 }

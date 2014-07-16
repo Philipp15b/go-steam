@@ -26,17 +26,18 @@ import (
 // When a FatalErrorEvent is emitted, the connection is automatically closed. The same client can be used to reconnect.
 // Other errors don't have any effect.
 type Client struct {
+	// these need to be 64 bit aligned for sync/atomic on 32bit
+	sessionId    int32
+	_            uint32
+	steamId      uint64
+	currentJobId uint64
+
 	Auth          *Auth
 	Social        *Social
 	Web           *Web
 	Notifications *Notifications
 	Trading       *Trading
 	GC            *GameCoordinator
-
-	sessionId int32
-	steamId   uint64
-
-	currentJobId uint64
 
 	events        chan interface{}
 	handlers      []PacketHandler
