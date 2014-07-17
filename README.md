@@ -10,6 +10,7 @@ Some of the currently implemented features:
   * Persona states (online, offline, looking to trade, etc.)
   * SteamGuard
   * Trade Offer notifications
+  * Team Fortress 2: Crafting, moving, naming and deleting items
 
 ## Installation
 
