@@ -10,6 +10,7 @@ import (
 	. "github.com/Philipp15b/go-steam/internal"
 	. "github.com/Philipp15b/go-steam/internal/protobuf"
 	. "github.com/Philipp15b/go-steam/internal/steamlang"
+	"github.com/Philipp15b/go-steam/netutil"
 	. "github.com/Philipp15b/go-steam/steamid"
 	"hash/crc32"
 	"io/ioutil"
@@ -135,7 +136,7 @@ func (c *Client) Connected() bool {
 //
 // You will receive a ServerListEvent after logging in which contains a new list of servers of which you
 // should choose one yourself and connect with ConnectTo since the included list may not always be up to date.
-func (c *Client) Connect() *PortAddr {
+func (c *Client) Connect() *netutil.PortAddr {
 	server := GetRandomCM()
 	c.ConnectTo(server)
 	return server
@@ -143,7 +144,7 @@ func (c *Client) Connect() *PortAddr {
 
 // Connects to a specific server.
 // If this client is already connected, it is disconnected first.
-func (c *Client) ConnectTo(addr *PortAddr) {
+func (c *Client) ConnectTo(addr *netutil.PortAddr) {
 	c.Disconnect()
 
 	conn, err := dialTCP(addr.ToTCPAddr())
@@ -353,16 +354,16 @@ func (c *Client) handleMulti(packet *Packet) {
 // You should always save them and then select one of these
 // instead of the builtin ones for the next connection.
 type ClientCMListEvent struct {
-	Addresses []*PortAddr
+	Addresses []*netutil.PortAddr
 }
 
 func (c *Client) handleClientCMList(packet *Packet) {
 	body := new(CMsgClientCMList)
 	packet.ReadProtoMsg(body)
 
-	l := make([]*PortAddr, 0)
+	l := make([]*netutil.PortAddr, 0)
 	for i, ip := range body.GetCmAddresses() {
-		l = append(l, &PortAddr{
+		l = append(l, &netutil.PortAddr{
 			readIp(ip),
 			uint16(body.GetCmPorts()[i]),
 		})

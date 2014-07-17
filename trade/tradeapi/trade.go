@@ -7,8 +7,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/Philipp15b/go-steam/economy/inventory"
+	"github.com/Philipp15b/go-steam/netutil"
 	"github.com/Philipp15b/go-steam/steamid"
-	"github.com/Philipp15b/go-steam/trade/inventory"
 	"io/ioutil"
 	"net/http"
 	"regexp"
@@ -112,7 +113,7 @@ func (t *Trade) GetForeignInventory(contextId uint64, appId uint32, start *uint)
 		data["start"] = strconv.FormatUint(uint64(*start), 10)
 	}
 
-	req, err := http.NewRequest("GET", t.baseUrl+"foreigninventory?"+toUrlValues(data).Encode(), nil)
+	req, err := http.NewRequest("GET", t.baseUrl+"foreigninventory?"+netutil.ToUrlValues(data).Encode(), nil)
 	if err != nil {
 		panic(err)
 	}
