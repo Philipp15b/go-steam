@@ -3,6 +3,7 @@ package inventory
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 )
 
 // A partial inventory as sent by the Steam API.
@@ -20,6 +21,32 @@ func (m *MoreStart) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 	return json.Unmarshal(data, (*uint)(m))
+}
+
+func GetFullInventory(getFirst func() (*PartialInventory, error), getNext func(start uint) (*PartialInventory, error)) (*Inventory, error) {
+	first, err := getFirst()
+	if err != nil {
+		return nil, err
+	}
+	if !first.Success {
+		return nil, errors.New("GetFullInventory API call failed.")
+	}
+
+	result := &first.Inventory
+	var next *PartialInventory
+	for latest := first; latest.More; latest = next {
+		next, err := getNext(uint(latest.MoreStart))
+		if err != nil {
+			return nil, err
+		}
+		if !next.Success {
+			return nil, errors.New("GetFullInventory API call failed.")
+		}
+
+		result = Merge(result, &next.Inventory)
+	}
+
+	return result, nil
 }
 
 // Merges the given Inventory into a single Inventory.

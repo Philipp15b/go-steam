@@ -1,8 +1,12 @@
+/*
+Includes inventory types as used in the trade package
+*/
 package inventory
 
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/Philipp15b/go-steam/economy"
 	"github.com/Philipp15b/go-steam/jsont"
 )
 
@@ -41,24 +45,24 @@ func (d *Descriptions) UnmarshalJSON(data []byte) error {
 }
 
 type Item struct {
-	Id         uint64 `json:",string"`
-	ClassId    uint64 `json:",string"`
-	InstanceId uint64 `json:",string"`
-	Amount     uint64 `json:",string"`
+	Id         economy.AssetId    `json:",string"`
+	ClassId    economy.ClassId    `json:",string"`
+	InstanceId economy.InstanceId `json:",string"`
+	Amount     uint64             `json:",string"`
 	Pos        uint32
 }
 
 type Currency struct {
-	Id         uint64 `json:",string"`
-	ClassId    uint64 `json:",string"`
-	IsCurrency bool   `json:"is_currency"`
+	Id         economy.AssetId `json:",string"`
+	ClassId    economy.ClassId `json:",string"`
+	IsCurrency bool            `json:"is_currency"`
 	Pos        uint32
 }
 
 type Description struct {
-	AppId      uint32 `json:",string"`
-	ClassId    uint64 `json:",string"`
-	InstanceId uint64 `json:",string"`
+	AppId      uint32             `json:",string"`
+	ClassId    economy.ClassId    `json:",string"`
+	InstanceId economy.InstanceId `json:",string"`
 
 	IconUrl     string `json:"icon_url"`
 	IconDragUrl string `json:"icon_drag_url"`

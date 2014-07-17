@@ -1,8 +1,7 @@
 package trade
 
 import (
-	"errors"
-	"github.com/Philipp15b/go-steam/trade/inventory"
+	"github.com/Philipp15b/go-steam/economy/inventory"
 	"github.com/Philipp15b/go-steam/trade/tradeapi"
 	"time"
 )
@@ -39,34 +38,8 @@ func (t *Trade) Poll() ([]interface{}, error) {
 	return t.Events(), nil
 }
 
-func (t *Trade) getFullInventory(getFirst func() (*inventory.PartialInventory, error), getNext func(start uint) (*inventory.PartialInventory, error)) (*inventory.Inventory, error) {
-	first, err := getFirst()
-	if err != nil {
-		return nil, err
-	}
-	if !first.Success {
-		return nil, errors.New("getFullInventory API call failed.")
-	}
-
-	result := &first.Inventory
-	var next *inventory.PartialInventory
-	for latest := first; latest.More; latest = next {
-		next, err := getNext(uint(latest.MoreStart))
-		if err != nil {
-			return nil, err
-		}
-		if !next.Success {
-			return nil, errors.New("getFullInventory API call failed.")
-		}
-
-		result = inventory.Merge(result, &next.Inventory)
-	}
-
-	return result, nil
-}
-
 func (t *Trade) GetTheirInventory(contextId uint64, appId uint32) (*inventory.Inventory, error) {
-	return t.getFullInventory(func() (*inventory.PartialInventory, error) {
+	return inventory.GetFullInventory(func() (*inventory.PartialInventory, error) {
 		return t.api.GetForeignInventory(contextId, appId, nil)
 	}, func(start uint) (*inventory.PartialInventory, error) {
 		return t.api.GetForeignInventory(contextId, appId, &start)
@@ -74,7 +47,7 @@ func (t *Trade) GetTheirInventory(contextId uint64, appId uint32) (*inventory.In
 }
 
 func (t *Trade) GetOwnInventory(contextId uint64, appId uint32) (*inventory.Inventory, error) {
-	return t.getFullInventory(func() (*inventory.PartialInventory, error) {
+	return inventory.GetFullInventory(func() (*inventory.PartialInventory, error) {
 		return t.api.GetOwnInventory(contextId, appId, nil)
 	}, func(start uint) (*inventory.PartialInventory, error) {
 		return t.api.GetOwnInventory(contextId, appId, &start)
