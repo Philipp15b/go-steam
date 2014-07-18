@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/Philipp15b/go-steam/community"
 	"github.com/Philipp15b/go-steam/economy/inventory"
 	"github.com/Philipp15b/go-steam/netutil"
 	"github.com/Philipp15b/go-steam/steamid"
@@ -18,7 +19,6 @@ import (
 )
 
 const tradeUrl = "http://steamcommunity.com/trade/%d/"
-const cookiePath = "http://steamcommunity.com/"
 
 type Trade struct {
 	client *http.Client
@@ -44,7 +44,7 @@ func New(sessionId, steamLogin string, other steamid.SteamId) *Trade {
 		baseUrl:   fmt.Sprintf(tradeUrl, other),
 		Version:   1,
 	}
-	t.setCookies(sessionId, steamLogin)
+	community.SetCookies(t.client, sessionId, steamLogin)
 	return t
 }
 
@@ -74,6 +74,28 @@ func (t *Trade) GetMain() (*Main, error) {
 	return &Main{
 		string(match[1]) == "true",
 	}, nil
+}
+
+// Ajax POSTs to an API endpoint that should return a status
+func (t *Trade) postWithStatus(url string, data map[string]string) (*Status, error) {
+	status := new(Status)
+
+	req := netutil.NewPostForm(url, netutil.ToUrlValues(data))
+	// Tales of Madness and Pain, Episode 1: If you forget this, Steam will return an error
+	// saying "missing required parameter", even though they are all there. IT WAS JUST THE HEADER, ARGH!
+	req.Header.Add("Referer", t.baseUrl)
+
+	resp, err := t.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	err = json.NewDecoder(resp.Body).Decode(status)
+	if err != nil {
+		return nil, err
+	}
+	return status, nil
 }
 
 func (t *Trade) GetStatus() (*Status, error) {
@@ -106,8 +128,8 @@ func (t *Trade) GetForeignInventory(contextId uint64, appId uint32, start *uint)
 }
 
 // Thread-safe.
-func (t *Trade) GetOwnInventory(contextId uint64, appId uint32, start *uint) (*inventory.PartialInventory, error) {
-	return inventory.GetOwnInventory(contextId, appId, start)
+func (t *Trade) GetOwnInventory(contextId uint64, appId uint32) (*inventory.Inventory, error) {
+	return inventory.GetOwnInventory(t.client, contextId, appId)
 }
 
 func (t *Trade) Chat(message string) (*Status, error) {

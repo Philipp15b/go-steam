@@ -47,11 +47,7 @@ func (t *Trade) GetTheirInventory(contextId uint64, appId uint32) (*inventory.In
 }
 
 func (t *Trade) GetOwnInventory(contextId uint64, appId uint32) (*inventory.Inventory, error) {
-	return inventory.GetFullInventory(func() (*inventory.PartialInventory, error) {
-		return t.api.GetOwnInventory(contextId, appId, nil)
-	}, func(start uint) (*inventory.PartialInventory, error) {
-		return t.api.GetOwnInventory(contextId, appId, &start)
-	})
+	return t.api.GetOwnInventory(contextId, appId)
 }
 
 func (t *Trade) GetMain() (*tradeapi.Main, error) {

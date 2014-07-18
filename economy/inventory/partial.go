@@ -10,6 +10,7 @@ import (
 // A partial inventory as sent by the Steam API.
 type PartialInventory struct {
 	Success bool
+	Error   string
 	Inventory
 	More      bool
 	MoreStart MoreStart `json:"more_start"`
@@ -31,7 +32,7 @@ func DoInventoryRequest(client *http.Client, req *http.Request) (*PartialInvento
 	}
 	defer resp.Body.Close()
 
-	inv := new(inventory.PartialInventory)
+	inv := new(PartialInventory)
 	err = json.NewDecoder(resp.Body).Decode(inv)
 	if err != nil {
 		return nil, err
@@ -45,7 +46,7 @@ func GetFullInventory(getFirst func() (*PartialInventory, error), getNext func(s
 		return nil, err
 	}
 	if !first.Success {
-		return nil, errors.New("GetFullInventory API call failed.")
+		return nil, errors.New("GetFullInventory API call failed: " + first.Error)
 	}
 
 	result := &first.Inventory
@@ -56,7 +57,7 @@ func GetFullInventory(getFirst func() (*PartialInventory, error), getNext func(s
 			return nil, err
 		}
 		if !next.Success {
-			return nil, errors.New("GetFullInventory API call failed.")
+			return nil, errors.New("GetFullInventory API call failed: " + next.Error)
 		}
 
 		result = Merge(result, &next.Inventory)
