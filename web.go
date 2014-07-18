@@ -22,8 +22,11 @@ type Web struct {
 	relogOnNonce uint32
 
 	// The `sessionid` cookie required to use the steam website.
+	// This cookie may contain a characters that will need to be URL-escaped, otherwise
+	// Steam (probably) interprets is as a string.
+	// When used as an URL paramter this is automatically escaped by the Go HTTP package.
 	SessionId string
-	// The `steamLogin` cookie required to use the steam website.
+	// The `steamLogin` cookie required to use the steam website. Already URL-escaped.
 	// It is only available after calling LogOn().
 	SteamLogin string
 
