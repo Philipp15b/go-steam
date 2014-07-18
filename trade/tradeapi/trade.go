@@ -84,23 +84,6 @@ func (t *Trade) GetStatus() (*Status, error) {
 	})
 }
 
-func (t *Trade) runInventoryRequest(req *http.Request) (*inventory.PartialInventory, error) {
-	req.Header.Add("Referer", t.baseUrl)
-
-	resp, err := t.client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	inv := new(inventory.PartialInventory)
-	err = json.NewDecoder(resp.Body).Decode(inv)
-	if err != nil {
-		return nil, err
-	}
-	return inv, nil
-}
-
 // Thread-safe.
 func (t *Trade) GetForeignInventory(contextId uint64, appId uint32, start *uint) (*inventory.PartialInventory, error) {
 	data := map[string]string{
@@ -117,21 +100,14 @@ func (t *Trade) GetForeignInventory(contextId uint64, appId uint32, start *uint)
 	if err != nil {
 		panic(err)
 	}
-	return t.runInventoryRequest(req)
+	req.Header.Add("Referer", t.baseUrl)
+
+	return inventory.DoInventoryRequest(t.client, req)
 }
 
 // Thread-safe.
 func (t *Trade) GetOwnInventory(contextId uint64, appId uint32, start *uint) (*inventory.PartialInventory, error) {
-	// TODO: the "trading" parameter can be left off to return non-tradable items too
-	url := fmt.Sprintf("http://steamcommunity.com/my/inventory/json/%d/%d?trading=1", appId, contextId)
-	if start != nil {
-		url += "&start=" + strconv.FormatUint(uint64(*start), 10)
-	}
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		panic(err)
-	}
-	return t.runInventoryRequest(req)
+	return inventory.GetOwnInventory(contextId, appId, start)
 }
 
 func (t *Trade) Chat(message string) (*Status, error) {

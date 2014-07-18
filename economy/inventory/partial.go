@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"net/http"
 )
 
 // A partial inventory as sent by the Steam API.
@@ -21,6 +22,21 @@ func (m *MoreStart) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 	return json.Unmarshal(data, (*uint)(m))
+}
+
+func DoInventoryRequest(client *http.Client, req *http.Request) (*PartialInventory, error) {
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	inv := new(inventory.PartialInventory)
+	err = json.NewDecoder(resp.Body).Decode(inv)
+	if err != nil {
+		return nil, err
+	}
+	return inv, nil
 }
 
 func GetFullInventory(getFirst func() (*PartialInventory, error), getNext func(start uint) (*PartialInventory, error)) (*Inventory, error) {
