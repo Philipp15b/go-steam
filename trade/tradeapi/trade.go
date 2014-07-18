@@ -1,5 +1,5 @@
 /*
-Wrapper around the HTTP trading api for type safety 'n' stuff.
+Wrapper around the HTTP trading API for type safety 'n' stuff.
 */
 package tradeapi
 

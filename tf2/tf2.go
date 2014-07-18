@@ -1,5 +1,5 @@
 /*
-Provides access to APIs of the TF2 GC.
+Provides access to TF2 Game Coordinator functionality.
 */
 package tf2
 
