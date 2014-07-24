@@ -285,7 +285,7 @@ func (f *Friend) Relationship() EFriendRelationship {
 }
 
 type GroupsList struct {
-	mutex *sync.RWMutex
+	mutex sync.RWMutex
 
 	first *Group
 	last  *Group
@@ -296,6 +296,8 @@ type GroupsList struct {
 func (list *GroupsList) add(group *Group) {
 	list.mutex.Lock()
 	defer list.mutex.Unlock()
+
+	group.mutex = &list.mutex
 
 	list.byId[group.steamId] = group
 
@@ -354,7 +356,7 @@ func (list *GroupsList) ById(id SteamId) *Group {
 
 // Represents a group within a doubly-linked group list.
 type Group struct {
-	mutex sync.RWMutex
+	mutex *sync.RWMutex
 
 	prev *Group
 	next *Group
