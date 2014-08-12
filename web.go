@@ -44,8 +44,6 @@ func (w *Web) HandlePacket(packet *Packet) {
 	}
 }
 
-type WebLoggedOnEvent struct{}
-
 // Fetches the `steamLogin` cookie. This may only be called after the first
 // WebSessionIdEvent or it will panic.
 func (w *Web) LogOn() {
@@ -110,8 +108,6 @@ func (w *Web) apiLogOn() error {
 	w.client.Emit(new(WebLoggedOnEvent))
 	return nil
 }
-
-type WebSessionIdEvent struct{}
 
 func (w *Web) handleNewLoginKey(packet *Packet) {
 	msg := new(CMsgClientNewLoginKey)
