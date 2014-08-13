@@ -60,7 +60,6 @@ func (a *Auth) HandlePacket(packet *Packet) {
 	case EMsg_ClientNewLoginKey:
 		a.handleLoginKey(packet)
 	case EMsg_ClientSessionToken:
-		a.handleSessionToken(packet)
 	case EMsg_ClientLoggedOff:
 		a.handleLoggedOff(packet)
 	case EMsg_ClientUpdateMachineAuth:
@@ -68,11 +67,8 @@ func (a *Auth) HandlePacket(packet *Packet) {
 	case EMsg_ClientAccountInfo:
 		a.handleAccountInfo(packet)
 	case EMsg_ClientWalletInfoUpdate:
-		a.handleWalletInfo(packet)
 	case EMsg_ClientRequestWebAPIAuthenticateUserNonceResponse:
-		a.handleWebAPIUserNonce(packet)
 	case EMsg_ClientMarketingMessageUpdate:
-		a.handleMarketingMessageUpdate(packet)
 	}
 }
 
@@ -131,10 +127,6 @@ func (a *Auth) handleLoginKey(packet *Packet) {
 	})
 }
 
-//TODO: handleSessionToken
-func (a *Auth) handleSessionToken(packet *Packet) {
-}
-
 func (a *Auth) handleLoggedOff(packet *Packet) {
 	result := EResult_Invalid
 	if packet.IsProto {
@@ -179,16 +171,4 @@ func (a *Auth) handleAccountInfo(packet *Packet) {
 		FacebookId:           body.GetFacebookId(),
 		FacebookName:         body.GetFacebookName(),
 	})
-}
-
-//TODO: handleWalletInfo
-func (a *Auth) handleWalletInfo(packet *Packet) {
-}
-
-//TODO: handleWebAPIUserNonce
-func (a *Auth) handleWebAPIUserNonce(packet *Packet) {
-}
-
-//TODO: handleMarketingMessageUpdate
-func (a *Auth) handleMarketingMessageUpdate(packet *Packet) {
 }
