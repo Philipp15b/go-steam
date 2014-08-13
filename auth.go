@@ -32,7 +32,6 @@ type LogOnDetails struct {
 // you to login without using an authcode in the future.
 //
 // If you don't use Steam Guard, username and password are enough.
-//TODO: Make sure Steam Guard works
 func (a *Auth) LogOn(details LogOnDetails) {
 	if len(details.Username) == 0 || len(details.Password) == 0 {
 		panic("Username and password must be set!")
