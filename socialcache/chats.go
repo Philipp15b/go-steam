@@ -12,8 +12,6 @@ import (
 // 	for id, chat := range client.Social.Chats.GetCopy() {
 // 		log.Println(id, chat.Name)
 // 	}
-
-// A thread-safe chat list
 type ChatsList struct {
 	mutex sync.RWMutex
 	byId  map[SteamId]*Chat

@@ -12,8 +12,6 @@ import (
 // 	for id, friend := range client.Social.Friends.GetCopy() {
 // 		log.Println(id, friend.Name)
 // 	}
-
-// A thread-safe friend list
 type FriendsList struct {
 	mutex sync.RWMutex
 	byId  map[SteamId]*Friend

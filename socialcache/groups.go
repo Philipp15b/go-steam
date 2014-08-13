@@ -12,8 +12,6 @@ import (
 // 	for id, group := range client.Social.Groups.GetCopy() {
 // 		log.Println(id, group.Name)
 // 	}
-
-// A thread-safe group list
 type GroupsList struct {
 	mutex sync.RWMutex
 	byId  map[SteamId]*Group
