@@ -138,6 +138,20 @@ func (c *Client) Connect() *netutil.PortAddr {
 	return server
 }
 
+// Connects to a random North American server on the Steam network
+func (c *Client) ConnectNorthAmerica() *netutil.PortAddr {
+	server := GetRandomNorthAmericaCM()
+	c.ConnectTo(server)
+	return server
+}
+
+// Connects to a random Europe server on the Steam network
+func (c *Client) ConnectEurope() *netutil.PortAddr {
+	server := GetRandomEuropeCM()
+	c.ConnectTo(server)
+	return server
+}
+
 // Connects to a specific server.
 // If this client is already connected, it is disconnected first.
 func (c *Client) ConnectTo(addr *netutil.PortAddr) {
