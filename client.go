@@ -91,10 +91,6 @@ func (c *Client) Emit(event interface{}) {
 	c.events <- event
 }
 
-// When this event is emitted by the Client, the connection is automatically closed.
-// This may be caused by a network error, for example.
-type FatalErrorEvent error
-
 // Emits a FatalErrorEvent formatted with fmt.Errorf and disconnects.
 func (c *Client) Fatalf(format string, a ...interface{}) {
 	c.Emit(FatalErrorEvent(fmt.Errorf(format, a...)))
@@ -171,6 +167,8 @@ func (c *Client) Disconnect() {
 		c.heartbeat.Stop()
 	}
 	close(c.writeChan)
+	c.Emit(&DisconnectedEvent{})
+
 }
 
 // Adds a message to the send queue. Modifications to the given message after
@@ -299,8 +297,6 @@ func (c *Client) handleChannelEncryptRequest(packet *Packet) {
 	c.Write(NewMsg(NewMsgChannelEncryptResponse(), payload.Bytes()))
 }
 
-type ConnectedEvent struct{}
-
 func (c *Client) handleChannelEncryptResult(packet *Packet) {
 	body := NewMsgChannelEncryptResult()
 	packet.ReadMsg(body)
@@ -312,7 +308,7 @@ func (c *Client) handleChannelEncryptResult(packet *Packet) {
 	c.conn.SetEncryptionKey(c.tempSessionKey)
 	c.tempSessionKey = nil
 
-	c.Emit(new(ConnectedEvent))
+	c.Emit(&ConnectedEvent{})
 }
 
 func (c *Client) handleMulti(packet *Packet) {
@@ -348,13 +344,6 @@ func (c *Client) handleMulti(packet *Packet) {
 		}
 		c.handlePacket(p)
 	}
-}
-
-// A list of connection manager addresses to connect to in the future.
-// You should always save them and then select one of these
-// instead of the builtin ones for the next connection.
-type ClientCMListEvent struct {
-	Addresses []*netutil.PortAddr
 }
 
 func (c *Client) handleClientCMList(packet *Packet) {
