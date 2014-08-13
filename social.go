@@ -82,20 +82,22 @@ func (s *Social) SetPersonaState(state EPersonaState) {
 
 // Sends a chat message to ether a room or friend
 func (s *Social) SendMessage(to SteamId, entryType EChatEntryType, message string) {
+	//Friend
 	if to.GetAccountType() == int32(EAccountType_Individual) || to.GetAccountType() == int32(EAccountType_ConsoleUser) {
-		s.SendChatMessage(to, entryType, message)
+		s.client.Write(NewClientMsgProtobuf(EMsg_ClientFriendMsg, &CMsgClientFriendMsg{
+			Steamid:       proto.Uint64(to.ToUint64()),
+			ChatEntryType: proto.Int32(int32(entryType)),
+			Message:       []byte(message),
+		}))
+	//Chat room
 	} else if to.GetAccountType() == int32(EAccountType_Clan) || to.GetAccountType() == int32(EAccountType_Chat) {
-		s.SendChatRoomMessage(to, entryType, message)
+		chatId := to.ClanToChat()
+		s.client.Write(NewClientMsg(&MsgClientChatMsg{
+			ChatMsgType:     entryType,
+			SteamIdChatRoom: chatId,
+			SteamIdChatter:  s.client.SteamId(),
+		}, []byte(message)))
 	}
-}
-
-// Sends a chat message to a friend
-func (s *Social) SendChatMessage(to SteamId, entryType EChatEntryType, message string) {
-	s.client.Write(NewClientMsgProtobuf(EMsg_ClientFriendMsg, &CMsgClientFriendMsg{
-		Steamid:       proto.Uint64(to.ToUint64()),
-		ChatEntryType: proto.Int32(int32(entryType)),
-		Message:       []byte(message),
-	}))
 }
 
 // Adds a friend to your friends list or accepts a friend. You'll receive a FriendStateEvent
@@ -169,16 +171,6 @@ func (s *Social) LeaveChat(id SteamId) {
 		SteamIdChat: chatId,
 		Type:        EChatInfoType_StateChange,
 	}, payload.Bytes()))
-}
-
-// Sends a chat message to a chat room
-func (s *Social) SendChatRoomMessage(room SteamId, entryType EChatEntryType, message string) {
-	chatId := room.ClanToChat()
-	s.client.Write(NewClientMsg(&MsgClientChatMsg{
-		ChatMsgType:     entryType,
-		SteamIdChatRoom: chatId,
-		SteamIdChatter:  s.client.SteamId(),
-	}, []byte(message)))
 }
 
 // Kicks the specified chat member from the given chat room
