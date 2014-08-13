@@ -6,23 +6,38 @@ and wait for a ConnectedCallback. Then you may call the Login method in the Auth
 with your login information. This is covered in more detail in the method's documentation. After you've
 received the LoggedOnEvent, you should set your persona state to online to receive friend lists etc.
 
-	client := steam.NewClient()
-	client.Connect()
-	for event := range client.Events() {
-		switch e := event.(type) {
-		case *steam.ConnectedEvent:
-			client.Auth.LogOn(myLoginInfo)
-		case *steam.MachineAuthUpdateEvent:
-			ioutil.WriteFile("sentry", e.Hash, 0666)
-		case *steam.LoggedOnEvent:
-			client.Social.SetPersonaState(steamlang.EPersonaState_Online)
-		case steam.FatalErrorEvent:
-			client.Connect() // please do some real error handling here
-			log.Print(e)
-		case error:
-			log.Print(e)
+	package main
+
+	import (
+		"github.com/Philipp15b/go-steam"
+		"github.com/Philipp15b/go-steam/internal/steamlang"
+		"io/ioutil"
+		"log"
+	)
+
+	func main() {
+		myLoginInfo := steam.LogOnDetails{}
+		myLoginInfo.Username = "UserName"
+		myLoginInfo.Password = "PassWord"
+
+		client := steam.NewClient()
+		client.Connect()
+		for event := range client.Events() {
+			switch e := event.(type) {
+			case *steam.ConnectedEvent:
+				client.Auth.LogOn(myLoginInfo)
+			case *steam.MachineAuthUpdateEvent:
+				ioutil.WriteFile("sentry", e.Hash, 0666)
+			case *steam.LoggedOnEvent:
+				client.Social.SetPersonaState(internal.EPersonaState_Online)
+			case steam.FatalErrorEvent:
+				log.Print(e)
+			case error:
+				log.Print(e)
+			}
 		}
 	}
+
 
 Events
 
