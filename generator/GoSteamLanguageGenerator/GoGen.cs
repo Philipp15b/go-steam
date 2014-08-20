@@ -56,9 +56,9 @@ namespace GoSteamLanguageGenerator
 			sb.AppendLine("import (");
 			sb.AppendLine("    \"io\"");
 			sb.AppendLine("    \"encoding/binary\"");
-			sb.AppendLine("    \"github.com/smithfox/goprotobuf/proto\"");
-			sb.AppendLine("     \"github.com/smithfox/go-steam/steamid\"");
-            sb.AppendLine("    . \"github.com/smithfox/go-steam/internal/protobuf\"");
+			sb.AppendLine("    \"code.google.com/p/goprotobuf/proto\"");
+			sb.AppendLine("     \"github.com/Philipp15b/go-steam/steamid\"");
+            sb.AppendLine("    . \"github.com/Philipp15b/go-steam/internal/protobuf\"");
 			sb.AppendLine(")");
 			sb.AppendLine();
 
@@ -137,18 +137,16 @@ namespace GoSteamLanguageGenerator
 
 		private void EmitEnumStringer(EnumNode enode, StringBuilder sb)
 		{
-			sb.AppendLine("func (e " + enode.Name + ") String() string {");
-			sb.AppendLine("    switch e {");
+			sb.AppendLine("var " + enode.Name + "_name = map[" + enode.Name + "]string{");
 
-			// go does not allow duplicate cases, so we filter duplicte ones out
+			// duplicate elements don't really make sense here, so we filter them
 			var uniqueNodes = new List<PropNode>();
 			{
 				var allValues = new List<long>();
-				for (int i = 0; i < enode.childNodes.Count; i++) {
-					Node node = enode.childNodes[i];
+				foreach (var node in enode.childNodes) {
 					if (!(node is PropNode))
 						continue;
-					PropNode prop = node as PropNode;
+					var prop = node as PropNode;
 					long val = EvalEnum(enode, prop);
 					if (allValues.Contains(val))
 						continue;
@@ -158,12 +156,18 @@ namespace GoSteamLanguageGenerator
 			}
 
 			foreach (PropNode prop in uniqueNodes) {
-				sb.AppendLine("    case " + enode.Name + "_" + prop.Name + ":");
-				sb.AppendLine("        return \"" + enode.Name + "_" + prop.Name + "\"");
+				sb.Append("    " + EvalEnum(enode, prop) + ": ");
+				sb.AppendLine("\"" + enode.Name + "_" + prop.Name + "\",");
 			}
-			sb.AppendLine("    default:");
-			sb.AppendLine("        return \"INVALID\"");
+
+			sb.AppendLine("}");
+			sb.AppendLine();
+
+			sb.AppendLine("func (e " + enode.Name + ") String() string {");
+			sb.AppendLine("    if s, ok := " + enode.Name + "_name[e]; ok {");
+			sb.AppendLine("         return s");
 			sb.AppendLine("    }");
+			sb.AppendLine("    return \"INVALID\"");
 			sb.AppendLine("}");
 			sb.AppendLine();
 		}

@@ -1,11 +1,11 @@
 package steam
 
 import (
-	"github.com/smithfox/goprotobuf/proto"
-	. "github.com/smithfox/go-steam/internal"
-	. "github.com/smithfox/go-steam/internal/protobuf"
-	. "github.com/smithfox/go-steam/internal/steamlang"
-	. "github.com/smithfox/go-steam/steamid"
+	"code.google.com/p/goprotobuf/proto"
+	. "github.com/Philipp15b/go-steam/internal"
+	. "github.com/Philipp15b/go-steam/internal/protobuf"
+	. "github.com/Philipp15b/go-steam/internal/steamlang"
+	. "github.com/Philipp15b/go-steam/steamid"
 )
 
 // Provides access to the Steam client's part of Steam Trading, that is bootstrapping
@@ -20,31 +20,6 @@ type Trading struct {
 }
 
 type TradeRequestId uint32
-
-type TradeProposedEvent struct {
-	RequestId TradeRequestId
-	Other     SteamId
-	OtherName string
-}
-
-type TradeResultEvent struct {
-	RequestId TradeRequestId
-	Response  EEconTradeResponse
-	Other     SteamId
-
-	// Number of days Steam Guard is required to have been active
-	NumDaysSteamGuardRequired uint32
-	// Number of days a new device cannot trade for.
-	NumDaysNewDeviceCooldown uint32
-	// Default number of days one cannot trade after a password reset.
-	DefaultNumDaysPasswordResetProbation uint32
-	// See above.
-	NumDaysPasswordResetProbation uint32
-}
-
-type TradeSessionStartEvent struct {
-	Other SteamId
-}
 
 func (t *Trading) HandlePacket(packet *Packet) {
 	switch packet.EMsg {

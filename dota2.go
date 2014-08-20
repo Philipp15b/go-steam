@@ -2,8 +2,8 @@ package steam
 
 import (
 	"fmt"
-	. "github.com/smithfox/go-steam/internal/gamecoordinator"
-	. "github.com/smithfox/go-steam/internal/protobuf/dota"
+	. "github.com/Philipp15b/go-steam/internal/gamecoordinator"
+	. "github.com/Philipp15b/go-steam/internal/protobuf/dota"
 	"time"
 )
 

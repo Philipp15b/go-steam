@@ -1,10 +1,10 @@
 package gamecoordinator
 
 import (
-	"github.com/smithfox/goprotobuf/proto"
-	. "github.com/smithfox/go-steam/internal"
-	. "github.com/smithfox/go-steam/internal/protobuf"
-	. "github.com/smithfox/go-steam/internal/steamlang"
+	"code.google.com/p/goprotobuf/proto"
+	. "github.com/Philipp15b/go-steam/internal"
+	. "github.com/Philipp15b/go-steam/internal/protobuf"
+	. "github.com/Philipp15b/go-steam/internal/steamlang"
 	"io"
 )
 
@@ -82,10 +82,10 @@ type GCMsg struct {
 	AppId   uint32
 	MsgType uint32
 	Header  *MsgGCHdr
-	Body    Serializable
+	Body    Serializer
 }
 
-func (g *GCMsg) NewGCMsg(appId, msgType uint32, body Serializable) *GCMsg {
+func NewGCMsg(appId, msgType uint32, body Serializer) *GCMsg {
 	return &GCMsg{
 		AppId:   appId,
 		MsgType: msgType,

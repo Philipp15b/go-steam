@@ -4,7 +4,7 @@
 
 package dota
 
-import proto "github.com/smithfox/goprotobuf/proto"
+import proto "code.google.com/p/goprotobuf/proto"
 import math "math"
 
 // discarding unused import steammessages "steammessages.pb"

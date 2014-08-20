@@ -3,6 +3,9 @@ package steamid
 import (
 	"fmt"
 	"strconv"
+	"errors"
+	"regexp"
+	"strings"
 )
 
 type ChatInstanceFlag uint64
@@ -15,16 +18,48 @@ const (
 
 type SteamId uint64
 
-func New(accountId, instance uint32, universe int32, accountType int32) SteamId {
+func NewId(id string) (SteamId, error) {
+	valid, err := regexp.MatchString(`STEAM_[0-5]:[01]:\d+`, id)
+	if err != nil {
+		return SteamId(0), err
+	}
+	if valid {
+		id = strings.Replace(id, "STEAM_", "", -1) // remove STEAM_
+		splitid := strings.Split(id, ":")          // split 0:1:00000000 into 0 1 00000000
+		universe, _ := strconv.ParseInt(splitid[0], 10, 32)
+		if universe == 0 { //EUniverse_Invalid
+			universe = 1 //EUniverse_Public
+		}
+		authServer, _ := strconv.ParseUint(splitid[1], 10, 32)
+		accId, _ := strconv.ParseUint(splitid[2], 10, 32)
+		accountType := int32(1) //EAccountType_Individual
+		accountId := (uint32(accId) << 1) | uint32(authServer)
+		return NewIdAdv(uint32(accountId), 1, int32(universe), accountType), nil
+	} else {
+		newid, err := strconv.ParseUint(id, 10, 64)
+		if err != nil {
+			return SteamId(0), err
+		}
+		return SteamId(newid), nil
+	}
+	return SteamId(0), errors.New(fmt.Sprintf("Invalid SteamId: %s\n", id))
+}
+
+func NewIdAdv(accountId, instance uint32, universe int32, accountType int32) SteamId {
 	s := SteamId(0)
 	s = s.SetAccountId(accountId)
 	s = s.SetAccountInstance(instance)
 	s = s.SetAccountUniverse(universe)
-	return s.SetAccountType(accountType)
+	s = s.SetAccountType(accountType)
+	return s
 }
 
 func (s SteamId) ToUint64() uint64 {
 	return uint64(s)
+}
+
+func (s SteamId) ToString() string {
+	return strconv.FormatUint(uint64(s), 10)
 }
 
 func (s SteamId) String() string {
@@ -80,4 +115,22 @@ func (s SteamId) GetAccountUniverse() int32 {
 
 func (s SteamId) SetAccountUniverse(universe int32) SteamId {
 	return s.set(56, 0xF, uint64(universe))
+}
+
+//used to fix the Clan SteamId to a Chat SteamId
+func (s SteamId) ClanToChat() SteamId {
+	if s.GetAccountType() == int32(7) { //EAccountType_Clan
+		s = s.SetAccountInstance(uint32(Clan))
+		s = s.SetAccountType(8) //EAccountType_Chat
+	}
+	return s
+}
+
+//used to fix the Chat SteamId to a Clan SteamId
+func (s SteamId) ChatToClan() SteamId {
+	if s.GetAccountType() == int32(8) { //EAccountType_Chat
+		s = s.SetAccountInstance(0)
+		s = s.SetAccountType(int32(7)) //EAccountType_Clan
+	}
+	return s
 }

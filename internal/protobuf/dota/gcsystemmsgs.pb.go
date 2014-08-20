@@ -4,7 +4,7 @@
 
 package dota
 
-import proto "github.com/smithfox/goprotobuf/proto"
+import proto "code.google.com/p/goprotobuf/proto"
 import math "math"
 
 // Reference imports to suppress errors if they are not otherwise used.

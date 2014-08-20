@@ -6,16 +6,18 @@ import (
 	"crypto/rand"
 	"encoding/binary"
 	"fmt"
-	"github.com/smithfox/go-steam/cryptoutil"
-	. "github.com/smithfox/go-steam/internal"
-	. "github.com/smithfox/go-steam/internal/protobuf"
-	. "github.com/smithfox/go-steam/internal/steamlang"
-	. "github.com/smithfox/go-steam/steamid"
+	"github.com/Philipp15b/go-steam/cryptoutil"
+	. "github.com/Philipp15b/go-steam/internal"
+	. "github.com/Philipp15b/go-steam/internal/protobuf"
+	. "github.com/Philipp15b/go-steam/internal/steamlang"
+	"github.com/Philipp15b/go-steam/netutil"
+	. "github.com/Philipp15b/go-steam/steamid"
 	"hash/crc32"
 	"io/ioutil"
 	"log"
+	"net"
 	"sync"
-	// "sync/atomic"
+	"sync/atomic"
 	"time"
 )
 
@@ -26,16 +28,18 @@ import (
 // When a FatalErrorEvent is emitted, the connection is automatically closed. The same client can be used to reconnect.
 // Other errors don't have any effect.
 type Client struct {
+	// these need to be 64 bit aligned for sync/atomic on 32bit
+	sessionId    int32
+	_            uint32
+	steamId      uint64
+	currentJobId uint64
+
 	Auth          *Auth
 	Social        *Social
 	Web           *Web
 	Notifications *Notifications
 	Trading       *Trading
 	GC            *GameCoordinator
-	sessionId     int32
-	steamId       uint64
-
-	currentJobId uint64
 
 	events        chan interface{}
 	handlers      []PacketHandler
@@ -45,7 +49,7 @@ type Client struct {
 
 	ConnectionTimeout time.Duration
 
-	mutex     sync.RWMutex // guarding connection, heartbeat and writeChan
+	mutex     sync.RWMutex // guarding conn and writeChan
 	conn      connection
 	writeChan chan IMsg
 	writeBuf  *bytes.Buffer
@@ -87,10 +91,6 @@ func (c *Client) Emit(event interface{}) {
 	c.events <- event
 }
 
-// When this event is emitted by the Client, the connection is automatically closed.
-// This may be caused by a network error, for example.
-type FatalErrorEvent error
-
 // Emits a FatalErrorEvent formatted with fmt.Errorf and disconnects.
 func (c *Client) Fatalf(format string, a ...interface{}) {
 	c.Emit(FatalErrorEvent(fmt.Errorf(format, a...)))
@@ -110,19 +110,15 @@ func (c *Client) RegisterPacketHandler(handler PacketHandler) {
 }
 
 func (c *Client) GetNextJobId() JobId {
-	//return JobId(atomic.AddUint64(&c.currentJobId, 1))
-	c.currentJobId += 1
-	return JobId(c.currentJobId)
+	return JobId(atomic.AddUint64(&c.currentJobId, 1))
 }
 
 func (c *Client) SteamId() SteamId {
-	//	return SteamId(atomic.LoadUint64(&c.steamId))
-	return SteamId(c.steamId)
+	return SteamId(atomic.LoadUint64(&c.steamId))
 }
 
 func (c *Client) SessionId() int32 {
-	//return atomic.LoadInt32(&c.sessionId)
-	return c.sessionId
+	return atomic.LoadInt32(&c.sessionId)
 }
 
 func (c *Client) Connected() bool {
@@ -136,18 +132,32 @@ func (c *Client) Connected() bool {
 //
 // You will receive a ServerListEvent after logging in which contains a new list of servers of which you
 // should choose one yourself and connect with ConnectTo since the included list may not always be up to date.
-func (c *Client) Connect() string {
-	server := getRandomCM()
+func (c *Client) Connect() *netutil.PortAddr {
+	server := GetRandomCM()
+	c.ConnectTo(server)
+	return server
+}
+
+// Connects to a random North American server on the Steam network
+func (c *Client) ConnectNorthAmerica() *netutil.PortAddr {
+	server := GetRandomNorthAmericaCM()
+	c.ConnectTo(server)
+	return server
+}
+
+// Connects to a random Europe server on the Steam network
+func (c *Client) ConnectEurope() *netutil.PortAddr {
+	server := GetRandomEuropeCM()
 	c.ConnectTo(server)
 	return server
 }
 
 // Connects to a specific server.
 // If this client is already connected, it is disconnected first.
-func (c *Client) ConnectTo(address string) {
+func (c *Client) ConnectTo(addr *netutil.PortAddr) {
 	c.Disconnect()
 
-	conn, err := dialTCP(address)
+	conn, err := dialTCP(addr.ToTCPAddr())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -170,8 +180,9 @@ func (c *Client) Disconnect() {
 	if c.heartbeat != nil {
 		c.heartbeat.Stop()
 	}
-
 	close(c.writeChan)
+	c.Emit(&DisconnectedEvent{})
+
 }
 
 // Adds a message to the send queue. Modifications to the given message after
@@ -206,7 +217,6 @@ func (c *Client) readLoop() {
 			c.Fatalf("Error reading from the connection: %v", err)
 			return
 		}
-		fmt.Printf("!!!!!!!get packet, EMsg=%d\n", packet.EMsg)
 		c.handlePacket(packet)
 	}
 }
@@ -260,7 +270,6 @@ func (c *Client) heartbeatLoop(seconds time.Duration) {
 }
 
 func (c *Client) handlePacket(packet *Packet) {
-	fmt.Printf("client.handlePacket, packet.EMsg=%d\n", packet.EMsg)
 	switch packet.EMsg {
 	case EMsg_ChannelEncryptRequest:
 		c.handleChannelEncryptRequest(packet)
@@ -268,6 +277,8 @@ func (c *Client) handlePacket(packet *Packet) {
 		c.handleChannelEncryptResult(packet)
 	case EMsg_Multi:
 		c.handleMulti(packet)
+	case EMsg_ClientCMList:
+		c.handleClientCMList(packet)
 	}
 
 	c.handlersMutex.RLock()
@@ -300,8 +311,6 @@ func (c *Client) handleChannelEncryptRequest(packet *Packet) {
 	c.Write(NewMsg(NewMsgChannelEncryptResponse(), payload.Bytes()))
 }
 
-type ConnectedEvent struct{}
-
 func (c *Client) handleChannelEncryptResult(packet *Packet) {
 	body := NewMsgChannelEncryptResult()
 	packet.ReadMsg(body)
@@ -313,7 +322,7 @@ func (c *Client) handleChannelEncryptResult(packet *Packet) {
 	c.conn.SetEncryptionKey(c.tempSessionKey)
 	c.tempSessionKey = nil
 
-	c.Emit(new(ConnectedEvent))
+	c.Emit(&ConnectedEvent{})
 }
 
 func (c *Client) handleMulti(packet *Packet) {
@@ -349,4 +358,28 @@ func (c *Client) handleMulti(packet *Packet) {
 		}
 		c.handlePacket(p)
 	}
+}
+
+func (c *Client) handleClientCMList(packet *Packet) {
+	body := new(CMsgClientCMList)
+	packet.ReadProtoMsg(body)
+
+	l := make([]*netutil.PortAddr, 0)
+	for i, ip := range body.GetCmAddresses() {
+		l = append(l, &netutil.PortAddr{
+			readIp(ip),
+			uint16(body.GetCmPorts()[i]),
+		})
+	}
+
+	c.Emit(&ClientCMListEvent{l})
+}
+
+func readIp(ip uint32) net.IP {
+	r := make(net.IP, 4)
+	r[3] = byte(ip)
+	r[2] = byte(ip >> 8)
+	r[1] = byte(ip >> 16)
+	r[0] = byte(ip >> 24)
+	return r
 }

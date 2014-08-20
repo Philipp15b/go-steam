@@ -44,16 +44,21 @@ func main() {
 
 func clean() {
 	print("# Cleaning")
-	protos, _ := filepath.Glob("../internal/**/*.pb.go")
+	cleanGlob("../internal/**/*.pb.go")
+	cleanGlob("../tf2/internal/**/*.pb.go")
+
+	os.Remove("../internal/steamlang/enums.go")
+	os.Remove("../internal/steamlang/messages.go")
+}
+
+func cleanGlob(pattern string) {
+	protos, _ := filepath.Glob(pattern)
 	for _, proto := range protos {
 		err := os.Remove(proto)
 		if err != nil {
 			panic(err)
 		}
 	}
-
-	os.Remove("../internal/steamlang/enums.go")
-	os.Remove("../internal/steamlang/messages.go")
 }
 
 func buildSteamLanguage(debug bool) {
@@ -74,25 +79,23 @@ func buildSteamLanguage(debug bool) {
 func buildProto() {
 	print("# Building Protobufs")
 
-	base := "SteamKit/Resources/Protobufs"
-	outDir := "../internal/protobuf"
-	os.MkdirAll(outDir, os.ModePerm)
-	for proto, out := range steamclient_protoFiles {
-		full := filepath.Join(outDir, out)
-		compileProto(base, "steamclient", proto, full)
-		fixProto(full)
-	}
+	buildProtoMap("steamclient", clientProtoFiles, "../internal/protobuf")
+	buildProtoMap("dota", dota2_protoFiles, "../internal/protobuf")
+	buildProtoMap("tf", tf2ProtoFiles, "../tf2/internal/protobuf")
+}
 
-	for proto, out := range dota2_protoFiles {
+func buildProtoMap(srcSubdir string, files map[string]string, outDir string) {
+	os.MkdirAll(outDir, os.ModePerm)
+	for proto, out := range files {
 		full := filepath.Join(outDir, out)
-		compileProto(base, "dota", proto, full)
+		compileProto("SteamKit/Resources/Protobufs", srcSubdir, proto, full)
 		fixProto(full)
 	}
 }
 
 // Maps the proto files to their target files.
-// See `SteamKit/Resources/Protobufs/dota/generate-base.bat` for reference.
-var steamclient_protoFiles = map[string]string{
+// See `SteamKit/Resources/Protobufs/steamclient/generate-base.bat` for reference.
+var clientProtoFiles = map[string]string{
 	"steammessages_base.proto":   "base.pb.go",
 	"encrypted_app_ticket.proto": "app_ticket.pb.go",
 
@@ -115,6 +118,14 @@ var steamclient_protoFiles = map[string]string{
 	"steammessages_publishedfile.steamclient.proto":     "unified/publishedfile.pb.go",
 }
 
+var tf2ProtoFiles = map[string]string{
+	"base_gcmessages.proto":  "base.pb.go",
+	"econ_gcmessages.proto":  "econ.pb.go",
+	"gcsdk_gcmessages.proto": "gcsdk.pb.go",
+	"tf_gcmessages.proto":    "tf.pb.go",
+	"gcsystemmsgs.proto":     "system.pb.go",
+}
+
 // Maps the proto files to their target files.
 // See `SteamKit/Resources/Protobufs/steamclient/generate-base.bat` for reference.
 var dota2_protoFiles = map[string]string{
@@ -130,14 +141,13 @@ var dota2_protoFiles = map[string]string{
 	"dota_gcmessages_server.proto": "dota/gcmessagesserver.pb.go",
 }
 
-func compileProto(base, subbase1, proto, target string) {
+func compileProto(srcBase, srcSubdir, proto, target string) {
 	outDir, _ := filepath.Split(target)
 	err := os.MkdirAll(outDir, os.ModePerm)
 	if err != nil {
 		panic(err)
 	}
-
-	execute("protoc", "--go_out="+outDir, "-I="+base+"/"+subbase1, "-I="+base, filepath.Join(base, subbase1, proto))
+	execute("protoc", "--go_out="+outDir, "-I="+srcBase+"/"+srcSubdir, "-I="+srcBase, filepath.Join(srcBase, srcSubdir, proto))
 	out := strings.Replace(filepath.Join(outDir, proto), ".proto", ".pb.go", 1)
 	err = forceRename(out, target)
 	if err != nil {
@@ -195,7 +205,7 @@ func fixProto(path string) {
 
 	// fix the google dependency;
 	// we just reuse the one from protoc-gen-go
-	file = bytes.Replace(file, []byte("google/protobuf/descriptor.pb"), []byte("github.com/smithfox/goprotobuf/protoc-gen-go/descriptor"), -1)
+	file = bytes.Replace(file, []byte("google/protobuf/descriptor.pb"), []byte("code.google.com/p/goprotobuf/protoc-gen-go/descriptor"), -1)
 
 	err = ioutil.WriteFile(path, file, os.ModePerm)
 	if err != nil {
