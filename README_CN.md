@@ -15,10 +15,11 @@ It is based on [SteamKit2](https://github.com/SteamRE/SteamKit), a .NET library.
     export GOPATH=/e/git/myapp
     cd /e/git/myapp/src
     mkdir -p code.google.com/p
-    cd /e/git/myapp/src/code.google.com/p
+    cd code.google.com/p
     git clone https://github.com/smithfox/goprotobuf.git
     cd /e/git/myapp/src
     mkdir -p github.com/Philipp15b
+    cd github.com/Philipp15b
     git clone https://github.com/smithfox/go-steam.git
     cd /e/git/myapp/src/github.com/Philipp15b/go-steam
     git submodule init && git submodule update
