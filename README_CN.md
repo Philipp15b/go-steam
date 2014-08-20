@@ -19,7 +19,7 @@ It is based on [SteamKit2](https://github.com/SteamRE/SteamKit), a .NET library.
     git clone https://github.com/smithfox/goprotobuf.git
     cd /e/git/myapp/src
     mkdir -p github.com/Philipp15b
-    git clone https://github.com/Philipp15b/go-steam.git
+    git clone https://github.com/smithfox/go-steam.git
     cd /e/git/myapp/src/github.com/Philipp15b/go-steam
     git submodule init && git submodule update
     cd /e/git/myapp/protobuf_gen_tool
