@@ -105,16 +105,13 @@ namespace GoSteamLanguageGenerator
 			sb.AppendLine("const (");
 			bool first = true;
 			foreach (PropNode prop in enode.childNodes) {
-				// the first element in the enum must be prefixed by its type
-				string t = first ? " " + enode.Name : "";
-
 				string val = String.Join(" | ", prop.Default.Select(item => {
 					var name = EmitSymbol(item);
 					// if this is an element of this enum, make sure to prefix it with its name
 					return (enode.childNodes.Exists(node => node.Name == name) ? enode.Name + "_" : "") + name;
 				}));
 
-				sb.Append("    " + enode.Name + "_" + prop.Name + t + " = " + val);
+				sb.Append("    " + enode.Name + "_" + prop.Name + " " + enode.Name + " = " + val);
 
 				if (prop.Obsolete != null) {
 					if (prop.Obsolete.Length > 0)
