@@ -41,6 +41,12 @@ namespace GoSteamLanguageGenerator
 			sb.AppendLine();
 			sb.AppendLine("package steamlang");
 			sb.AppendLine();
+			sb.AppendLine("import (");
+			sb.AppendLine("    \"strings\"");
+			sb.AppendLine("    \"sort\"");
+			sb.AppendLine("    \"fmt\"");
+			sb.AppendLine(")");
+			sb.AppendLine();
 			foreach (Node n in root.childNodes) {
 				EmitEnumNode(n as EnumNode, sb);
 			}
@@ -164,7 +170,17 @@ namespace GoSteamLanguageGenerator
 			sb.AppendLine("    if s, ok := " + enode.Name + "_name[e]; ok {");
 			sb.AppendLine("         return s");
 			sb.AppendLine("    }");
-			sb.AppendLine("    return \"INVALID\"");
+			sb.AppendLine("    var flags []string");
+			sb.AppendLine("    for k, v := range " + enode.Name + "_name {");
+			sb.AppendLine("        	if e&k != 0 {");
+			sb.AppendLine("        		flags = append(flags, v)");
+			sb.AppendLine("	        }");
+			sb.AppendLine("    }");
+			sb.AppendLine("    if len(flags) == 0 {");
+			sb.AppendLine("        return fmt.Sprint(e)");
+			sb.AppendLine("    }");
+			sb.AppendLine("    sort.Strings(flags)");
+			sb.AppendLine("    return strings.Join(flags, \" | \")");
 			sb.AppendLine("}");
 			sb.AppendLine();
 		}
