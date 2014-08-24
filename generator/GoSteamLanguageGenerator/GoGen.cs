@@ -194,7 +194,7 @@ namespace GoSteamLanguageGenerator
 
 				if (new Regex("^[-0-9]+$|^0x[-0-9a-fA-F]+$").IsMatch(val)) {
 					int bas = 10;
-					if (val.StartsWith("0x")) {
+					if (val.StartsWith("0x", StringComparison.Ordinal)) {
 						bas = 16;
 						val = val.Substring(2);
 					}
