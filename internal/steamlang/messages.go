@@ -7,6 +7,7 @@ import (
 	"code.google.com/p/goprotobuf/proto"
 	"encoding/binary"
 	. "github.com/Philipp15b/go-steam/internal/protobuf"
+	"github.com/Philipp15b/go-steam/rwu"
 	"github.com/Philipp15b/go-steam/steamid"
 	"io"
 )
@@ -83,48 +84,48 @@ func (d *UdpHeader) Serialize(w io.Writer) error {
 
 func (d *UdpHeader) Deserialize(r io.Reader) error {
 	var err error
-	d.Magic, err = readUint32(r)
+	d.Magic, err = rwu.ReadUint32(r)
 	if err != nil {
 		return err
 	}
-	d.PayloadSize, err = readUint16(r)
+	d.PayloadSize, err = rwu.ReadUint16(r)
 	if err != nil {
 		return err
 	}
-	t0, err := readUint8(r)
+	t0, err := rwu.ReadUint8(r)
 	if err != nil {
 		return err
 	}
 	d.PacketType = EUdpPacketType(t0)
-	d.Flags, err = readUint8(r)
+	d.Flags, err = rwu.ReadUint8(r)
 	if err != nil {
 		return err
 	}
-	d.SourceConnID, err = readUint32(r)
+	d.SourceConnID, err = rwu.ReadUint32(r)
 	if err != nil {
 		return err
 	}
-	d.DestConnID, err = readUint32(r)
+	d.DestConnID, err = rwu.ReadUint32(r)
 	if err != nil {
 		return err
 	}
-	d.SeqThis, err = readUint32(r)
+	d.SeqThis, err = rwu.ReadUint32(r)
 	if err != nil {
 		return err
 	}
-	d.SeqAck, err = readUint32(r)
+	d.SeqAck, err = rwu.ReadUint32(r)
 	if err != nil {
 		return err
 	}
-	d.PacketsInMsg, err = readUint32(r)
+	d.PacketsInMsg, err = rwu.ReadUint32(r)
 	if err != nil {
 		return err
 	}
-	d.MsgStartSeq, err = readUint32(r)
+	d.MsgStartSeq, err = rwu.ReadUint32(r)
 	if err != nil {
 		return err
 	}
-	d.MsgSize, err = readUint32(r)
+	d.MsgSize, err = rwu.ReadUint32(r)
 	return err
 }
 
@@ -151,11 +152,11 @@ func (d *ChallengeData) Serialize(w io.Writer) error {
 
 func (d *ChallengeData) Deserialize(r io.Reader) error {
 	var err error
-	d.ChallengeValue, err = readUint32(r)
+	d.ChallengeValue, err = rwu.ReadUint32(r)
 	if err != nil {
 		return err
 	}
-	d.ServerLoad, err = readUint32(r)
+	d.ServerLoad, err = rwu.ReadUint32(r)
 	return err
 }
 
@@ -177,7 +178,7 @@ func (d *ConnectData) Serialize(w io.Writer) error {
 
 func (d *ConnectData) Deserialize(r io.Reader) error {
 	var err error
-	d.ChallengeValue, err = readUint32(r)
+	d.ChallengeValue, err = rwu.ReadUint32(r)
 	return err
 }
 
@@ -262,16 +263,16 @@ func (d *MsgHdr) Serialize(w io.Writer) error {
 
 func (d *MsgHdr) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readInt32(r)
+	t0, err := rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
 	d.Msg = EMsg(t0)
-	d.TargetJobID, err = readUint64(r)
+	d.TargetJobID, err = rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
-	d.SourceJobID, err = readUint64(r)
+	d.SourceJobID, err = rwu.ReadUint64(r)
 	return err
 }
 
@@ -333,37 +334,37 @@ func (d *ExtendedClientMsgHdr) Serialize(w io.Writer) error {
 
 func (d *ExtendedClientMsgHdr) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readInt32(r)
+	t0, err := rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
 	d.Msg = EMsg(t0)
-	d.HeaderSize, err = readUint8(r)
+	d.HeaderSize, err = rwu.ReadUint8(r)
 	if err != nil {
 		return err
 	}
-	d.HeaderVersion, err = readUint16(r)
+	d.HeaderVersion, err = rwu.ReadUint16(r)
 	if err != nil {
 		return err
 	}
-	d.TargetJobID, err = readUint64(r)
+	d.TargetJobID, err = rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
-	d.SourceJobID, err = readUint64(r)
+	d.SourceJobID, err = rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
-	d.HeaderCanary, err = readUint8(r)
+	d.HeaderCanary, err = rwu.ReadUint8(r)
 	if err != nil {
 		return err
 	}
-	t1, err := readUint64(r)
+	t1, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.SteamID = steamid.SteamId(t1)
-	d.SessionID, err = readInt32(r)
+	d.SessionID, err = rwu.ReadInt32(r)
 	return err
 }
 
@@ -401,12 +402,12 @@ func (d *MsgHdrProtoBuf) Serialize(w io.Writer) error {
 
 func (d *MsgHdrProtoBuf) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readInt32(r)
+	t0, err := rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
 	d.Msg = EMsg(uint32(t0) & EMsgMask)
-	d.HeaderLength, err = readInt32(r)
+	d.HeaderLength, err = rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
@@ -453,12 +454,12 @@ func (d *MsgGCHdrProtoBuf) Serialize(w io.Writer) error {
 
 func (d *MsgGCHdrProtoBuf) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readUint32(r)
+	t0, err := rwu.ReadUint32(r)
 	if err != nil {
 		return err
 	}
 	d.Msg = uint32(t0) & EMsgMask
-	d.HeaderLength, err = readInt32(r)
+	d.HeaderLength, err = rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
@@ -501,15 +502,15 @@ func (d *MsgGCHdr) Serialize(w io.Writer) error {
 
 func (d *MsgGCHdr) Deserialize(r io.Reader) error {
 	var err error
-	d.HeaderVersion, err = readUint16(r)
+	d.HeaderVersion, err = rwu.ReadUint16(r)
 	if err != nil {
 		return err
 	}
-	d.TargetJobID, err = readUint64(r)
+	d.TargetJobID, err = rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
-	d.SourceJobID, err = readUint64(r)
+	d.SourceJobID, err = rwu.ReadUint64(r)
 	return err
 }
 
@@ -554,7 +555,7 @@ func (d *MsgClientGenericResponse) Serialize(w io.Writer) error {
 
 func (d *MsgClientGenericResponse) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readInt32(r)
+	t0, err := rwu.ReadInt32(r)
 	d.Result = EResult(t0)
 	return err
 }
@@ -589,11 +590,11 @@ func (d *MsgChannelEncryptRequest) Serialize(w io.Writer) error {
 
 func (d *MsgChannelEncryptRequest) Deserialize(r io.Reader) error {
 	var err error
-	d.ProtocolVersion, err = readUint32(r)
+	d.ProtocolVersion, err = rwu.ReadUint32(r)
 	if err != nil {
 		return err
 	}
-	t0, err := readInt32(r)
+	t0, err := rwu.ReadInt32(r)
 	d.Universe = EUniverse(t0)
 	return err
 }
@@ -626,11 +627,11 @@ func (d *MsgChannelEncryptResponse) Serialize(w io.Writer) error {
 
 func (d *MsgChannelEncryptResponse) Deserialize(r io.Reader) error {
 	var err error
-	d.ProtocolVersion, err = readUint32(r)
+	d.ProtocolVersion, err = rwu.ReadUint32(r)
 	if err != nil {
 		return err
 	}
-	d.KeySize, err = readUint32(r)
+	d.KeySize, err = rwu.ReadUint32(r)
 	return err
 }
 
@@ -656,7 +657,7 @@ func (d *MsgChannelEncryptResult) Serialize(w io.Writer) error {
 
 func (d *MsgChannelEncryptResult) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readInt32(r)
+	t0, err := rwu.ReadInt32(r)
 	d.Result = EResult(t0)
 	return err
 }
@@ -688,7 +689,7 @@ func (d *MsgClientNewLoginKey) Serialize(w io.Writer) error {
 
 func (d *MsgClientNewLoginKey) Deserialize(r io.Reader) error {
 	var err error
-	d.UniqueID, err = readUint32(r)
+	d.UniqueID, err = rwu.ReadUint32(r)
 	if err != nil {
 		return err
 	}
@@ -716,7 +717,7 @@ func (d *MsgClientNewLoginKeyAccepted) Serialize(w io.Writer) error {
 
 func (d *MsgClientNewLoginKeyAccepted) Deserialize(r io.Reader) error {
 	var err error
-	d.UniqueID, err = readUint32(r)
+	d.UniqueID, err = rwu.ReadUint32(r)
 	return err
 }
 
@@ -787,7 +788,7 @@ func (d *MsgClientVACBanStatus) Serialize(w io.Writer) error {
 
 func (d *MsgClientVACBanStatus) Deserialize(r io.Reader) error {
 	var err error
-	d.NumBans, err = readUint32(r)
+	d.NumBans, err = rwu.ReadUint32(r)
 	return err
 }
 
@@ -821,16 +822,16 @@ func (d *MsgClientAppUsageEvent) Serialize(w io.Writer) error {
 
 func (d *MsgClientAppUsageEvent) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readInt32(r)
+	t0, err := rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
 	d.AppUsageEvent = EAppUsageEvent(t0)
-	d.GameID, err = readUint64(r)
+	d.GameID, err = rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
-	d.Offline, err = readUint16(r)
+	d.Offline, err = rwu.ReadUint16(r)
 	return err
 }
 
@@ -858,21 +859,21 @@ func (d *MsgClientEmailAddrInfo) Serialize(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	err = writeBool2Byte(w, d.Validated)
+	err = rwu.WriteBool(w, d.Validated)
 	return err
 }
 
 func (d *MsgClientEmailAddrInfo) Deserialize(r io.Reader) error {
 	var err error
-	d.PasswordStrength, err = readUint32(r)
+	d.PasswordStrength, err = rwu.ReadUint32(r)
 	if err != nil {
 		return err
 	}
-	d.FlagsAccountSecurityPolicy, err = readUint32(r)
+	d.FlagsAccountSecurityPolicy, err = rwu.ReadUint32(r)
 	if err != nil {
 		return err
 	}
-	d.Validated, err = readByte2Bool(r)
+	d.Validated, err = rwu.ReadBool(r)
 	return err
 }
 
@@ -906,16 +907,16 @@ func (d *MsgClientUpdateGuestPassesList) Serialize(w io.Writer) error {
 
 func (d *MsgClientUpdateGuestPassesList) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readInt32(r)
+	t0, err := rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
 	d.Result = EResult(t0)
-	d.CountGuestPassesToGive, err = readInt32(r)
+	d.CountGuestPassesToGive, err = rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
-	d.CountGuestPassesToRedeem, err = readInt32(r)
+	d.CountGuestPassesToRedeem, err = rwu.ReadInt32(r)
 	return err
 }
 
@@ -939,7 +940,7 @@ func (d *MsgClientRequestedClientStats) Serialize(w io.Writer) error {
 
 func (d *MsgClientRequestedClientStats) Deserialize(r io.Reader) error {
 	var err error
-	d.CountStats, err = readInt32(r)
+	d.CountStats, err = rwu.ReadInt32(r)
 	return err
 }
 
@@ -980,12 +981,12 @@ func (d *MsgClientP2PIntroducerMessage) Serialize(w io.Writer) error {
 
 func (d *MsgClientP2PIntroducerMessage) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readUint64(r)
+	t0, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.SteamID = steamid.SteamId(t0)
-	t1, err := readInt32(r)
+	t1, err := rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
@@ -994,7 +995,7 @@ func (d *MsgClientP2PIntroducerMessage) Deserialize(r io.Reader) error {
 	if err != nil {
 		return err
 	}
-	d.DataLen, err = readUint32(r)
+	d.DataLen, err = rwu.ReadUint32(r)
 	return err
 }
 
@@ -1033,20 +1034,20 @@ func (d *MsgClientOGSBeginSession) Serialize(w io.Writer) error {
 
 func (d *MsgClientOGSBeginSession) Deserialize(r io.Reader) error {
 	var err error
-	d.AccountType, err = readUint8(r)
+	d.AccountType, err = rwu.ReadUint8(r)
 	if err != nil {
 		return err
 	}
-	t0, err := readUint64(r)
+	t0, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.AccountId = steamid.SteamId(t0)
-	d.AppId, err = readUint32(r)
+	d.AppId, err = rwu.ReadUint32(r)
 	if err != nil {
 		return err
 	}
-	d.TimeStarted, err = readUint32(r)
+	d.TimeStarted, err = rwu.ReadUint32(r)
 	return err
 }
 
@@ -1071,11 +1072,11 @@ func (d *MsgClientOGSBeginSessionResponse) Serialize(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	err = writeBool2Byte(w, d.CollectingAny)
+	err = rwu.WriteBool(w, d.CollectingAny)
 	if err != nil {
 		return err
 	}
-	err = writeBool2Byte(w, d.CollectingDetails)
+	err = rwu.WriteBool(w, d.CollectingDetails)
 	if err != nil {
 		return err
 	}
@@ -1085,20 +1086,20 @@ func (d *MsgClientOGSBeginSessionResponse) Serialize(w io.Writer) error {
 
 func (d *MsgClientOGSBeginSessionResponse) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readInt32(r)
+	t0, err := rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
 	d.Result = EResult(t0)
-	d.CollectingAny, err = readByte2Bool(r)
+	d.CollectingAny, err = rwu.ReadBool(r)
 	if err != nil {
 		return err
 	}
-	d.CollectingDetails, err = readByte2Bool(r)
+	d.CollectingDetails, err = rwu.ReadBool(r)
 	if err != nil {
 		return err
 	}
-	d.SessionId, err = readUint64(r)
+	d.SessionId, err = rwu.ReadUint64(r)
 	return err
 }
 
@@ -1137,19 +1138,19 @@ func (d *MsgClientOGSEndSession) Serialize(w io.Writer) error {
 
 func (d *MsgClientOGSEndSession) Deserialize(r io.Reader) error {
 	var err error
-	d.SessionId, err = readUint64(r)
+	d.SessionId, err = rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
-	d.TimeEnded, err = readUint32(r)
+	d.TimeEnded, err = rwu.ReadUint32(r)
 	if err != nil {
 		return err
 	}
-	d.ReasonCode, err = readInt32(r)
+	d.ReasonCode, err = rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
-	d.CountAttributes, err = readInt32(r)
+	d.CountAttributes, err = rwu.ReadInt32(r)
 	return err
 }
 
@@ -1173,7 +1174,7 @@ func (d *MsgClientOGSEndSessionResponse) Serialize(w io.Writer) error {
 
 func (d *MsgClientOGSEndSessionResponse) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readInt32(r)
+	t0, err := rwu.ReadInt32(r)
 	d.Result = EResult(t0)
 	return err
 }
@@ -1203,11 +1204,11 @@ func (d *MsgClientOGSWriteRow) Serialize(w io.Writer) error {
 
 func (d *MsgClientOGSWriteRow) Deserialize(r io.Reader) error {
 	var err error
-	d.SessionId, err = readUint64(r)
+	d.SessionId, err = rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
-	d.CountAttributes, err = readInt32(r)
+	d.CountAttributes, err = rwu.ReadInt32(r)
 	return err
 }
 
@@ -1231,7 +1232,7 @@ func (d *MsgClientGetFriendsWhoPlayGame) Serialize(w io.Writer) error {
 
 func (d *MsgClientGetFriendsWhoPlayGame) Deserialize(r io.Reader) error {
 	var err error
-	d.GameId, err = readUint64(r)
+	d.GameId, err = rwu.ReadUint64(r)
 	return err
 }
 
@@ -1265,16 +1266,16 @@ func (d *MsgClientGetFriendsWhoPlayGameResponse) Serialize(w io.Writer) error {
 
 func (d *MsgClientGetFriendsWhoPlayGameResponse) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readInt32(r)
+	t0, err := rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
 	d.Result = EResult(t0)
-	d.GameId, err = readUint64(r)
+	d.GameId, err = rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
-	d.CountFriends, err = readUint32(r)
+	d.CountFriends, err = rwu.ReadUint32(r)
 	return err
 }
 
@@ -1298,7 +1299,7 @@ func (d *MsgGSPerformHardwareSurvey) Serialize(w io.Writer) error {
 
 func (d *MsgGSPerformHardwareSurvey) Deserialize(r io.Reader) error {
 	var err error
-	d.Flags, err = readUint32(r)
+	d.Flags, err = rwu.ReadUint32(r)
 	return err
 }
 
@@ -1337,20 +1338,20 @@ func (d *MsgGSGetPlayStatsResponse) Serialize(w io.Writer) error {
 
 func (d *MsgGSGetPlayStatsResponse) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readInt32(r)
+	t0, err := rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
 	d.Result = EResult(t0)
-	d.Rank, err = readInt32(r)
+	d.Rank, err = rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
-	d.LifetimeConnects, err = readUint32(r)
+	d.LifetimeConnects, err = rwu.ReadUint32(r)
 	if err != nil {
 		return err
 	}
-	d.LifetimeMinutesPlayed, err = readUint32(r)
+	d.LifetimeMinutesPlayed, err = rwu.ReadUint32(r)
 	return err
 }
 
@@ -1382,7 +1383,7 @@ func (d *MsgGSGetReputationResponse) Serialize(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	err = writeBool2Byte(w, d.Banned)
+	err = rwu.WriteBool(w, d.Banned)
 	if err != nil {
 		return err
 	}
@@ -1404,32 +1405,32 @@ func (d *MsgGSGetReputationResponse) Serialize(w io.Writer) error {
 
 func (d *MsgGSGetReputationResponse) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readInt32(r)
+	t0, err := rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
 	d.Result = EResult(t0)
-	d.ReputationScore, err = readUint32(r)
+	d.ReputationScore, err = rwu.ReadUint32(r)
 	if err != nil {
 		return err
 	}
-	d.Banned, err = readByte2Bool(r)
+	d.Banned, err = rwu.ReadBool(r)
 	if err != nil {
 		return err
 	}
-	d.BannedIp, err = readUint32(r)
+	d.BannedIp, err = rwu.ReadUint32(r)
 	if err != nil {
 		return err
 	}
-	d.BannedPort, err = readUint16(r)
+	d.BannedPort, err = rwu.ReadUint16(r)
 	if err != nil {
 		return err
 	}
-	d.BannedGameId, err = readUint64(r)
+	d.BannedGameId, err = rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
-	d.TimeBanExpires, err = readUint32(r)
+	d.TimeBanExpires, err = rwu.ReadUint32(r)
 	return err
 }
 
@@ -1458,12 +1459,12 @@ func (d *MsgGSDeny) Serialize(w io.Writer) error {
 
 func (d *MsgGSDeny) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readUint64(r)
+	t0, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.SteamId = steamid.SteamId(t0)
-	t1, err := readInt32(r)
+	t1, err := rwu.ReadInt32(r)
 	d.DenyReason = EDenyReason(t1)
 	return err
 }
@@ -1488,7 +1489,7 @@ func (d *MsgGSApprove) Serialize(w io.Writer) error {
 
 func (d *MsgGSApprove) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readUint64(r)
+	t0, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
@@ -1526,17 +1527,17 @@ func (d *MsgGSKick) Serialize(w io.Writer) error {
 
 func (d *MsgGSKick) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readUint64(r)
+	t0, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.SteamId = steamid.SteamId(t0)
-	t1, err := readInt32(r)
+	t1, err := rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
 	d.DenyReason = EDenyReason(t1)
-	d.WaitTilMapChange, err = readInt32(r)
+	d.WaitTilMapChange, err = rwu.ReadInt32(r)
 	return err
 }
 
@@ -1565,12 +1566,12 @@ func (d *MsgGSGetUserGroupStatus) Serialize(w io.Writer) error {
 
 func (d *MsgGSGetUserGroupStatus) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readUint64(r)
+	t0, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.SteamIdUser = steamid.SteamId(t0)
-	t1, err := readUint64(r)
+	t1, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
@@ -1613,22 +1614,22 @@ func (d *MsgGSGetUserGroupStatusResponse) Serialize(w io.Writer) error {
 
 func (d *MsgGSGetUserGroupStatusResponse) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readUint64(r)
+	t0, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.SteamIdUser = steamid.SteamId(t0)
-	t1, err := readUint64(r)
+	t1, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.SteamIdGroup = steamid.SteamId(t1)
-	t2, err := readInt32(r)
+	t2, err := rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
 	d.ClanRelationship = EClanRelationship(t2)
-	t3, err := readInt32(r)
+	t3, err := rwu.ReadInt32(r)
 	d.ClanRank = EClanRank(t3)
 	return err
 }
@@ -1652,18 +1653,18 @@ func (d *MsgClientJoinChat) Serialize(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	err = writeBool2Byte(w, d.IsVoiceSpeaker)
+	err = rwu.WriteBool(w, d.IsVoiceSpeaker)
 	return err
 }
 
 func (d *MsgClientJoinChat) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readUint64(r)
+	t0, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.SteamIdChat = steamid.SteamId(t0)
-	d.IsVoiceSpeaker, err = readByte2Bool(r)
+	d.IsVoiceSpeaker, err = rwu.ReadBool(r)
 	return err
 }
 
@@ -1717,36 +1718,36 @@ func (d *MsgClientChatEnter) Serialize(w io.Writer) error {
 
 func (d *MsgClientChatEnter) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readUint64(r)
+	t0, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.SteamIdChat = steamid.SteamId(t0)
-	t1, err := readUint64(r)
+	t1, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.SteamIdFriend = steamid.SteamId(t1)
-	t2, err := readInt32(r)
+	t2, err := rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
 	d.ChatRoomType = EChatRoomType(t2)
-	t3, err := readUint64(r)
+	t3, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.SteamIdOwner = steamid.SteamId(t3)
-	t4, err := readUint64(r)
+	t4, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.SteamIdClan = steamid.SteamId(t4)
-	d.ChatFlags, err = readUint8(r)
+	d.ChatFlags, err = rwu.ReadUint8(r)
 	if err != nil {
 		return err
 	}
-	t5, err := readInt32(r)
+	t5, err := rwu.ReadInt32(r)
 	d.EnterResponse = EChatRoomEnterResponse(t5)
 	return err
 }
@@ -1781,17 +1782,17 @@ func (d *MsgClientChatMsg) Serialize(w io.Writer) error {
 
 func (d *MsgClientChatMsg) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readUint64(r)
+	t0, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.SteamIdChatter = steamid.SteamId(t0)
-	t1, err := readUint64(r)
+	t1, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.SteamIdChatRoom = steamid.SteamId(t1)
-	t2, err := readInt32(r)
+	t2, err := rwu.ReadInt32(r)
 	d.ChatMsgType = EChatEntryType(t2)
 	return err
 }
@@ -1821,12 +1822,12 @@ func (d *MsgClientChatMemberInfo) Serialize(w io.Writer) error {
 
 func (d *MsgClientChatMemberInfo) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readUint64(r)
+	t0, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.SteamIdChat = steamid.SteamId(t0)
-	t1, err := readInt32(r)
+	t1, err := rwu.ReadInt32(r)
 	d.Type = EChatInfoType(t1)
 	return err
 }
@@ -1861,17 +1862,17 @@ func (d *MsgClientChatAction) Serialize(w io.Writer) error {
 
 func (d *MsgClientChatAction) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readUint64(r)
+	t0, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.SteamIdChat = steamid.SteamId(t0)
-	t1, err := readUint64(r)
+	t1, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.SteamIdUserToActOn = steamid.SteamId(t1)
-	t2, err := readInt32(r)
+	t2, err := rwu.ReadInt32(r)
 	d.ChatAction = EChatAction(t2)
 	return err
 }
@@ -1911,22 +1912,22 @@ func (d *MsgClientChatActionResult) Serialize(w io.Writer) error {
 
 func (d *MsgClientChatActionResult) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readUint64(r)
+	t0, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.SteamIdChat = steamid.SteamId(t0)
-	t1, err := readUint64(r)
+	t1, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.SteamIdUserActedOn = steamid.SteamId(t1)
-	t2, err := readInt32(r)
+	t2, err := rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
 	d.ChatAction = EChatAction(t2)
-	t3, err := readInt32(r)
+	t3, err := rwu.ReadInt32(r)
 	d.ActionResult = EChatActionResult(t3)
 	return err
 }
@@ -1951,7 +1952,7 @@ func (d *MsgClientGetNumberOfCurrentPlayers) Serialize(w io.Writer) error {
 
 func (d *MsgClientGetNumberOfCurrentPlayers) Deserialize(r io.Reader) error {
 	var err error
-	d.GameID, err = readUint64(r)
+	d.GameID, err = rwu.ReadUint64(r)
 	return err
 }
 
@@ -1980,12 +1981,12 @@ func (d *MsgClientGetNumberOfCurrentPlayersResponse) Serialize(w io.Writer) erro
 
 func (d *MsgClientGetNumberOfCurrentPlayersResponse) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readInt32(r)
+	t0, err := rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
 	d.Result = EResult(t0)
-	d.NumPlayers, err = readUint32(r)
+	d.NumPlayers, err = rwu.ReadUint32(r)
 	return err
 }
 
@@ -2019,17 +2020,17 @@ func (d *MsgClientSetIgnoreFriend) Serialize(w io.Writer) error {
 
 func (d *MsgClientSetIgnoreFriend) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readUint64(r)
+	t0, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.MySteamId = steamid.SteamId(t0)
-	t1, err := readUint64(r)
+	t1, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.SteamIdFriend = steamid.SteamId(t1)
-	d.Ignore, err = readUint8(r)
+	d.Ignore, err = rwu.ReadUint8(r)
 	return err
 }
 
@@ -2058,11 +2059,11 @@ func (d *MsgClientSetIgnoreFriendResponse) Serialize(w io.Writer) error {
 
 func (d *MsgClientSetIgnoreFriendResponse) Deserialize(r io.Reader) error {
 	var err error
-	d.Unknown, err = readUint64(r)
+	d.Unknown, err = rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
-	t0, err := readInt32(r)
+	t0, err := rwu.ReadInt32(r)
 	d.Result = EResult(t0)
 	return err
 }
@@ -2097,16 +2098,16 @@ func (d *MsgClientLoggedOff) Serialize(w io.Writer) error {
 
 func (d *MsgClientLoggedOff) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readInt32(r)
+	t0, err := rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
 	d.Result = EResult(t0)
-	d.SecMinReconnectHint, err = readInt32(r)
+	d.SecMinReconnectHint, err = rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
-	d.SecMaxReconnectHint, err = readInt32(r)
+	d.SecMaxReconnectHint, err = rwu.ReadInt32(r)
 	return err
 }
 
@@ -2155,29 +2156,29 @@ func (d *MsgClientLogOnResponse) Serialize(w io.Writer) error {
 
 func (d *MsgClientLogOnResponse) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readInt32(r)
+	t0, err := rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
 	d.Result = EResult(t0)
-	d.OutOfGameHeartbeatRateSec, err = readInt32(r)
+	d.OutOfGameHeartbeatRateSec, err = rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
-	d.InGameHeartbeatRateSec, err = readInt32(r)
+	d.InGameHeartbeatRateSec, err = rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
-	t1, err := readUint64(r)
+	t1, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.ClientSuppliedSteamId = steamid.SteamId(t1)
-	d.IpPublic, err = readUint32(r)
+	d.IpPublic, err = rwu.ReadUint32(r)
 	if err != nil {
 		return err
 	}
-	d.ServerRealTime, err = readUint32(r)
+	d.ServerRealTime, err = rwu.ReadUint32(r)
 	return err
 }
 
@@ -2211,15 +2212,15 @@ func (d *MsgClientSendGuestPass) Serialize(w io.Writer) error {
 
 func (d *MsgClientSendGuestPass) Deserialize(r io.Reader) error {
 	var err error
-	d.GiftId, err = readUint64(r)
+	d.GiftId, err = rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
-	d.GiftType, err = readUint8(r)
+	d.GiftType, err = rwu.ReadUint8(r)
 	if err != nil {
 		return err
 	}
-	d.AccountId, err = readUint32(r)
+	d.AccountId, err = rwu.ReadUint32(r)
 	return err
 }
 
@@ -2243,7 +2244,7 @@ func (d *MsgClientSendGuestPassResponse) Serialize(w io.Writer) error {
 
 func (d *MsgClientSendGuestPassResponse) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readInt32(r)
+	t0, err := rwu.ReadInt32(r)
 	d.Result = EResult(t0)
 	return err
 }
@@ -2278,15 +2279,15 @@ func (d *MsgClientServerUnavailable) Serialize(w io.Writer) error {
 
 func (d *MsgClientServerUnavailable) Deserialize(r io.Reader) error {
 	var err error
-	d.JobidSent, err = readUint64(r)
+	d.JobidSent, err = rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
-	d.EMsgSent, err = readUint32(r)
+	d.EMsgSent, err = rwu.ReadUint32(r)
 	if err != nil {
 		return err
 	}
-	t0, err := readInt32(r)
+	t0, err := rwu.ReadInt32(r)
 	d.EServerTypeUnavailable = EServerType(t0)
 	return err
 }
@@ -2356,49 +2357,49 @@ func (d *MsgClientCreateChat) Serialize(w io.Writer) error {
 
 func (d *MsgClientCreateChat) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readInt32(r)
+	t0, err := rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
 	d.ChatRoomType = EChatRoomType(t0)
-	d.GameId, err = readUint64(r)
+	d.GameId, err = rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
-	t1, err := readUint64(r)
+	t1, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.SteamIdClan = steamid.SteamId(t1)
-	t2, err := readInt32(r)
+	t2, err := rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
 	d.PermissionOfficer = EChatPermission(t2)
-	t3, err := readInt32(r)
+	t3, err := rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
 	d.PermissionMember = EChatPermission(t3)
-	t4, err := readInt32(r)
+	t4, err := rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
 	d.PermissionAll = EChatPermission(t4)
-	d.MembersMax, err = readUint32(r)
+	d.MembersMax, err = rwu.ReadUint32(r)
 	if err != nil {
 		return err
 	}
-	d.ChatFlags, err = readUint8(r)
+	d.ChatFlags, err = rwu.ReadUint8(r)
 	if err != nil {
 		return err
 	}
-	t5, err := readUint64(r)
+	t5, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.SteamIdFriendChat = steamid.SteamId(t5)
-	t6, err := readUint64(r)
+	t6, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
@@ -2441,22 +2442,22 @@ func (d *MsgClientCreateChatResponse) Serialize(w io.Writer) error {
 
 func (d *MsgClientCreateChatResponse) Deserialize(r io.Reader) error {
 	var err error
-	t0, err := readInt32(r)
+	t0, err := rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
 	d.Result = EResult(t0)
-	t1, err := readUint64(r)
+	t1, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
 	d.SteamIdChat = steamid.SteamId(t1)
-	t2, err := readInt32(r)
+	t2, err := rwu.ReadInt32(r)
 	if err != nil {
 		return err
 	}
 	d.ChatRoomType = EChatRoomType(t2)
-	t3, err := readUint64(r)
+	t3, err := rwu.ReadUint64(r)
 	if err != nil {
 		return err
 	}
@@ -2489,10 +2490,10 @@ func (d *MsgClientMarketingMessageUpdate2) Serialize(w io.Writer) error {
 
 func (d *MsgClientMarketingMessageUpdate2) Deserialize(r io.Reader) error {
 	var err error
-	d.MarketingMessageUpdateTime, err = readUint32(r)
+	d.MarketingMessageUpdateTime, err = rwu.ReadUint32(r)
 	if err != nil {
 		return err
 	}
-	d.Count, err = readUint32(r)
+	d.Count, err = rwu.ReadUint32(r)
 	return err
 }
