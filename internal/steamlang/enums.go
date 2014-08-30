@@ -3417,7 +3417,7 @@ func (e EMsg) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -3614,7 +3614,7 @@ func (e EResult) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -3652,7 +3652,7 @@ func (e EUniverse) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -3701,7 +3701,7 @@ func (e EChatEntryType) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -3742,7 +3742,7 @@ func (e EPersonaState) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -3791,7 +3791,7 @@ func (e EAccountType) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -3836,7 +3836,7 @@ func (e EFriendRelationship) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -3919,7 +3919,7 @@ func (e EAccountFlags) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -3973,7 +3973,7 @@ func (e EClanPermission) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -4026,7 +4026,7 @@ func (e EChatPermission) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -4076,7 +4076,7 @@ func (e EFriendFlags) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -4111,7 +4111,7 @@ func (e EPersonaStateFlag) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -4160,7 +4160,7 @@ func (e EClientPersonaStateFlag) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -4201,7 +4201,7 @@ func (e EAppUsageEvent) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -4244,7 +4244,7 @@ func (e ELicenseFlags) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -4283,7 +4283,7 @@ func (e ELicenseType) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -4382,7 +4382,7 @@ func (e EPaymentMethod) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -4413,7 +4413,7 @@ func (e EIntroducerRouting) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -4452,7 +4452,7 @@ func (e EServerFlags) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -4507,7 +4507,7 @@ func (e EDenyReason) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -4542,7 +4542,7 @@ func (e EClanRank) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -4579,7 +4579,7 @@ func (e EClanRelationship) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -4622,7 +4622,7 @@ func (e EAuthSessionResponse) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -4675,7 +4675,7 @@ func (e EChatRoomEnterResponse) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -4706,7 +4706,7 @@ func (e EChatRoomType) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -4737,7 +4737,7 @@ func (e EChatInfoType) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -4794,7 +4794,7 @@ func (e EChatAction) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -4839,7 +4839,7 @@ func (e EChatActionResult) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -4900,7 +4900,7 @@ func (e EAppInfoSection) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -4938,7 +4938,7 @@ func (e EContentDownloadSourceType) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -4977,7 +4977,7 @@ func (e EPlatformType) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -5081,7 +5081,7 @@ func (e EOSType) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -5244,7 +5244,7 @@ func (e EServerType) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -5291,7 +5291,7 @@ func (e EBillingType) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -5332,7 +5332,7 @@ func (e EActivationCodeClass) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -5371,7 +5371,7 @@ func (e EChatMemberStateChange) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -5414,7 +5414,7 @@ func (e ERegionCode) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -5459,7 +5459,7 @@ func (e ECurrencyCode) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -5502,7 +5502,7 @@ func (e EDepotFileFlag) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -5541,7 +5541,7 @@ func (e EWorkshopEnumerationType) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -5572,7 +5572,7 @@ func (e EPublishedFileVisibility) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -5628,7 +5628,7 @@ func (e EWorkshopFileType) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -5657,7 +5657,7 @@ func (e EWorkshopFileAction) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -5738,7 +5738,7 @@ func (e EEconTradeResponse) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -5775,7 +5775,7 @@ func (e EMarketingMessageFlags) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -5810,7 +5810,7 @@ func (e ENewsUpdateType) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -5857,7 +5857,7 @@ func (e ESystemIMType) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -5890,7 +5890,7 @@ func (e EChatFlags) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -5929,7 +5929,7 @@ func (e ERemoteStoragePlatform) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -5972,7 +5972,7 @@ func (e EDRMBlobDownloadType) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -6043,7 +6043,7 @@ func (e EDRMBlobDownloadErrorDetail) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -6080,7 +6080,7 @@ func (e EClientStat) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -6113,7 +6113,7 @@ func (e EClientStatAggregateMethod) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -6146,7 +6146,7 @@ func (e ELeaderboardDataRequest) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -6177,7 +6177,7 @@ func (e ELeaderboardSortMethod) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -6208,7 +6208,7 @@ func (e ELeaderboardUploadScoreMethod) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -6243,7 +6243,7 @@ func (e EUCMFilePrivacyState) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
@@ -6286,7 +6286,7 @@ func (e EUdpPacketType) String() string {
 		}
 	}
 	if len(flags) == 0 {
-		return fmt.Sprint(e)
+		return fmt.Sprintf("%d", e)
 	}
 	sort.Strings(flags)
 	return strings.Join(flags, " | ")
