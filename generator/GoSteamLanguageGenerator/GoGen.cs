@@ -178,7 +178,7 @@ namespace GoSteamLanguageGenerator
 			sb.AppendLine("	        }");
 			sb.AppendLine("    }");
 			sb.AppendLine("    if len(flags) == 0 {");
-			sb.AppendLine("        return fmt.Sprint(e)");
+			sb.AppendLine("        return fmt.Sprintf(\"%d\", e)");
 			sb.AppendLine("    }");
 			sb.AppendLine("    sort.Strings(flags)");
 			sb.AppendLine("    return strings.Join(flags, \" | \")");
