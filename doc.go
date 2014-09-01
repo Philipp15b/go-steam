@@ -29,7 +29,7 @@ received the LoggedOnEvent, you should set your persona state to online to recei
 			case *steam.MachineAuthUpdateEvent:
 				ioutil.WriteFile("sentry", e.Hash, 0666)
 			case *steam.LoggedOnEvent:
-				client.Social.SetPersonaState(internal.EPersonaState_Online)
+				client.Social.SetPersonaState(steamlang.EPersonaState_Online)
 			case steam.FatalErrorEvent:
 				log.Print(e)
 			case error:
