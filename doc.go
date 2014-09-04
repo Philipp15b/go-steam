@@ -16,9 +16,9 @@ received the LoggedOnEvent, you should set your persona state to online to recei
 	)
 
 	func main() {
-		myLoginInfo := steam.LogOnDetails{}
-		myLoginInfo.Username = "UserName"
-		myLoginInfo.Password = "PassWord"
+		myLoginInfo := new(steam.LogOnDetails)
+		myLoginInfo.Username = "Your username"
+		myLoginInfo.Password = "Your password"
 
 		client := steam.NewClient()
 		client.Connect()
