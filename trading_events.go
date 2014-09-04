@@ -8,7 +8,6 @@ import (
 type TradeProposedEvent struct {
 	RequestId TradeRequestId
 	Other     SteamId `json:",string"`
-	OtherName string
 }
 
 type TradeResultEvent struct {
