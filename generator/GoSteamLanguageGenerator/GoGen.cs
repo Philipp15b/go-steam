@@ -41,6 +41,12 @@ namespace GoSteamLanguageGenerator
 			sb.AppendLine();
 			sb.AppendLine("package steamlang");
 			sb.AppendLine();
+			sb.AppendLine("import (");
+			sb.AppendLine("    \"strings\"");
+			sb.AppendLine("    \"sort\"");
+			sb.AppendLine("    \"fmt\"");
+			sb.AppendLine(")");
+			sb.AppendLine();
 			foreach (Node n in root.childNodes) {
 				EmitEnumNode(n as EnumNode, sb);
 			}
@@ -57,8 +63,9 @@ namespace GoSteamLanguageGenerator
 			sb.AppendLine("    \"io\"");
 			sb.AppendLine("    \"encoding/binary\"");
 			sb.AppendLine("    \"code.google.com/p/goprotobuf/proto\"");
-			sb.AppendLine("     \"github.com/Philipp15b/go-steam/steamid\"");
-            sb.AppendLine("    . \"github.com/Philipp15b/go-steam/internal/protobuf\"");
+			sb.AppendLine("    \"github.com/Philipp15b/go-steam/steamid\"");
+			sb.AppendLine("    \"github.com/Philipp15b/go-steam/rwu\"");
+			sb.AppendLine("   . \"github.com/Philipp15b/go-steam/internal/protobuf\"");
 			sb.AppendLine(")");
 			sb.AppendLine();
 
@@ -105,16 +112,13 @@ namespace GoSteamLanguageGenerator
 			sb.AppendLine("const (");
 			bool first = true;
 			foreach (PropNode prop in enode.childNodes) {
-				// the first element in the enum must be prefixed by its type
-				string t = first ? " " + enode.Name : "";
-
 				string val = String.Join(" | ", prop.Default.Select(item => {
 					var name = EmitSymbol(item);
 					// if this is an element of this enum, make sure to prefix it with its name
 					return (enode.childNodes.Exists(node => node.Name == name) ? enode.Name + "_" : "") + name;
 				}));
 
-				sb.Append("    " + enode.Name + "_" + prop.Name + t + " = " + val);
+				sb.Append("    " + enode.Name + "_" + prop.Name + " " + enode.Name + " = " + val);
 
 				if (prop.Obsolete != null) {
 					if (prop.Obsolete.Length > 0)
@@ -167,7 +171,17 @@ namespace GoSteamLanguageGenerator
 			sb.AppendLine("    if s, ok := " + enode.Name + "_name[e]; ok {");
 			sb.AppendLine("         return s");
 			sb.AppendLine("    }");
-			sb.AppendLine("    return \"INVALID\"");
+			sb.AppendLine("    var flags []string");
+			sb.AppendLine("    for k, v := range " + enode.Name + "_name {");
+			sb.AppendLine("        	if e&k != 0 {");
+			sb.AppendLine("        		flags = append(flags, v)");
+			sb.AppendLine("	        }");
+			sb.AppendLine("    }");
+			sb.AppendLine("    if len(flags) == 0 {");
+			sb.AppendLine("        return fmt.Sprintf(\"%d\", e)");
+			sb.AppendLine("    }");
+			sb.AppendLine("    sort.Strings(flags)");
+			sb.AppendLine("    return strings.Join(flags, \" | \")");
 			sb.AppendLine("}");
 			sb.AppendLine();
 		}
@@ -181,7 +195,7 @@ namespace GoSteamLanguageGenerator
 
 				if (new Regex("^[-0-9]+$|^0x[-0-9a-fA-F]+$").IsMatch(val)) {
 					int bas = 10;
-					if (val.StartsWith("0x")) {
+					if (val.StartsWith("0x", StringComparison.Ordinal)) {
 						bas = 16;
 						val = val.Substring(2);
 					}
@@ -320,7 +334,7 @@ namespace GoSteamLanguageGenerator
 				if (node.Flags == "const") {
 					continue;
 				} else if (node.Flags == "boolmarshal") {
-					sb.AppendLine("    err = writeBool2Byte(w, d." + GetUpperName(node.Name) + ")");
+					sb.AppendLine("    err = rwu.WriteBool(w, d." + GetUpperName(node.Name) + ")");
 				} else if (node.Flags == "steamidmarshal") {
 					sb.AppendLine("    err = binary.Write(w, binary.LittleEndian, d." + GetUpperName(node.Name) + ")");
 				} else if (node.Flags == "protomask") {
@@ -349,9 +363,9 @@ namespace GoSteamLanguageGenerator
 				if (node.Flags == "const") {
 					continue;
 				} else if (node.Flags == "boolmarshal") {
-					sb.AppendLine("    d." + GetUpperName(node.Name) + ", err = readByte2Bool(r)");
+					sb.AppendLine("    d." + GetUpperName(node.Name) + ", err = rwu.ReadBool(r)");
 				} else if (node.Flags == "steamidmarshal") {
-					sb.AppendLine("    t" + tempNum + ", err := readUint64(r)");
+					sb.AppendLine("    t" + tempNum + ", err := rwu.ReadUint64(r)");
 					sb.AppendLine("    if err != nil { return err }");
 					sb.AppendLine("    d." + GetUpperName(node.Name) + " = steamid.SteamId(t" + tempNum + ")");
 					tempNum++;
@@ -360,15 +374,15 @@ namespace GoSteamLanguageGenerator
 					string type = EmitType(node.Type);
 					if (enumTypes.ContainsKey(type))
 						type = enumTypes[type];
-					sb.AppendLine("    t" + tempNum + ", err := read" + GetUpperName(type) + "(r)");
+					sb.AppendLine("    t" + tempNum + ", err := rwu.Read" + GetUpperName(type) + "(r)");
 					sb.AppendLine("    if err != nil { return err }");
 					sb.AppendLine("    d." + GetUpperName(node.Name) + " = EMsg(uint32(t" + tempNum + ") & EMsgMask)");
 					tempNum++;
 					continue;
 				} else if (node.Flags == "protomaskgc") {
-					sb.AppendLine("    t" + tempNum + ", err := read" + GetUpperName(EmitType(node.Type)) + "(r)");
+					sb.AppendLine("    t" + tempNum + ", err := rwu.Read" + GetUpperName(EmitType(node.Type)) + "(r)");
 					sb.AppendLine("    if err != nil { return err }");
-                    sb.AppendLine("    d." + GetUpperName(node.Name) + " = uint32(t" + tempNum + ") & EMsgMask");
+					sb.AppendLine("    d." + GetUpperName(node.Name) + " = uint32(t" + tempNum + ") & EMsgMask");
 					tempNum++;
 					continue;
 				} else if (node.Flags == "proto") {
@@ -382,9 +396,9 @@ namespace GoSteamLanguageGenerator
 					if (!String.IsNullOrEmpty(node.FlagsOpt)) {
 						sb.AppendLine("    err = binary.Read(r, binary.LittleEndian, d." + GetUpperName(node.Name) + ")");
 					} else if (!enumTypes.ContainsKey(type)) {
-						sb.AppendLine("    d." + GetUpperName(node.Name) + ", err = read" + GetUpperName(type) + "(r)");
+						sb.AppendLine("    d." + GetUpperName(node.Name) + ", err = rwu.Read" + GetUpperName(type) + "(r)");
 					} else {
-						sb.AppendLine("    t" + tempNum + ", err := read" + GetUpperName(enumTypes[type]) + "(r)");
+						sb.AppendLine("    t" + tempNum + ", err := rwu.Read" + GetUpperName(enumTypes[type]) + "(r)");
 						if (node != cnode.childNodes[cnode.childNodes.Count - 1])
 							sb.AppendLine("    if err != nil { return err }");
 						sb.AppendLine("    d." + GetUpperName(node.Name) + " = " + type + "(t" + tempNum + ")");

@@ -32,7 +32,7 @@ type LogOnDetails struct {
 // you to login without using an authcode in the future.
 //
 // If you don't use Steam Guard, username and password are enough.
-func (a *Auth) LogOn(details LogOnDetails) {
+func (a *Auth) LogOn(details *LogOnDetails) {
 	if len(details.Username) == 0 || len(details.Password) == 0 {
 		panic("Username and password must be set!")
 	}
@@ -47,7 +47,7 @@ func (a *Auth) LogOn(details LogOnDetails) {
 	logon.ProtocolVersion = proto.Uint32(MsgClientLogon_CurrentProtocol)
 	logon.ShaSentryfile = details.SentryFileHash
 
-	atomic.StoreUint64(&a.client.steamId, uint64(NewIdAdv(0, 1, int32(EUniverse_Public), EAccountType_Individual)))
+	atomic.StoreUint64(&a.client.steamId, uint64(NewIdAdv(0, 1, int32(EUniverse_Public), int32(EAccountType_Individual))))
 
 	a.client.Write(NewClientMsgProtobuf(EMsg_ClientLogon, logon))
 }

@@ -8,6 +8,7 @@ import (
 	. "github.com/Philipp15b/go-steam/internal"
 	. "github.com/Philipp15b/go-steam/internal/protobuf"
 	. "github.com/Philipp15b/go-steam/internal/steamlang"
+	. "github.com/Philipp15b/go-steam/rwu"
 	"github.com/Philipp15b/go-steam/socialcache"
 	. "github.com/Philipp15b/go-steam/steamid"
 	"io"
@@ -89,7 +90,8 @@ func (s *Social) SendMessage(to SteamId, entryType EChatEntryType, message strin
 			ChatEntryType: proto.Int32(int32(entryType)),
 			Message:       []byte(message),
 		}))
-	//Chat room
+
+		//Chat room
 	} else if to.GetAccountType() == int32(EAccountType_Clan) || to.GetAccountType() == int32(EAccountType_Chat) {
 		chatId := to.ClanToChat()
 		s.client.Write(NewClientMsg(&MsgClientChatMsg{
