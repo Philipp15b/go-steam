@@ -3645,6 +3645,7 @@ func (e EUniverse) String() string {
 	if s, ok := EUniverse_name[e]; ok {
 		return s
 	}
+
 	var flags []string
 	for k, v := range EUniverse_name {
 		if e&k != 0 {
@@ -4572,6 +4573,9 @@ func (e EClanRelationship) String() string {
 	if s, ok := EClanRelationship_name[e]; ok {
 		return s
 	}
+<<<<<<< HEAD
+	return "INVALID"
+=======
 	var flags []string
 	for k, v := range EClanRelationship_name {
 		if e&k != 0 {
@@ -4615,6 +4619,9 @@ func (e EAuthSessionResponse) String() string {
 	if s, ok := EAuthSessionResponse_name[e]; ok {
 		return s
 	}
+<<<<<<< HEAD
+	return "INVALID"
+=======
 	var flags []string
 	for k, v := range EAuthSessionResponse_name {
 		if e&k != 0 {
@@ -4668,6 +4675,9 @@ func (e EChatRoomEnterResponse) String() string {
 	if s, ok := EChatRoomEnterResponse_name[e]; ok {
 		return s
 	}
+<<<<<<< HEAD
+	return "INVALID"
+=======
 	var flags []string
 	for k, v := range EChatRoomEnterResponse_name {
 		if e&k != 0 {
@@ -4699,6 +4709,9 @@ func (e EChatRoomType) String() string {
 	if s, ok := EChatRoomType_name[e]; ok {
 		return s
 	}
+<<<<<<< HEAD
+	return "INVALID"
+=======
 	var flags []string
 	for k, v := range EChatRoomType_name {
 		if e&k != 0 {
@@ -5237,6 +5250,9 @@ func (e EServerType) String() string {
 	if s, ok := EServerType_name[e]; ok {
 		return s
 	}
+<<<<<<< HEAD
+	return "INVALID"
+=======
 	var flags []string
 	for k, v := range EServerType_name {
 		if e&k != 0 {
@@ -5284,6 +5300,9 @@ func (e EBillingType) String() string {
 	if s, ok := EBillingType_name[e]; ok {
 		return s
 	}
+<<<<<<< HEAD
+	return "INVALID"
+=======
 	var flags []string
 	for k, v := range EBillingType_name {
 		if e&k != 0 {
@@ -5325,6 +5344,9 @@ func (e EActivationCodeClass) String() string {
 	if s, ok := EActivationCodeClass_name[e]; ok {
 		return s
 	}
+<<<<<<< HEAD
+	return "INVALID"
+=======
 	var flags []string
 	for k, v := range EActivationCodeClass_name {
 		if e&k != 0 {
@@ -5364,6 +5386,9 @@ func (e EChatMemberStateChange) String() string {
 	if s, ok := EChatMemberStateChange_name[e]; ok {
 		return s
 	}
+<<<<<<< HEAD
+	return "INVALID"
+=======
 	var flags []string
 	for k, v := range EChatMemberStateChange_name {
 		if e&k != 0 {
@@ -5731,6 +5756,9 @@ func (e EEconTradeResponse) String() string {
 	if s, ok := EEconTradeResponse_name[e]; ok {
 		return s
 	}
+<<<<<<< HEAD
+	return "INVALID"
+=======
 	var flags []string
 	for k, v := range EEconTradeResponse_name {
 		if e&k != 0 {
@@ -5768,6 +5796,9 @@ func (e EMarketingMessageFlags) String() string {
 	if s, ok := EMarketingMessageFlags_name[e]; ok {
 		return s
 	}
+<<<<<<< HEAD
+	return "INVALID"
+=======
 	var flags []string
 	for k, v := range EMarketingMessageFlags_name {
 		if e&k != 0 {
@@ -5803,6 +5834,9 @@ func (e ENewsUpdateType) String() string {
 	if s, ok := ENewsUpdateType_name[e]; ok {
 		return s
 	}
+<<<<<<< HEAD
+	return "INVALID"
+=======
 	var flags []string
 	for k, v := range ENewsUpdateType_name {
 		if e&k != 0 {
@@ -5850,6 +5884,9 @@ func (e ESystemIMType) String() string {
 	if s, ok := ESystemIMType_name[e]; ok {
 		return s
 	}
+<<<<<<< HEAD
+	return "INVALID"
+=======
 	var flags []string
 	for k, v := range ESystemIMType_name {
 		if e&k != 0 {
@@ -6170,6 +6207,9 @@ func (e ELeaderboardSortMethod) String() string {
 	if s, ok := ELeaderboardSortMethod_name[e]; ok {
 		return s
 	}
+<<<<<<< HEAD
+	return "INVALID"
+=======
 	var flags []string
 	for k, v := range ELeaderboardSortMethod_name {
 		if e&k != 0 {
@@ -6201,6 +6241,9 @@ func (e ELeaderboardUploadScoreMethod) String() string {
 	if s, ok := ELeaderboardUploadScoreMethod_name[e]; ok {
 		return s
 	}
+<<<<<<< HEAD
+	return "INVALID"
+=======
 	var flags []string
 	for k, v := range ELeaderboardUploadScoreMethod_name {
 		if e&k != 0 {

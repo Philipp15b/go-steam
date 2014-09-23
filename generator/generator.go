@@ -80,6 +80,7 @@ func buildProto() {
 	print("# Building Protobufs")
 
 	buildProtoMap("steamclient", clientProtoFiles, "../internal/protobuf")
+	buildProtoMap("dota", dota2_protoFiles, "../internal/protobuf")
 	buildProtoMap("tf", tf2ProtoFiles, "../tf2/internal/protobuf")
 }
 
@@ -123,6 +124,21 @@ var tf2ProtoFiles = map[string]string{
 	"gcsdk_gcmessages.proto": "gcsdk.pb.go",
 	"tf_gcmessages.proto":    "tf.pb.go",
 	"gcsystemmsgs.proto":     "system.pb.go",
+}
+
+// Maps the proto files to their target files.
+// See `SteamKit/Resources/Protobufs/steamclient/generate-base.bat` for reference.
+var dota2_protoFiles = map[string]string{
+	"steammessages.proto":          "dota/steammessages.pb.go",
+	"gcsystemmsgs.proto":           "dota/gcsystemmsgs.pb.go",
+	"base_gcmessages.proto":        "dota/basegcmessages.pb.go",
+	"gcsdk_gcmessages.proto":       "dota/gcsdkgcmessages.pb.go",
+	"econ_gcmessages.proto":        "dota/econgcmessages.pb.go",
+	"matchmaker_common.proto":      "dota/matchmakercommon.pb.go",
+	"network_connection.proto":     "dota/networkconnection.pb.go",
+	"dota_gcmessages_common.proto": "dota/gcmessagescommon.pb.go",
+	"dota_gcmessages_client.proto": "dota/gcmessagesclient.pb.go",
+	"dota_gcmessages_server.proto": "dota/gcmessagesserver.pb.go",
 }
 
 func compileProto(srcBase, srcSubdir, proto, target string) {

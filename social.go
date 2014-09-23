@@ -90,6 +90,7 @@ func (s *Social) SendMessage(to SteamId, entryType EChatEntryType, message strin
 			ChatEntryType: proto.Int32(int32(entryType)),
 			Message:       []byte(message),
 		}))
+
 		//Chat room
 	} else if to.GetAccountType() == int32(EAccountType_Clan) || to.GetAccountType() == int32(EAccountType_Chat) {
 		chatId := to.ClanToChat()

@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"encoding/binary"
 	. "github.com/Philipp15b/go-steam/internal/steamlang"
 	"io"
 )
