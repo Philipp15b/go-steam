@@ -29,7 +29,6 @@ func (t *Trading) HandlePacket(packet *Packet) {
 		t.client.Emit(&TradeProposedEvent{
 			RequestId: TradeRequestId(msg.GetTradeRequestId()),
 			Other:     SteamId(msg.GetOtherSteamid()),
-			OtherName: msg.GetOtherName(),
 		})
 	case EMsg_EconTrading_InitiateTradeResult:
 		msg := new(CMsgTrading_InitiateTradeResponse)
