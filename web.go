@@ -127,7 +127,7 @@ func (w *Web) handleAuthNonceResponse(packet *Packet) {
 	// this has to be the best name for a message yet.
 	msg := new(CMsgClientRequestWebAPIAuthenticateUserNonceResponse)
 	packet.ReadProtoMsg(msg)
-	w.SessionId = msg.GetWebapiAuthenticateUserNonce()
+	w.webLoginKey = msg.GetWebapiAuthenticateUserNonce()
 
 	// if the nonce was specifically requested in apiLogOn(),
 	// don't emit an event.
