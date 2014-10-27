@@ -73,7 +73,7 @@ func (w *Web) apiLogOn() error {
 
 	cryptedSessionKey := cryptoutil.RSAEncrypt(GetPublicKey(EUniverse_Public), sessionKey)
 	ciph, _ := aes.NewCipher(sessionKey)
-	cryptedLoginKey := cryptoutil.SymmetricEncrypt(ciph, []byte(w.SessionId))
+	cryptedLoginKey := cryptoutil.SymmetricEncrypt(ciph, []byte(w.webLoginKey))
 	data := make(url.Values)
 	data.Add("format", "json")
 	data.Add("steamid", strconv.FormatUint(uint64(w.client.SteamId()), 10))
