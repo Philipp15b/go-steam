@@ -76,7 +76,7 @@ func (w *Web) apiLogOn() error {
 	cryptedLoginKey := cryptoutil.SymmetricEncrypt(ciph, []byte(w.webLoginKey))
 	data := make(url.Values)
 	data.Add("format", "json")
-	data.Add("steamid", strconv.FormatUint(uint64(w.client.SteamId()), 10))
+	data.Add("steamid", strconv.FormatUint(w.client.SteamId().ToUint64(), 10))
 	data.Add("sessionkey", string(cryptedSessionKey))
 	data.Add("encrypted_loginkey", string(cryptedLoginKey))
 	resp, err := http.PostForm("http://api.steampowered.com/ISteamUserAuth/AuthenticateUser/v0001", data)
@@ -86,7 +86,7 @@ func (w *Web) apiLogOn() error {
 	defer resp.Body.Close()
 
 	if resp.StatusCode == 401 {
-		// our web session id has expired, request a new one
+		// our web login key has expired, request a new one
 		atomic.StoreUint32(&w.relogOnNonce, 1)
 		w.client.Write(NewClientMsgProtobuf(EMsg_ClientRequestWebAPIAuthenticateUserNonce, new(CMsgClientRequestWebAPIAuthenticateUserNonce)))
 		return nil
