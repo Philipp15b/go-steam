@@ -117,7 +117,6 @@ func (w *Web) handleNewLoginKey(packet *Packet) {
 		UniqueId: proto.Uint32(msg.GetUniqueId()),
 	}))
 
-	w.webLoginKey = msg.GetLoginKey()
 	// number -> string -> bytes -> base64
 	w.SessionId = base64.StdEncoding.EncodeToString([]byte(strconv.FormatUint(uint64(msg.GetUniqueId()), 10)))
 
