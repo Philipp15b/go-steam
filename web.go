@@ -133,7 +133,5 @@ func (w *Web) handleAuthNonceResponse(packet *Packet) {
 	// don't emit an event.
 	if atomic.CompareAndSwapUint32(&w.relogOnNonce, 1, 0) {
 		w.LogOn()
-	} else {
-		w.client.Emit(new(WebSessionIdEvent))
 	}
 }
