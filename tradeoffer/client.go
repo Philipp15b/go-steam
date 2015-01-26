@@ -96,6 +96,66 @@ func (c *Client) Accept(id TradeOfferId) error {
 	return nil
 }
 
+type TradeItem struct {
+	AppId     uint32
+	ContextId uint64
+	Amount    uint
+	AssetId   uint64
+}
+
+// Sends a new trade offer to the given Steam user. You can optionally specify an access token if you've got one.
+// In addition, `countered` can be non-nil, indicating the trade offer this is a counter for.
+func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, theirItems []TradeItem, countered *TradeOfferId, message string) error {
+	to := map[string]interface{}{
+		"newversion": "true",
+		"version":    "2",
+		"me": map[string]interface{}{
+			"assets":   myItems,
+			"currency": make([]struct{}, 0),
+			"ready":    "false",
+		},
+		"them": map[string]interface{}{
+			"assets":   theirItems,
+			"currency": make([]struct{}, 0),
+			"ready":    "false",
+		},
+	}
+
+	jto, err := json.Marshal(to)
+	if err != nil {
+		panic(err)
+	}
+
+	data := map[string]string{
+		"sessionid":         c.sessionId,
+		"serverid":          "1",
+		"partner":           fmt.Sprintf("%d", other),
+		"tradeoffermessage": message,
+		"json_tradeoffer":   string(jto),
+	}
+
+	var referer string
+	if countered != nil {
+		referer = fmt.Sprintf("http://steamcommunity.com/tradeoffer/%d/", *countered)
+		data["tradeofferid_countered"] = fmt.Sprintf("%d", *countered)
+	} else {
+		referer = fmt.Sprintf("http://steamcommunity.com/tradeoffer/new?partner=%d", other)
+	}
+
+	req := netutil.NewPostForm("http://steamcommunity.com/tradeoffer/new/send", netutil.ToUrlValues(data))
+	req.Header.Add("Referer", referer)
+
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != 200 {
+		return errors.New("accept error: status code not 200")
+	}
+	return nil
+}
+
 func (c *Client) GetOwnInventory(contextId uint64, appId uint32) (*inventory.Inventory, error) {
 	return inventory.GetOwnInventory(c.client, contextId, appId)
 }
