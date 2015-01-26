@@ -80,6 +80,22 @@ func (c *Client) Cancel(id TradeOfferId) error {
 	return c.action("CancelTradeOffer", 1, id)
 }
 
+func (c *Client) Accept(id TradeOfferId) error {
+	resp, err := c.client.PostForm(fmt.Sprintf("http://steamcommunity.com/tradeoffer/%d/accept", id), netutil.ToUrlValues(map[string]string{
+		"sessionid":    c.sessionId,
+		"serverid":     "1",
+		"tradeofferid": strconv.FormatUint(uint64(id), 10),
+	}))
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != 200 {
+		return errors.New("accept error: status code not 200")
+	}
+	return nil
+}
+
 func (c *Client) GetOwnInventory(contextId uint64, appId uint32) (*inventory.Inventory, error) {
 	return inventory.GetOwnInventory(c.client, contextId, appId)
 }
