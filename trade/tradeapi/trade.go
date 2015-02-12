@@ -18,7 +18,7 @@ import (
 	"time"
 )
 
-const tradeUrl = "http://steamcommunity.com/trade/%d/"
+const tradeUrl = "https://steamcommunity.com/trade/%d/"
 
 type Trade struct {
 	client *http.Client
@@ -32,8 +32,8 @@ type Trade struct {
 	baseUrl   string
 }
 
-// Creates a new Trade based on the given cookies `sessionid` and `steamLogin` and the trade partner's Steam ID.
-func New(sessionId, steamLogin string, other steamid.SteamId) *Trade {
+// Creates a new Trade based on the given cookies `sessionid`, `steamLogin`, `steamLoginSecure` and the trade partner's Steam ID.
+func New(sessionId, steamLogin steamLoginSecure, string, other steamid.SteamId) *Trade {
 	client := new(http.Client)
 	client.Timeout = 10 * time.Second
 
@@ -44,7 +44,7 @@ func New(sessionId, steamLogin string, other steamid.SteamId) *Trade {
 		baseUrl:   fmt.Sprintf(tradeUrl, other),
 		Version:   1,
 	}
-	community.SetCookies(t.client, sessionId, steamLogin)
+	community.SetCookies(t.client, sessionId, steamLogin, steamLoginSecure)
 	return t
 }
 
