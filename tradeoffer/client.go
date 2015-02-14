@@ -103,9 +103,13 @@ type TradeItem struct {
 	AssetId   uint64 `json:"assetid"`
 }
 
+type TradeCreateResult struct {
+	TradeOfferId uint64 `json:",string"`
+}
+
 // Sends a new trade offer to the given Steam user. You can optionally specify an access token if you've got one.
 // In addition, `countered` can be non-nil, indicating the trade offer this is a counter for.
-func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, theirItems []TradeItem, countered *TradeOfferId, message string) error {
+func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, theirItems []TradeItem, countered *TradeOfferId, message string) (*TradeCreateResult, error) {
 	to := map[string]interface{}{
 		"newversion": true,
 		"version":    "3",
@@ -149,13 +153,20 @@ func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, the
 
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer resp.Body.Close()
+
+	// If we failed, error out
 	if resp.StatusCode != 200 {
-		return errors.New("create error: status code not 200")
+		return nil, errors.New("create error: status code not 200")
 	}
-	return nil
+
+	// Load the JSON result into TradeCreateResult
+	result := new(TradeCreateResult)
+	decoder := json.NewDecoder(resp.Body)
+	decoder.Decode(result)
+	return result, nil
 }
 
 func (c *Client) GetOwnInventory(contextId uint64, appId uint32) (*inventory.Inventory, error) {
