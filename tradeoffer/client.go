@@ -97,27 +97,27 @@ func (c *Client) Accept(id TradeOfferId) error {
 }
 
 type TradeItem struct {
-	AppId     uint32
-	ContextId uint64
-	Amount    uint
-	AssetId   uint64
+	AppId     uint32 `json:"appid"`
+	ContextId uint64 `json:"contextid"`
+	Amount    uint   `json:"amount"`
+	AssetId   uint64 `json:"assetid"`
 }
 
 // Sends a new trade offer to the given Steam user. You can optionally specify an access token if you've got one.
 // In addition, `countered` can be non-nil, indicating the trade offer this is a counter for.
 func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, theirItems []TradeItem, countered *TradeOfferId, message string) error {
 	to := map[string]interface{}{
-		"newversion": "true",
-		"version":    "2",
+		"newversion": true,
+		"version":    "3",
 		"me": map[string]interface{}{
 			"assets":   myItems,
 			"currency": make([]struct{}, 0),
-			"ready":    "false",
+			"ready":    false,
 		},
 		"them": map[string]interface{}{
 			"assets":   theirItems,
 			"currency": make([]struct{}, 0),
-			"ready":    "false",
+			"ready":    false,
 		},
 	}
 
@@ -127,11 +127,13 @@ func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, the
 	}
 
 	data := map[string]string{
-		"sessionid":         c.sessionId,
-		"serverid":          "1",
-		"partner":           fmt.Sprintf("%d", other),
-		"tradeoffermessage": message,
-		"json_tradeoffer":   string(jto),
+		"sessionid":                 c.sessionId,
+		"serverid":                  "1",
+		"partner":                   fmt.Sprintf("%d", other),
+		"tradeoffermessage":         message,
+		"json_tradeoffer":           string(jto),
+		"captcha":                   "",
+		"trade_offer_create_params": "{}",
 	}
 
 	var referer string
@@ -151,7 +153,7 @@ func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, the
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
-		return errors.New("accept error: status code not 200")
+		return errors.New("create error: status code not 200")
 	}
 	return nil
 }
