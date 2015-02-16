@@ -130,6 +130,16 @@ func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, the
 		panic(err)
 	}
 
+	params := make(map[string]string)
+	if accessToken != nil {
+		params["trade_offer_access_token"] = *accessToken
+	}
+
+	paramsJson, err := json.Marshal(params)
+	if err != nil {
+		panic(err)
+	}
+
 	data := map[string]string{
 		"sessionid":                 c.sessionId,
 		"serverid":                  "1",
@@ -137,7 +147,7 @@ func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, the
 		"tradeoffermessage":         message,
 		"json_tradeoffer":           string(jto),
 		"captcha":                   "",
-		"trade_offer_create_params": "{}",
+		"trade_offer_create_params": string(paramsJson),
 	}
 
 	var referer string
