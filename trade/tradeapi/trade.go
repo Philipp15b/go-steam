@@ -33,7 +33,7 @@ type Trade struct {
 }
 
 // Creates a new Trade based on the given cookies `sessionid`, `steamLogin`, `steamLoginSecure` and the trade partner's Steam ID.
-func New(sessionId, steamLogin steamLoginSecure, string, other steamid.SteamId) *Trade {
+func New(sessionId, steamLogin, steamLoginSecure string, other steamid.SteamId) *Trade {
 	client := new(http.Client)
 	client.Timeout = 10 * time.Second
 
