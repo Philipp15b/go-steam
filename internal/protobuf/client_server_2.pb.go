@@ -4,7 +4,7 @@
 
 package protobuf
 
-import proto "code.google.com/p/goprotobuf/proto"
+import proto "github.com/golang/protobuf/proto"
 import math "math"
 
 // discarding unused import steammessages_base "steammessages_base.pb"

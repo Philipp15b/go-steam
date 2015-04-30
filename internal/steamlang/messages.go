@@ -4,7 +4,7 @@
 package steamlang
 
 import (
-	"code.google.com/p/goprotobuf/proto"
+	"github.com/golang/protobuf/proto"
 	"encoding/binary"
 	. "github.com/Philipp15b/go-steam/internal/protobuf"
 	"github.com/Philipp15b/go-steam/rwu"

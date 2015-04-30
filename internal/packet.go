@@ -2,7 +2,7 @@ package internal
 
 import (
 	"bytes"
-	"code.google.com/p/goprotobuf/proto"
+	"github.com/golang/protobuf/proto"
 	"encoding/binary"
 	"fmt"
 	. "github.com/Philipp15b/go-steam/internal/steamlang"
