@@ -1,7 +1,7 @@
 package steam
 
 import (
-	"code.google.com/p/goprotobuf/proto"
+	"github.com/golang/protobuf/proto"
 	"crypto/aes"
 	"crypto/rand"
 	"encoding/base64"

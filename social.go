@@ -2,7 +2,7 @@ package steam
 
 import (
 	"bytes"
-	"code.google.com/p/goprotobuf/proto"
+	"github.com/golang/protobuf/proto"
 	"encoding/binary"
 	"encoding/hex"
 	. "github.com/Philipp15b/go-steam/internal"

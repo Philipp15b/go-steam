@@ -35,7 +35,7 @@ You should also take a look at the following sub-packages:
 
 To update go-steam to a new version of SteamKit, do the following:
 
-	go get code.google.com/p/goprotobuf/protoc-gen-go
+	go get github.com/golang/protobuf/protoc-gen-go/
     git submodule init && git submodule update
     cd generator
     go run generator.go clean proto steamlang
