@@ -6,12 +6,6 @@ import (
 	"crypto/rand"
 	"encoding/binary"
 	"fmt"
-	"github.com/vincentserpoul/go-steam/cryptoutil"
-	. "github.com/vincentserpoul/go-steam/internal"
-	. "github.com/vincentserpoul/go-steam/internal/protobuf"
-	. "github.com/vincentserpoul/go-steam/internal/steamlang"
-	"github.com/vincentserpoul/go-steam/netutil"
-	. "github.com/vincentserpoul/go-steam/steamid"
 	"hash/crc32"
 	"io/ioutil"
 	"log"
@@ -19,6 +13,13 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
+
+	"github.com/vincentserpoul/go-steam/cryptoutil"
+	. "github.com/vincentserpoul/go-steam/internal"
+	. "github.com/vincentserpoul/go-steam/internal/protobuf"
+	. "github.com/vincentserpoul/go-steam/internal/steamlang"
+	"github.com/vincentserpoul/go-steam/netutil"
+	. "github.com/vincentserpoul/go-steam/steamid"
 )
 
 // Represents a client to the Steam network.
@@ -148,6 +149,13 @@ func (c *Client) ConnectNorthAmerica() *netutil.PortAddr {
 // Connects to a random Europe server on the Steam network
 func (c *Client) ConnectEurope() *netutil.PortAddr {
 	server := GetRandomEuropeCM()
+	c.ConnectTo(server)
+	return server
+}
+
+// ConnectSingapore Connects to a random Europe server on the Steam network
+func (c *Client) ConnectSingapore() *netutil.PortAddr {
+	server := GetRandomSingaporeCM()
 	c.ConnectTo(server)
 	return server
 }

@@ -1,9 +1,10 @@
 package steam
 
 import (
-	"github.com/vincentserpoul/go-steam/netutil"
 	"math/rand"
 	"time"
+
+	"github.com/vincentserpoul/go-steam/netutil"
 )
 
 var CMServers = [][]string{
@@ -39,6 +40,10 @@ var CMServers = [][]string{
 		"146.66.152.15:27017",
 		"146.66.152.15:27018",
 		"146.66.152.15:27019",
+	},
+	{ // Starhub, Singapore (non-optimal route)
+		"103.28.54.10:27017",
+		"103.28.54.11:27017",
 	},
 	/* Highwinds, Netherlands (not live)
 	"81.171.115.5":27017",
@@ -80,6 +85,15 @@ func GetRandomNorthAmericaCM() *netutil.PortAddr {
 func GetRandomEuropeCM() *netutil.PortAddr {
 	rng := rand.New(rand.NewSource(time.Now().UnixNano()))
 	addr := netutil.ParsePortAddr(CMServers[1][rng.Int31n(int32(len(CMServers[0])))])
+	if addr == nil {
+		panic("invalid address in CMServers slice")
+	}
+	return addr
+}
+
+func GetRandomSingaporeCM() *netutil.PortAddr {
+	rng := rand.New(rand.NewSource(time.Now().UnixNano()))
+	addr := netutil.ParsePortAddr(CMServers[2][rng.Int31n(int32(len(CMServers[2])))])
 	if addr == nil {
 		panic("invalid address in CMServers slice")
 	}
