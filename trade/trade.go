@@ -2,8 +2,8 @@ package trade
 
 import (
 	"errors"
-	"github.com/Philipp15b/go-steam/steamid"
-	"github.com/Philipp15b/go-steam/trade/tradeapi"
+	"github.com/vincentserpoul/go-steam/steamid"
+	"github.com/vincentserpoul/go-steam/trade/tradeapi"
 	"time"
 )
 

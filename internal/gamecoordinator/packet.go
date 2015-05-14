@@ -3,9 +3,9 @@ package gamecoordinator
 import (
 	"bytes"
 	"github.com/golang/protobuf/proto"
-	. "github.com/Philipp15b/go-steam/internal"
-	. "github.com/Philipp15b/go-steam/internal/protobuf"
-	. "github.com/Philipp15b/go-steam/internal/steamlang"
+	. "github.com/vincentserpoul/go-steam/internal"
+	. "github.com/vincentserpoul/go-steam/internal/protobuf"
+	. "github.com/vincentserpoul/go-steam/internal/steamlang"
 )
 
 // An incoming, partially unread message from the Game Coordinator.

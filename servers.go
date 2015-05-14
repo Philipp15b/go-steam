@@ -1,7 +1,7 @@
 package steam
 
 import (
-	"github.com/Philipp15b/go-steam/netutil"
+	"github.com/vincentserpoul/go-steam/netutil"
 	"math/rand"
 	"time"
 )
