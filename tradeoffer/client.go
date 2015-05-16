@@ -4,14 +4,15 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/vincentserpoul/go-steam/community"
-	"github.com/vincentserpoul/go-steam/economy/inventory"
-	"github.com/vincentserpoul/go-steam/netutil"
-	"github.com/vincentserpoul/go-steam/steamid"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	"github.com/vincentserpoul/go-steam/community"
+	"github.com/vincentserpoul/go-steam/economy/inventory"
+	"github.com/vincentserpoul/go-steam/netutil"
+	"github.com/vincentserpoul/go-steam/steamid"
 )
 
 type APIKey string
@@ -178,7 +179,7 @@ func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, the
 
 	// If we failed, error out
 	if resp.StatusCode != 200 {
-		return nil, errors.New("create error: status code not 200")
+		return nil, fmt.Errorf("accept error: status code %d", resp.StatusCode)
 	}
 
 	// Load the JSON result into TradeCreateResult
