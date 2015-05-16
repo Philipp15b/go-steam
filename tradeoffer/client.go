@@ -108,9 +108,9 @@ func (c *Client) Accept(id TradeOfferId) error {
 
 type TradeItem struct {
 	AppId     uint32 `json:"appid"`
-	ContextId uint64 `json:"contextid"`
+	ContextId string `json:"contextid"`
 	Amount    uint   `json:"amount"`
-	AssetId   uint64 `json:"assetid"`
+	AssetId   string `json:"assetid"`
 }
 
 type TradeCreateResult struct {
@@ -165,7 +165,7 @@ func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, the
 		referer = fmt.Sprintf("https://steamcommunity.com/tradeoffer/%d/", *countered)
 		data["tradeofferid_countered"] = fmt.Sprintf("%d", *countered)
 	} else {
-		referer = fmt.Sprintf("https://steamcommunity.com/tradeoffer/new?partner=%d", other)
+		referer = fmt.Sprintf("https://steamcommunity.com/tradeoffer/new?partner=%d", other.GetAccountId())
 	}
 
 	req := netutil.NewPostForm("https://steamcommunity.com/tradeoffer/new/send", netutil.ToUrlValues(data))
