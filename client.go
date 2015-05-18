@@ -157,7 +157,21 @@ func (c *Client) ConnectEurope() *netutil.PortAddr {
 func (c *Client) ConnectTo(addr *netutil.PortAddr) {
 	c.Disconnect()
 
-	conn, err := dialTCP(addr.ToTCPAddr())
+	conn, err := dialTCP(addr.ToTCPAddr(), nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	c.conn = conn
+
+	go c.readLoop()
+	go c.writeLoop()
+}
+
+// Connects to a specific server, and binds to a specified local IP
+func (c *Client) ConnectToBind(addr *netutil.PortAddr, local *net.TCPAddr) {
+	c.Disconnect()
+
+	conn, err := dialTCP(addr.ToTCPAddr(), local)
 	if err != nil {
 		log.Fatal(err)
 	}
