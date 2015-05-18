@@ -7,8 +7,6 @@ package protobuf
 import proto "github.com/golang/protobuf/proto"
 import math "math"
 
-// discarding unused import steammessages_base "steammessages_base.pb"
-// discarding unused import encrypted_app_ticket "encrypted_app_ticket.pb"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal

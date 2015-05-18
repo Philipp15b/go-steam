@@ -6,7 +6,7 @@ package protobuf
 
 import proto "github.com/golang/protobuf/proto"
 import math "math"
-import google_protobuf "github.com/golang/protobuf/protoc-gen-go//descriptor"
+import google_protobuf "github.com/golang/protobuf/protoc-gen-go/descriptor"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal

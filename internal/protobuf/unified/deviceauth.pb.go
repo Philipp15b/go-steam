@@ -7,8 +7,6 @@ package unified
 import proto "github.com/golang/protobuf/proto"
 import math "math"
 
-// discarding unused import google_protobuf "github.com/golang/protobuf/protoc-gen-go//descriptor"
-// discarding unused import steammessages_unified_base_steamclient "steammessages_unified_base.steamclient.pb"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
