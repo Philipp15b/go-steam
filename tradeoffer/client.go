@@ -23,17 +23,17 @@ const apiURL = "https://api.steampowered.com/IEconService/%s/v%d"
 type Client struct {
 	client    *http.Client
 	key       APIKey
-	sessionid string
+	sessionID string
 }
 
 // NewClient will create a new client and returns the right struct
-func NewClient(key APIKey, sessionid, steamLogin, steamLoginSecure string) *Client {
+func NewClient(key APIKey, sessionID, steamLogin, steamLoginSecure string) *Client {
 	c := &Client{
 		new(http.Client),
 		key,
-		sessionid,
+		sessionID,
 	}
-	community.SetCookies(c.client, sessionid, steamLogin, steamLoginSecure)
+	community.SetCookies(c.client, sessionID, steamLogin, steamLoginSecure)
 	return c
 }
 
@@ -87,7 +87,7 @@ func (c *Client) Cancel(id TradeOfferId) error {
 func (c *Client) Accept(id TradeOfferId) error {
 	baseurl := fmt.Sprintf("https://steamcommunity.com/tradeoffer/%d/", id)
 	req := netutil.NewPostForm(baseurl+"accept", netutil.ToUrlValues(map[string]string{
-		"sessionid":    c.sessionid,
+		"sessionid":    c.sessionID,
 		"serverid":     "1",
 		"tradeofferid": strconv.FormatUint(uint64(id), 10),
 	}))
@@ -150,7 +150,7 @@ func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, the
 	}
 
 	data := map[string]string{
-		"sessionid":                 c.sessionid,
+		"sessionid":                 c.sessionID,
 		"serverid":                  "1",
 		"partner":                   fmt.Sprintf("%d", other),
 		"tradeoffermessage":         message,
@@ -208,7 +208,7 @@ func (c *Client) GetTheirInventory(other steamid.SteamId, contextId uint64, appI
 
 func (c *Client) getPartialTheirInventory(other steamid.SteamId, contextId uint64, appId uint32, start *uint) (*inventory.PartialInventory, error) {
 	data := map[string]string{
-		"sessionid": c.sessionid,
+		"sessionid": c.sessionID,
 		"partner":   fmt.Sprintf("%d", other),
 		"contextid": strconv.FormatUint(contextId, 10),
 		"appid":     strconv.FormatUint(uint64(appId), 10),
