@@ -150,6 +150,7 @@ func forceRename(from, to string) error {
 
 var pkgRegex = regexp.MustCompile(`(package \w+)`)
 var pkgCommentRegex = regexp.MustCompile(`(?s)(\/\*.*?\*\/\n)package`)
+var unusedImportCommentRegex = regexp.MustCompile("// discarding unused import .*\n")
 
 func fixProto(path string) {
 	// goprotobuf is really bad at dependencies, so we must fix them manually...
@@ -185,6 +186,9 @@ func fixProto(path string) {
 	// remove the package comment because it just includes a list of all messages and
 	// creates collisions between the others.
 	file = cutAllSubmatch(pkgCommentRegex, file, 1)
+
+	// remove warnings
+	file = unusedImportCommentRegex.ReplaceAllLiteral(file, []byte{})
 
 	// fix the package name
 	file = pkgRegex.ReplaceAll(file, []byte("package "+inferPackageName(path)))
