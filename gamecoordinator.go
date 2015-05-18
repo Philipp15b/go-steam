@@ -2,11 +2,11 @@ package steam
 
 import (
 	"bytes"
-	"github.com/golang/protobuf/proto"
 	. "github.com/Philipp15b/go-steam/internal"
 	. "github.com/Philipp15b/go-steam/internal/gamecoordinator"
 	. "github.com/Philipp15b/go-steam/internal/protobuf"
 	. "github.com/Philipp15b/go-steam/internal/steamlang"
+	"github.com/golang/protobuf/proto"
 )
 
 type GameCoordinator struct {

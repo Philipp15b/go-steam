@@ -2,7 +2,6 @@ package steam
 
 import (
 	"bytes"
-	"github.com/golang/protobuf/proto"
 	"encoding/binary"
 	"encoding/hex"
 	. "github.com/Philipp15b/go-steam/internal"
@@ -11,6 +10,7 @@ import (
 	. "github.com/Philipp15b/go-steam/rwu"
 	"github.com/Philipp15b/go-steam/socialcache"
 	. "github.com/Philipp15b/go-steam/steamid"
+	"github.com/golang/protobuf/proto"
 	"io"
 	"sync"
 )

@@ -1,7 +1,6 @@
 package steam
 
 import (
-	"github.com/golang/protobuf/proto"
 	"crypto/aes"
 	"crypto/rand"
 	"encoding/base64"
@@ -11,6 +10,7 @@ import (
 	. "github.com/Philipp15b/go-steam/internal"
 	. "github.com/Philipp15b/go-steam/internal/protobuf"
 	. "github.com/Philipp15b/go-steam/internal/steamlang"
+	"github.com/golang/protobuf/proto"
 	"net/http"
 	"net/url"
 	"strconv"
