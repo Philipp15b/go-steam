@@ -27,8 +27,11 @@ type Web struct {
 	// When used as an URL paramter this is automatically escaped by the Go HTTP package.
 	SessionId string
 	// The `steamLogin` cookie required to use the steam website. Already URL-escaped.
-	// It is only available after calling LogOn().
+	// This is only available after calling LogOn().
 	SteamLogin string
+	// The `steamLoginSecure` cookie required to use the steam website over HTTPs. Already URL-escaped.
+	// This is only availbile after calling LogOn().
+	SteamLoginSecure string
 
 	webLoginKey string
 
@@ -79,7 +82,7 @@ func (w *Web) apiLogOn() error {
 	data.Add("steamid", strconv.FormatUint(w.client.SteamId().ToUint64(), 10))
 	data.Add("sessionkey", string(cryptedSessionKey))
 	data.Add("encrypted_loginkey", string(cryptedLoginKey))
-	resp, err := http.PostForm("http://api.steampowered.com/ISteamUserAuth/AuthenticateUser/v0001", data)
+	resp, err := http.PostForm("https://api.steampowered.com/ISteamUserAuth/AuthenticateUser/v0001", data)
 	if err != nil {
 		return err
 	}
@@ -96,14 +99,17 @@ func (w *Web) apiLogOn() error {
 
 	result := new(struct {
 		Authenticateuser struct {
-			Token string
+			Token       string
+			TokenSecure string
 		}
 	})
 	err = json.NewDecoder(resp.Body).Decode(result)
 	if err != nil {
 		return err
 	}
+
 	w.SteamLogin = result.Authenticateuser.Token
+	w.SteamLoginSecure = result.Authenticateuser.TokenSecure
 
 	w.client.Emit(new(WebLoggedOnEvent))
 	return nil

@@ -28,8 +28,8 @@ type tcpConnection struct {
 	cipherMutex sync.RWMutex
 }
 
-func dialTCP(addr *net.TCPAddr) (*tcpConnection, error) {
-	conn, err := net.DialTCP("tcp", nil, addr)
+func dialTCP(addr, local *net.TCPAddr) (*tcpConnection, error) {
+	conn, err := net.DialTCP("tcp", local, addr)
 	if err != nil {
 		return nil, err
 	}

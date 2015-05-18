@@ -14,7 +14,7 @@ import (
 
 type APIKey string
 
-const apiUrl = "http://api.steampowered.com/IEconService/%s/v%d"
+const apiUrl = "https://api.steampowered.com/IEconService/%s/v%d"
 
 type Client struct {
 	client    *http.Client
@@ -22,13 +22,13 @@ type Client struct {
 	sessionId string
 }
 
-func NewClient(key APIKey, sessionId, steamLogin string) *Client {
+func NewClient(key APIKey, sessionId, steamLogin, steamLoginSecure string) *Client {
 	c := &Client{
 		new(http.Client),
 		key,
 		sessionId,
 	}
-	community.SetCookies(c.client, sessionId, steamLogin)
+	community.SetCookies(c.client, sessionId, steamLogin, steamLoginSecure)
 	return c
 }
 
@@ -101,27 +101,31 @@ func (c *Client) Accept(id TradeOfferId) error {
 }
 
 type TradeItem struct {
-	AppId     uint32
-	ContextId uint64
-	Amount    uint
-	AssetId   uint64
+	AppId     uint32 `json:"appid"`
+	ContextId uint64 `json:"contextid"`
+	Amount    uint   `json:"amount"`
+	AssetId   uint64 `json:"assetid"`
+}
+
+type TradeCreateResult struct {
+	TradeOfferId uint64 `json:",string"`
 }
 
 // Sends a new trade offer to the given Steam user. You can optionally specify an access token if you've got one.
 // In addition, `countered` can be non-nil, indicating the trade offer this is a counter for.
-func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, theirItems []TradeItem, countered *TradeOfferId, message string) error {
+func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, theirItems []TradeItem, countered *TradeOfferId, message string) (*TradeCreateResult, error) {
 	to := map[string]interface{}{
-		"newversion": "true",
-		"version":    "2",
+		"newversion": true,
+		"version":    "3",
 		"me": map[string]interface{}{
 			"assets":   myItems,
 			"currency": make([]struct{}, 0),
-			"ready":    "false",
+			"ready":    false,
 		},
 		"them": map[string]interface{}{
 			"assets":   theirItems,
 			"currency": make([]struct{}, 0),
-			"ready":    "false",
+			"ready":    false,
 		},
 	}
 
@@ -130,34 +134,53 @@ func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, the
 		panic(err)
 	}
 
+	params := make(map[string]string)
+	if accessToken != nil {
+		params["trade_offer_access_token"] = *accessToken
+	}
+
+	paramsJson, err := json.Marshal(params)
+	if err != nil {
+		panic(err)
+	}
+
 	data := map[string]string{
-		"sessionid":         c.sessionId,
-		"serverid":          "1",
-		"partner":           fmt.Sprintf("%d", other),
-		"tradeoffermessage": message,
-		"json_tradeoffer":   string(jto),
+		"sessionid":                 c.sessionId,
+		"serverid":                  "1",
+		"partner":                   fmt.Sprintf("%d", other),
+		"tradeoffermessage":         message,
+		"json_tradeoffer":           string(jto),
+		"captcha":                   "",
+		"trade_offer_create_params": string(paramsJson),
 	}
 
 	var referer string
 	if countered != nil {
-		referer = fmt.Sprintf("http://steamcommunity.com/tradeoffer/%d/", *countered)
+		referer = fmt.Sprintf("https://steamcommunity.com/tradeoffer/%d/", *countered)
 		data["tradeofferid_countered"] = fmt.Sprintf("%d", *countered)
 	} else {
-		referer = fmt.Sprintf("http://steamcommunity.com/tradeoffer/new?partner=%d", other)
+		referer = fmt.Sprintf("https://steamcommunity.com/tradeoffer/new?partner=%d", other)
 	}
 
-	req := netutil.NewPostForm("http://steamcommunity.com/tradeoffer/new/send", netutil.ToUrlValues(data))
+	req := netutil.NewPostForm("https://steamcommunity.com/tradeoffer/new/send", netutil.ToUrlValues(data))
 	req.Header.Add("Referer", referer)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer resp.Body.Close()
+
+	// If we failed, error out
 	if resp.StatusCode != 200 {
-		return errors.New("accept error: status code not 200")
+		return nil, errors.New("create error: status code not 200")
 	}
-	return nil
+
+	// Load the JSON result into TradeCreateResult
+	result := new(TradeCreateResult)
+	decoder := json.NewDecoder(resp.Body)
+	decoder.Decode(result)
+	return result, nil
 }
 
 func (c *Client) GetOwnInventory(contextId uint64, appId uint32) (*inventory.Inventory, error) {
@@ -183,7 +206,7 @@ func (c *Client) getPartialTheirInventory(other steamid.SteamId, contextId uint6
 		data["start"] = strconv.FormatUint(uint64(*start), 10)
 	}
 
-	const baseUrl = "http://steamcommunity.com/tradeoffer/new/"
+	const baseUrl = "https://steamcommunity.com/tradeoffer/new/"
 	req, err := http.NewRequest("GET", baseUrl+"partnerinventory/?"+netutil.ToUrlValues(data).Encode(), nil)
 	if err != nil {
 		panic(err)

@@ -6,9 +6,9 @@ import (
 	"net/url"
 )
 
-const cookiePath = "http://steamcommunity.com/"
+const cookiePath = "https://steamcommunity.com/"
 
-func SetCookies(client *http.Client, sessionId, steamLogin string) {
+func SetCookies(client *http.Client, sessionId, steamLogin, steamLoginSecure string) {
 	if client.Jar == nil {
 		client.Jar, _ = cookiejar.New(new(cookiejar.Options))
 	}
@@ -26,6 +26,10 @@ func SetCookies(client *http.Client, sessionId, steamLogin string) {
 		&http.Cookie{
 			Name:  "steamLogin",
 			Value: steamLogin,
+		},
+		&http.Cookie{
+			Name:  "steamLoginSecure",
+			Value: steamLoginSecure,
 		},
 	})
 }
