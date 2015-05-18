@@ -105,8 +105,6 @@ var clientProtoFiles = map[string]string{
 
 	"content_manifest.proto": "content_manifest.pb.go",
 
-	"iclient_objects.proto": "iclient_objects.pb.go",
-
 	"steammessages_unified_base.steamclient.proto":      "unified/base.pb.go",
 	"steammessages_cloud.steamclient.proto":             "unified/cloud.pb.go",
 	"steammessages_credentials.steamclient.proto":       "unified/credentials.pb.go",
