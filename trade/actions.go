@@ -1,8 +1,8 @@
 package trade
 
 import (
-	"github.com/Philipp15b/go-steam/economy/inventory"
-	"github.com/Philipp15b/go-steam/trade/tradeapi"
+	"github.com/vincentserpoul/go-steam/economy/inventory"
+	"github.com/vincentserpoul/go-steam/trade/tradeapi"
 	"time"
 )
 

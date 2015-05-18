@@ -2,15 +2,15 @@ package steam
 
 import (
 	"bytes"
-	"code.google.com/p/goprotobuf/proto"
+	"github.com/golang/protobuf/proto"
 	"encoding/binary"
 	"encoding/hex"
-	. "github.com/Philipp15b/go-steam/internal"
-	. "github.com/Philipp15b/go-steam/internal/protobuf"
-	. "github.com/Philipp15b/go-steam/internal/steamlang"
-	. "github.com/Philipp15b/go-steam/rwu"
-	"github.com/Philipp15b/go-steam/socialcache"
-	. "github.com/Philipp15b/go-steam/steamid"
+	. "github.com/vincentserpoul/go-steam/internal"
+	. "github.com/vincentserpoul/go-steam/internal/protobuf"
+	. "github.com/vincentserpoul/go-steam/internal/steamlang"
+	. "github.com/vincentserpoul/go-steam/rwu"
+	"github.com/vincentserpoul/go-steam/socialcache"
+	. "github.com/vincentserpoul/go-steam/steamid"
 	"io"
 	"sync"
 )

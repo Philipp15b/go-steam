@@ -13,29 +13,29 @@ Some of the currently implemented features:
   * SteamGuard
   * Team Fortress 2: Crafting, moving, naming and deleting items
 
-If this is useful to you, there's also the [go-steamapi](https://github.com/Philipp15b/go-steamapi) package that wraps some of the official Steam Web API's types.
+If this is useful to you, there's also the [go-steamapi](https://github.com/vincentserpoul/go-steamapi) package that wraps some of the official Steam Web API's types.
 
 ## Installation
 
-    go get github.com/Philipp15b/go-steam
+    go get github.com/vincentserpoul/go-steam
 
 ## Usage
 
 You can view the documentation with the [`godoc`](http://golang.org/cmd/godoc) tool or
-[online on godoc.org](http://godoc.org/github.com/Philipp15b/go-steam).
+[online on godoc.org](http://godoc.org/github.com/vincentserpoul/go-steam).
 
 You should also take a look at the following sub-packages:
 
-  * [`trade`](http://godoc.org/github.com/Philipp15b/go-steam/trade) for trading
-  * [`tradeoffer`](http://godoc.org/github.com/Philipp15b/go-steam/tradeoffer) for trade offers
-  * [`economy/inventory`](http://godoc.org/github.com/Philipp15b/go-steam/economy/inventory) for inventories
-  * [`tf2`](http://godoc.org/github.com/Philipp15b/go-steam/tf2) for Team Fortress 2 related things
+  * [`trade`](http://godoc.org/github.com/vincentserpoul/go-steam/trade) for trading
+  * [`tradeoffer`](http://godoc.org/github.com/vincentserpoul/go-steam/tradeoffer) for trade offers
+  * [`economy/inventory`](http://godoc.org/github.com/vincentserpoul/go-steam/economy/inventory) for inventories
+  * [`tf2`](http://godoc.org/github.com/vincentserpoul/go-steam/tf2) for Team Fortress 2 related things
 
 ## Updating go-steam to a new SteamKit version
 
 To update go-steam to a new version of SteamKit, do the following:
 
-	go get code.google.com/p/goprotobuf/protoc-gen-go
+	go get github.com/golang/protobuf/protoc-gen-go/
     git submodule init && git submodule update
     cd generator
     go run generator.go clean proto steamlang

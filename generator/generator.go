@@ -189,7 +189,7 @@ func fixProto(path string) {
 
 	// fix the google dependency;
 	// we just reuse the one from protoc-gen-go
-	file = bytes.Replace(file, []byte("google/protobuf/descriptor.pb"), []byte("code.google.com/p/goprotobuf/protoc-gen-go/descriptor"), -1)
+	file = bytes.Replace(file, []byte("google/protobuf/descriptor.pb"), []byte("github.com/golang/protobuf/protoc-gen-go//descriptor"), -1)
 
 	err = ioutil.WriteFile(path, file, os.ModePerm)
 	if err != nil {

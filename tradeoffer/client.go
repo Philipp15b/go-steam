@@ -4,12 +4,15 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/Philipp15b/go-steam/community"
-	"github.com/Philipp15b/go-steam/economy/inventory"
-	"github.com/Philipp15b/go-steam/netutil"
-	"github.com/Philipp15b/go-steam/steamid"
 	"net/http"
+	"net/url"
 	"strconv"
+	"strings"
+
+	"github.com/vincentserpoul/go-steam/community"
+	"github.com/vincentserpoul/go-steam/economy/inventory"
+	"github.com/vincentserpoul/go-steam/netutil"
+	"github.com/vincentserpoul/go-steam/steamid"
 )
 
 type APIKey string
@@ -81,26 +84,33 @@ func (c *Client) Cancel(id TradeOfferId) error {
 }
 
 func (c *Client) Accept(id TradeOfferId) error {
-	resp, err := c.client.PostForm(fmt.Sprintf("https://steamcommunity.com/tradeoffer/%d/accept", id), netutil.ToUrlValues(map[string]string{
-		"sessionid":    c.sessionId,
-		"serverid":     "1",
-		"tradeofferid": strconv.FormatUint(uint64(id), 10),
-	}))
+	baseurl := fmt.Sprintf("https://steamcommunity.com/tradeoffer/%d/", id)
+
+	v := url.Values{}
+	v.Set("sessionid", c.sessionId)
+	v.Set("serverid", "1")
+	v.Set("tradeofferid", strconv.FormatUint(uint64(id), 10))
+
+	req, _ := http.NewRequest("POST", baseurl+"accept", strings.NewReader(v.Encode()))
+	req.Header.Set("Referer", baseurl)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+	resp, err := c.client.Do(req)
 	if err != nil {
 		return err
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
-		return errors.New("accept error: status code not 200")
+		return fmt.Errorf("accept error: status code %d", resp.StatusCode)
 	}
 	return nil
 }
 
 type TradeItem struct {
 	AppId     uint32 `json:"appid"`
-	ContextId uint64 `json:"contextid"`
+	ContextId string `json:"contextid"`
 	Amount    uint   `json:"amount"`
-	AssetId   uint64 `json:"assetid"`
+	AssetId   string `json:"assetid"`
 }
 
 type TradeCreateResult struct {
@@ -155,7 +165,7 @@ func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, the
 		referer = fmt.Sprintf("https://steamcommunity.com/tradeoffer/%d/", *countered)
 		data["tradeofferid_countered"] = fmt.Sprintf("%d", *countered)
 	} else {
-		referer = fmt.Sprintf("https://steamcommunity.com/tradeoffer/new?partner=%d", other)
+		referer = fmt.Sprintf("https://steamcommunity.com/tradeoffer/new?partner=%d", other.GetAccountId())
 	}
 
 	req := netutil.NewPostForm("https://steamcommunity.com/tradeoffer/new/send", netutil.ToUrlValues(data))
@@ -169,7 +179,7 @@ func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, the
 
 	// If we failed, error out
 	if resp.StatusCode != 200 {
-		return nil, errors.New("create error: status code not 200")
+		return nil, fmt.Errorf("accept error: status code %d", resp.StatusCode)
 	}
 
 	// Load the JSON result into TradeCreateResult

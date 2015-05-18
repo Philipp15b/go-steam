@@ -1,16 +1,16 @@
 package steam
 
 import (
-	"code.google.com/p/goprotobuf/proto"
+	"github.com/golang/protobuf/proto"
 	"crypto/aes"
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
-	"github.com/Philipp15b/go-steam/cryptoutil"
-	. "github.com/Philipp15b/go-steam/internal"
-	. "github.com/Philipp15b/go-steam/internal/protobuf"
-	. "github.com/Philipp15b/go-steam/internal/steamlang"
+	"github.com/vincentserpoul/go-steam/cryptoutil"
+	. "github.com/vincentserpoul/go-steam/internal"
+	. "github.com/vincentserpoul/go-steam/internal/protobuf"
+	. "github.com/vincentserpoul/go-steam/internal/steamlang"
 	"net/http"
 	"net/url"
 	"strconv"

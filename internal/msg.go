@@ -1,9 +1,9 @@
 package internal
 
 import (
-	"code.google.com/p/goprotobuf/proto"
-	. "github.com/Philipp15b/go-steam/internal/steamlang"
-	. "github.com/Philipp15b/go-steam/steamid"
+	"github.com/golang/protobuf/proto"
+	. "github.com/vincentserpoul/go-steam/internal/steamlang"
+	. "github.com/vincentserpoul/go-steam/steamid"
 	"io"
 )
 
