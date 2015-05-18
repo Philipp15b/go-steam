@@ -113,10 +113,17 @@ const (
 	ETFGCMsg_k_EMsgGCRemovePlayerFromLobby                          ETFGCMsg = 6301
 	ETFGCMsg_k_EMsgGCSetLobbySafeToLeave                            ETFGCMsg = 6302
 	ETFGCMsg_k_EMsgGC_UpdatePeriodicEvent                           ETFGCMsg = 6400
+	ETFGCMsg_k_EMsgGC_DuckLeaderboard_IndividualUpdate              ETFGCMsg = 6401
 	ETFGCMsg_k_EMsgGC_ClientVerificationChallenge                   ETFGCMsg = 6500
 	ETFGCMsg_k_EMsgGC_ClientVerificationChallengeResponse           ETFGCMsg = 6501
 	ETFGCMsg_k_EMsgGC_ClientVerificationVerboseResponse             ETFGCMsg = 6502
 	ETFGCMsg_k_EMsgGC_ClientSetItemSlotAttribute                    ETFGCMsg = 6503
+	ETFGCMsg_k_EMsgGC_PlayerSkillRating_Adjustment                  ETFGCMsg = 6504
+	ETFGCMsg_k_EMsgGC_SpyVsEngyWar_IndividualUpdate                 ETFGCMsg = 6505
+	ETFGCMsg_k_EMsgGC_SpyVsEngyWar_JoinWar                          ETFGCMsg = 6506
+	ETFGCMsg_k_EMsgGC_SpyVsEngyWar_RequestGlobalStats               ETFGCMsg = 6507
+	ETFGCMsg_k_EMsgGC_SpyVsEngyWar_GlobalStatsResponse              ETFGCMsg = 6508
+	ETFGCMsg_k_EMsgGC_SpyVsEngyWar_SetKillCamMessage                ETFGCMsg = 6509
 	ETFGCMsg_k_EMsgGCDev_GrantWarKill                               ETFGCMsg = 10001
 )
 
@@ -219,10 +226,17 @@ var ETFGCMsg_name = map[int32]string{
 	6301:  "k_EMsgGCRemovePlayerFromLobby",
 	6302:  "k_EMsgGCSetLobbySafeToLeave",
 	6400:  "k_EMsgGC_UpdatePeriodicEvent",
+	6401:  "k_EMsgGC_DuckLeaderboard_IndividualUpdate",
 	6500:  "k_EMsgGC_ClientVerificationChallenge",
 	6501:  "k_EMsgGC_ClientVerificationChallengeResponse",
 	6502:  "k_EMsgGC_ClientVerificationVerboseResponse",
 	6503:  "k_EMsgGC_ClientSetItemSlotAttribute",
+	6504:  "k_EMsgGC_PlayerSkillRating_Adjustment",
+	6505:  "k_EMsgGC_SpyVsEngyWar_IndividualUpdate",
+	6506:  "k_EMsgGC_SpyVsEngyWar_JoinWar",
+	6507:  "k_EMsgGC_SpyVsEngyWar_RequestGlobalStats",
+	6508:  "k_EMsgGC_SpyVsEngyWar_GlobalStatsResponse",
+	6509:  "k_EMsgGC_SpyVsEngyWar_SetKillCamMessage",
 	10001: "k_EMsgGCDev_GrantWarKill",
 }
 var ETFGCMsg_value = map[string]int32{
@@ -324,10 +338,17 @@ var ETFGCMsg_value = map[string]int32{
 	"k_EMsgGCRemovePlayerFromLobby":                          6301,
 	"k_EMsgGCSetLobbySafeToLeave":                            6302,
 	"k_EMsgGC_UpdatePeriodicEvent":                           6400,
+	"k_EMsgGC_DuckLeaderboard_IndividualUpdate":              6401,
 	"k_EMsgGC_ClientVerificationChallenge":                   6500,
 	"k_EMsgGC_ClientVerificationChallengeResponse":           6501,
 	"k_EMsgGC_ClientVerificationVerboseResponse":             6502,
 	"k_EMsgGC_ClientSetItemSlotAttribute":                    6503,
+	"k_EMsgGC_PlayerSkillRating_Adjustment":                  6504,
+	"k_EMsgGC_SpyVsEngyWar_IndividualUpdate":                 6505,
+	"k_EMsgGC_SpyVsEngyWar_JoinWar":                          6506,
+	"k_EMsgGC_SpyVsEngyWar_RequestGlobalStats":               6507,
+	"k_EMsgGC_SpyVsEngyWar_GlobalStatsResponse":              6508,
+	"k_EMsgGC_SpyVsEngyWar_SetKillCamMessage":                6509,
 	"k_EMsgGCDev_GrantWarKill":                               10001,
 }
 
@@ -384,17 +405,20 @@ const (
 	TF_MatchmakingMode_TF_Matchmaking_INVALID   TF_MatchmakingMode = 0
 	TF_MatchmakingMode_TF_Matchmaking_QUICKPLAY TF_MatchmakingMode = 1
 	TF_MatchmakingMode_TF_Matchmaking_TOBOR     TF_MatchmakingMode = 2
+	TF_MatchmakingMode_TF_Matchmaking_LADDER    TF_MatchmakingMode = 3
 )
 
 var TF_MatchmakingMode_name = map[int32]string{
 	0: "TF_Matchmaking_INVALID",
 	1: "TF_Matchmaking_QUICKPLAY",
 	2: "TF_Matchmaking_TOBOR",
+	3: "TF_Matchmaking_LADDER",
 }
 var TF_MatchmakingMode_value = map[string]int32{
 	"TF_Matchmaking_INVALID":   0,
 	"TF_Matchmaking_QUICKPLAY": 1,
 	"TF_Matchmaking_TOBOR":     2,
+	"TF_Matchmaking_LADDER":    3,
 }
 
 func (x TF_MatchmakingMode) Enum() *TF_MatchmakingMode {
@@ -423,6 +447,7 @@ const (
 	TF_Matchmaking_WizardStep_TF_Matchmaking_WizardStep_TOBOR_CHALLENGE                TF_Matchmaking_WizardStep = 3
 	TF_Matchmaking_WizardStep_TF_Matchmaking_WizardStep_QUICKPLAY                      TF_Matchmaking_WizardStep = 4
 	TF_Matchmaking_WizardStep_TF_Matchmaking_WizardStep_SEARCHING                      TF_Matchmaking_WizardStep = 5
+	TF_Matchmaking_WizardStep_TF_Matchmaking_WizardStep_LADDER                         TF_Matchmaking_WizardStep = 6
 )
 
 var TF_Matchmaking_WizardStep_name = map[int32]string{
@@ -432,6 +457,7 @@ var TF_Matchmaking_WizardStep_name = map[int32]string{
 	3: "TF_Matchmaking_WizardStep_TOBOR_CHALLENGE",
 	4: "TF_Matchmaking_WizardStep_QUICKPLAY",
 	5: "TF_Matchmaking_WizardStep_SEARCHING",
+	6: "TF_Matchmaking_WizardStep_LADDER",
 }
 var TF_Matchmaking_WizardStep_value = map[string]int32{
 	"TF_Matchmaking_WizardStep_INVALID":                        0,
@@ -440,6 +466,7 @@ var TF_Matchmaking_WizardStep_value = map[string]int32{
 	"TF_Matchmaking_WizardStep_TOBOR_CHALLENGE":                3,
 	"TF_Matchmaking_WizardStep_QUICKPLAY":                      4,
 	"TF_Matchmaking_WizardStep_SEARCHING":                      5,
+	"TF_Matchmaking_WizardStep_LADDER":                         6,
 }
 
 func (x TF_Matchmaking_WizardStep) Enum() *TF_Matchmaking_WizardStep {
@@ -511,6 +538,7 @@ type TF_GC_TEAM int32
 
 const (
 	TF_GC_TEAM_TF_GC_TEAM_DEFENDERS   TF_GC_TEAM = 0
+	TF_GC_TEAM_TF_GC_TEAM_INVADERS    TF_GC_TEAM = 1
 	TF_GC_TEAM_TF_GC_TEAM_BROADCASTER TF_GC_TEAM = 2
 	TF_GC_TEAM_TF_GC_TEAM_SPECTATOR   TF_GC_TEAM = 3
 	TF_GC_TEAM_TF_GC_TEAM_PLAYER_POOL TF_GC_TEAM = 4
@@ -519,6 +547,7 @@ const (
 
 var TF_GC_TEAM_name = map[int32]string{
 	0: "TF_GC_TEAM_DEFENDERS",
+	1: "TF_GC_TEAM_INVADERS",
 	2: "TF_GC_TEAM_BROADCASTER",
 	3: "TF_GC_TEAM_SPECTATOR",
 	4: "TF_GC_TEAM_PLAYER_POOL",
@@ -526,6 +555,7 @@ var TF_GC_TEAM_name = map[int32]string{
 }
 var TF_GC_TEAM_value = map[string]int32{
 	"TF_GC_TEAM_DEFENDERS":   0,
+	"TF_GC_TEAM_INVADERS":    1,
 	"TF_GC_TEAM_BROADCASTER": 2,
 	"TF_GC_TEAM_SPECTATOR":   3,
 	"TF_GC_TEAM_PLAYER_POOL": 4,
@@ -1071,17 +1101,20 @@ const (
 	CMsgRemovePlayerFromLobby_VOTE_KICK  CMsgRemovePlayerFromLobby_RemoveReason = 0
 	CMsgRemovePlayerFromLobby_IDLE_KICK  CMsgRemovePlayerFromLobby_RemoveReason = 1
 	CMsgRemovePlayerFromLobby_ADMIN_KICK CMsgRemovePlayerFromLobby_RemoveReason = 2
+	CMsgRemovePlayerFromLobby_GAME_OVER  CMsgRemovePlayerFromLobby_RemoveReason = 3
 )
 
 var CMsgRemovePlayerFromLobby_RemoveReason_name = map[int32]string{
 	0: "VOTE_KICK",
 	1: "IDLE_KICK",
 	2: "ADMIN_KICK",
+	3: "GAME_OVER",
 }
 var CMsgRemovePlayerFromLobby_RemoveReason_value = map[string]int32{
 	"VOTE_KICK":  0,
 	"IDLE_KICK":  1,
 	"ADMIN_KICK": 2,
+	"GAME_OVER":  3,
 }
 
 func (x CMsgRemovePlayerFromLobby_RemoveReason) Enum() *CMsgRemovePlayerFromLobby_RemoveReason {
@@ -1098,6 +1131,39 @@ func (x *CMsgRemovePlayerFromLobby_RemoveReason) UnmarshalJSON(data []byte) erro
 		return err
 	}
 	*x = CMsgRemovePlayerFromLobby_RemoveReason(value)
+	return nil
+}
+
+type CGCMsgTFPlayerSkillRatingAdjustment_MatchType int32
+
+const (
+	CGCMsgTFPlayerSkillRatingAdjustment_PUBLIC CGCMsgTFPlayerSkillRatingAdjustment_MatchType = 0
+	CGCMsgTFPlayerSkillRatingAdjustment_BETA   CGCMsgTFPlayerSkillRatingAdjustment_MatchType = 1
+)
+
+var CGCMsgTFPlayerSkillRatingAdjustment_MatchType_name = map[int32]string{
+	0: "PUBLIC",
+	1: "BETA",
+}
+var CGCMsgTFPlayerSkillRatingAdjustment_MatchType_value = map[string]int32{
+	"PUBLIC": 0,
+	"BETA":   1,
+}
+
+func (x CGCMsgTFPlayerSkillRatingAdjustment_MatchType) Enum() *CGCMsgTFPlayerSkillRatingAdjustment_MatchType {
+	p := new(CGCMsgTFPlayerSkillRatingAdjustment_MatchType)
+	*p = x
+	return p
+}
+func (x CGCMsgTFPlayerSkillRatingAdjustment_MatchType) String() string {
+	return proto.EnumName(CGCMsgTFPlayerSkillRatingAdjustment_MatchType_name, int32(x))
+}
+func (x *CGCMsgTFPlayerSkillRatingAdjustment_MatchType) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(CGCMsgTFPlayerSkillRatingAdjustment_MatchType_value, data, "CGCMsgTFPlayerSkillRatingAdjustment_MatchType")
+	if err != nil {
+		return err
+	}
+	*x = CGCMsgTFPlayerSkillRatingAdjustment_MatchType(value)
 	return nil
 }
 
@@ -1878,6 +1944,7 @@ type CMsgTFQuickplay_ScoreServersResponse_ServerInfo struct {
 	ServerPort       *uint32  `protobuf:"varint,2,opt,name=server_port" json:"server_port,omitempty"`
 	TotalScore       *float32 `protobuf:"fixed32,3,opt,name=total_score" json:"total_score,omitempty"`
 	SteamId          *uint64  `protobuf:"varint,4,opt,name=steam_id" json:"steam_id,omitempty"`
+	OptionsScore     *uint32  `protobuf:"varint,5,opt,name=options_score" json:"options_score,omitempty"`
 	XXX_unrecognized []byte   `json:"-"`
 }
 
@@ -1913,6 +1980,13 @@ func (m *CMsgTFQuickplay_ScoreServersResponse_ServerInfo) GetTotalScore() float3
 func (m *CMsgTFQuickplay_ScoreServersResponse_ServerInfo) GetSteamId() uint64 {
 	if m != nil && m.SteamId != nil {
 		return *m.SteamId
+	}
+	return 0
+}
+
+func (m *CMsgTFQuickplay_ScoreServersResponse_ServerInfo) GetOptionsScore() uint32 {
+	if m != nil && m.OptionsScore != nil {
+		return *m.OptionsScore
 	}
 	return 0
 }
@@ -2570,6 +2644,7 @@ type CSOTFPartyMember struct {
 	BadgeLevel        *uint32 `protobuf:"varint,4,opt,name=badge_level" json:"badge_level,omitempty"`
 	SquadSurplus      *bool   `protobuf:"varint,5,opt,name=squad_surplus" json:"squad_surplus,omitempty"`
 	IsBanned          *bool   `protobuf:"varint,8,opt,name=is_banned,def=0" json:"is_banned,omitempty"`
+	OwnsLadderTicket  *bool   `protobuf:"varint,9,opt,name=owns_ladder_ticket" json:"owns_ladder_ticket,omitempty"`
 	XXX_unrecognized  []byte  `json:"-"`
 }
 
@@ -2614,6 +2689,13 @@ func (m *CSOTFPartyMember) GetIsBanned() bool {
 	return Default_CSOTFPartyMember_IsBanned
 }
 
+func (m *CSOTFPartyMember) GetOwnsLadderTicket() bool {
+	if m != nil && m.OwnsLadderTicket != nil {
+		return *m.OwnsLadderTicket
+	}
+	return false
+}
+
 type CMsgMatchSearchCriteria struct {
 	MatchmakingMode       *TF_MatchmakingMode `protobuf:"varint,7,opt,name=matchmaking_mode,enum=TF_MatchmakingMode,def=0" json:"matchmaking_mode,omitempty"`
 	LateJoinOk            *bool               `protobuf:"varint,5,opt,name=late_join_ok" json:"late_join_ok,omitempty"`
@@ -2621,6 +2703,7 @@ type CMsgMatchSearchCriteria struct {
 	MvmMissions           []string            `protobuf:"bytes,9,rep,name=mvm_missions" json:"mvm_missions,omitempty"`
 	PlayForBraggingRights *bool               `protobuf:"varint,6,opt,name=play_for_bragging_rights" json:"play_for_bragging_rights,omitempty"`
 	QuickplayGameType     *uint32             `protobuf:"varint,8,opt,name=quickplay_game_type" json:"quickplay_game_type,omitempty"`
+	LadderType            *uint32             `protobuf:"varint,11,opt,name=ladder_type" json:"ladder_type,omitempty"`
 	XXX_unrecognized      []byte              `json:"-"`
 }
 
@@ -2668,6 +2751,13 @@ func (m *CMsgMatchSearchCriteria) GetPlayForBraggingRights() bool {
 func (m *CMsgMatchSearchCriteria) GetQuickplayGameType() uint32 {
 	if m != nil && m.QuickplayGameType != nil {
 		return *m.QuickplayGameType
+	}
+	return 0
+}
+
+func (m *CMsgMatchSearchCriteria) GetLadderType() uint32 {
+	if m != nil && m.LadderType != nil {
+		return *m.LadderType
 	}
 	return 0
 }
@@ -2774,6 +2864,7 @@ type CSOTFParty struct {
 	SearchMvmMissions           []string                   `protobuf:"bytes,31,rep,name=search_mvm_missions" json:"search_mvm_missions,omitempty"`
 	SearchPlayForBraggingRights *bool                      `protobuf:"varint,26,opt,name=search_play_for_bragging_rights" json:"search_play_for_bragging_rights,omitempty"`
 	SearchQuickplayGameType     *uint32                    `protobuf:"varint,28,opt,name=search_quickplay_game_type" json:"search_quickplay_game_type,omitempty"`
+	SearchLadderType            *uint32                    `protobuf:"varint,33,opt,name=search_ladder_type" json:"search_ladder_type,omitempty"`
 	PreventMatchUntilDate       *uint32                    `protobuf:"varint,18,opt,name=prevent_match_until_date" json:"prevent_match_until_date,omitempty"`
 	PreventMatchAccountId       *uint32                    `protobuf:"varint,19,opt,name=prevent_match_account_id" json:"prevent_match_account_id,omitempty"`
 	XXX_unrecognized            []byte                     `json:"-"`
@@ -2895,6 +2986,13 @@ func (m *CSOTFParty) GetSearchPlayForBraggingRights() bool {
 func (m *CSOTFParty) GetSearchQuickplayGameType() uint32 {
 	if m != nil && m.SearchQuickplayGameType != nil {
 		return *m.SearchQuickplayGameType
+	}
+	return 0
+}
+
+func (m *CSOTFParty) GetSearchLadderType() uint32 {
+	if m != nil && m.SearchLadderType != nil {
+		return *m.SearchLadderType
 	}
 	return 0
 }
@@ -3766,27 +3864,28 @@ func (m *CMsgTFRequestChatChannelListResponse_ChatChannel) GetChannelType() Chat
 }
 
 type CMsgGameServerMatchmakingStatus struct {
-	ServerVersion      *uint32                                   `protobuf:"varint,16,opt,name=server_version,def=1225" json:"server_version,omitempty"`
-	MatchmakingState   *ServerMatchmakingState                   `protobuf:"varint,1,opt,name=matchmaking_state,enum=ServerMatchmakingState,def=0" json:"matchmaking_state,omitempty"`
-	MatchmakingMode    *TF_MatchmakingMode                       `protobuf:"varint,2,opt,name=matchmaking_mode,enum=TF_MatchmakingMode,def=0" json:"matchmaking_mode,omitempty"`
-	Map                *string                                   `protobuf:"bytes,3,opt,name=map" json:"map,omitempty"`
-	Tags               *string                                   `protobuf:"bytes,4,opt,name=tags" json:"tags,omitempty"`
-	BotCount           *uint32                                   `protobuf:"varint,5,opt,name=bot_count" json:"bot_count,omitempty"`
-	NumSpectators      *uint32                                   `protobuf:"varint,6,opt,name=num_spectators" json:"num_spectators,omitempty"`
-	MaxPlayers         *uint32                                   `protobuf:"varint,7,opt,name=max_players" json:"max_players,omitempty"`
-	SlotsFree          *uint32                                   `protobuf:"varint,8,opt,name=slots_free" json:"slots_free,omitempty"`
-	ServerRegion       *uint32                                   `protobuf:"varint,9,opt,name=server_region" json:"server_region,omitempty"`
-	ServerLoadavg      *float32                                  `protobuf:"fixed32,10,opt,name=server_loadavg" json:"server_loadavg,omitempty"`
-	ServerTrusted      *bool                                     `protobuf:"varint,11,opt,name=server_trusted" json:"server_trusted,omitempty"`
-	ServerDedicated    *bool                                     `protobuf:"varint,12,opt,name=server_dedicated" json:"server_dedicated,omitempty"`
-	Strict             *uint32                                   `protobuf:"varint,17,opt,name=strict" json:"strict,omitempty"`
-	Players            []*CMsgGameServerMatchmakingStatus_Player `protobuf:"bytes,13,rep,name=players" json:"players,omitempty"`
-	GameState          *TF_GC_GameState                          `protobuf:"varint,14,opt,name=game_state,enum=TF_GC_GameState,def=0" json:"game_state,omitempty"`
-	Event              *CMsgGameServerMatchmakingStatus_Event    `protobuf:"varint,15,opt,name=event,enum=CMsgGameServerMatchmakingStatus_Event,def=0" json:"event,omitempty"`
-	MvmWave            *uint32                                   `protobuf:"varint,18,opt,name=mvm_wave" json:"mvm_wave,omitempty"`
-	MvmCreditsAcquired *uint32                                   `protobuf:"varint,19,opt,name=mvm_credits_acquired" json:"mvm_credits_acquired,omitempty"`
-	MvmCreditsDropped  *uint32                                   `protobuf:"varint,20,opt,name=mvm_credits_dropped" json:"mvm_credits_dropped,omitempty"`
-	XXX_unrecognized   []byte                                    `json:"-"`
+	ServerVersion           *uint32                                   `protobuf:"varint,16,opt,name=server_version,def=1225" json:"server_version,omitempty"`
+	MatchmakingState        *ServerMatchmakingState                   `protobuf:"varint,1,opt,name=matchmaking_state,enum=ServerMatchmakingState,def=0" json:"matchmaking_state,omitempty"`
+	MatchmakingMode         *TF_MatchmakingMode                       `protobuf:"varint,2,opt,name=matchmaking_mode,enum=TF_MatchmakingMode,def=0" json:"matchmaking_mode,omitempty"`
+	Map                     *string                                   `protobuf:"bytes,3,opt,name=map" json:"map,omitempty"`
+	Tags                    *string                                   `protobuf:"bytes,4,opt,name=tags" json:"tags,omitempty"`
+	BotCount                *uint32                                   `protobuf:"varint,5,opt,name=bot_count" json:"bot_count,omitempty"`
+	NumSpectators           *uint32                                   `protobuf:"varint,6,opt,name=num_spectators" json:"num_spectators,omitempty"`
+	MaxPlayers              *uint32                                   `protobuf:"varint,7,opt,name=max_players" json:"max_players,omitempty"`
+	SlotsFree               *uint32                                   `protobuf:"varint,8,opt,name=slots_free" json:"slots_free,omitempty"`
+	ServerRegion            *uint32                                   `protobuf:"varint,9,opt,name=server_region" json:"server_region,omitempty"`
+	ServerLoadavg           *float32                                  `protobuf:"fixed32,10,opt,name=server_loadavg" json:"server_loadavg,omitempty"`
+	ServerTrusted           *bool                                     `protobuf:"varint,11,opt,name=server_trusted" json:"server_trusted,omitempty"`
+	ServerDedicated         *bool                                     `protobuf:"varint,12,opt,name=server_dedicated" json:"server_dedicated,omitempty"`
+	Strict                  *uint32                                   `protobuf:"varint,17,opt,name=strict" json:"strict,omitempty"`
+	Players                 []*CMsgGameServerMatchmakingStatus_Player `protobuf:"bytes,13,rep,name=players" json:"players,omitempty"`
+	GameState               *TF_GC_GameState                          `protobuf:"varint,14,opt,name=game_state,enum=TF_GC_GameState,def=0" json:"game_state,omitempty"`
+	Event                   *CMsgGameServerMatchmakingStatus_Event    `protobuf:"varint,15,opt,name=event,enum=CMsgGameServerMatchmakingStatus_Event,def=0" json:"event,omitempty"`
+	MvmWave                 *uint32                                   `protobuf:"varint,18,opt,name=mvm_wave" json:"mvm_wave,omitempty"`
+	MvmCreditsAcquired      *uint32                                   `protobuf:"varint,19,opt,name=mvm_credits_acquired" json:"mvm_credits_acquired,omitempty"`
+	MvmCreditsDropped       *uint32                                   `protobuf:"varint,20,opt,name=mvm_credits_dropped" json:"mvm_credits_dropped,omitempty"`
+	SkillratingForceAverage *uint32                                   `protobuf:"varint,21,opt,name=skillrating_force_average" json:"skillrating_force_average,omitempty"`
+	XXX_unrecognized        []byte                                    `json:"-"`
 }
 
 func (m *CMsgGameServerMatchmakingStatus) Reset()         { *m = CMsgGameServerMatchmakingStatus{} }
@@ -3935,6 +4034,13 @@ func (m *CMsgGameServerMatchmakingStatus) GetMvmCreditsAcquired() uint32 {
 func (m *CMsgGameServerMatchmakingStatus) GetMvmCreditsDropped() uint32 {
 	if m != nil && m.MvmCreditsDropped != nil {
 		return *m.MvmCreditsDropped
+	}
+	return 0
+}
+
+func (m *CMsgGameServerMatchmakingStatus) GetSkillratingForceAverage() uint32 {
+	if m != nil && m.SkillratingForceAverage != nil {
+		return *m.SkillratingForceAverage
 	}
 	return 0
 }
@@ -4895,60 +5001,148 @@ func (m *CAttribute_String) GetValue() string {
 	return ""
 }
 
-type CAttribute_ItemDynamicRecipeComponentDefinedItem struct {
-	ItemDef          *uint32 `protobuf:"varint,1,opt,name=item_def" json:"item_def,omitempty"`
+type CAttribute_DynamicRecipeComponent struct {
+	DefIndex         *uint32 `protobuf:"varint,1,opt,name=def_index" json:"def_index,omitempty"`
 	ItemQuality      *uint32 `protobuf:"varint,2,opt,name=item_quality" json:"item_quality,omitempty"`
-	ItemFlags        *uint32 `protobuf:"varint,3,opt,name=item_flags" json:"item_flags,omitempty"`
+	ComponentFlags   *uint32 `protobuf:"varint,3,opt,name=component_flags" json:"component_flags,omitempty"`
 	AttributesString *string `protobuf:"bytes,4,opt,name=attributes_string" json:"attributes_string,omitempty"`
-	ItemCount        *uint32 `protobuf:"varint,5,opt,name=item_count" json:"item_count,omitempty"`
-	ItemsFulfilled   *uint32 `protobuf:"varint,6,opt,name=items_fulfilled" json:"items_fulfilled,omitempty"`
+	NumRequired      *uint32 `protobuf:"varint,5,opt,name=num_required" json:"num_required,omitempty"`
+	NumFulfilled     *uint32 `protobuf:"varint,6,opt,name=num_fulfilled" json:"num_fulfilled,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *CAttribute_ItemDynamicRecipeComponentDefinedItem) Reset() {
-	*m = CAttribute_ItemDynamicRecipeComponentDefinedItem{}
-}
-func (m *CAttribute_ItemDynamicRecipeComponentDefinedItem) String() string {
-	return proto.CompactTextString(m)
-}
-func (*CAttribute_ItemDynamicRecipeComponentDefinedItem) ProtoMessage() {}
+func (m *CAttribute_DynamicRecipeComponent) Reset()         { *m = CAttribute_DynamicRecipeComponent{} }
+func (m *CAttribute_DynamicRecipeComponent) String() string { return proto.CompactTextString(m) }
+func (*CAttribute_DynamicRecipeComponent) ProtoMessage()    {}
 
-func (m *CAttribute_ItemDynamicRecipeComponentDefinedItem) GetItemDef() uint32 {
-	if m != nil && m.ItemDef != nil {
-		return *m.ItemDef
+func (m *CAttribute_DynamicRecipeComponent) GetDefIndex() uint32 {
+	if m != nil && m.DefIndex != nil {
+		return *m.DefIndex
 	}
 	return 0
 }
 
-func (m *CAttribute_ItemDynamicRecipeComponentDefinedItem) GetItemQuality() uint32 {
+func (m *CAttribute_DynamicRecipeComponent) GetItemQuality() uint32 {
 	if m != nil && m.ItemQuality != nil {
 		return *m.ItemQuality
 	}
 	return 0
 }
 
-func (m *CAttribute_ItemDynamicRecipeComponentDefinedItem) GetItemFlags() uint32 {
-	if m != nil && m.ItemFlags != nil {
-		return *m.ItemFlags
+func (m *CAttribute_DynamicRecipeComponent) GetComponentFlags() uint32 {
+	if m != nil && m.ComponentFlags != nil {
+		return *m.ComponentFlags
 	}
 	return 0
 }
 
-func (m *CAttribute_ItemDynamicRecipeComponentDefinedItem) GetAttributesString() string {
+func (m *CAttribute_DynamicRecipeComponent) GetAttributesString() string {
 	if m != nil && m.AttributesString != nil {
 		return *m.AttributesString
 	}
 	return ""
 }
 
-func (m *CAttribute_ItemDynamicRecipeComponentDefinedItem) GetItemCount() uint32 {
+func (m *CAttribute_DynamicRecipeComponent) GetNumRequired() uint32 {
+	if m != nil && m.NumRequired != nil {
+		return *m.NumRequired
+	}
+	return 0
+}
+
+func (m *CAttribute_DynamicRecipeComponent) GetNumFulfilled() uint32 {
+	if m != nil && m.NumFulfilled != nil {
+		return *m.NumFulfilled
+	}
+	return 0
+}
+
+type CAttribute_DynamicRecipeComponent_COMPAT_NEVER_SERIALIZE_THIS_OUT struct {
+	DefIndex         *uint32 `protobuf:"varint,1,opt,name=def_index" json:"def_index,omitempty"`
+	ItemDef          *uint32 `protobuf:"varint,2,opt,name=item_def" json:"item_def,omitempty"`
+	ItemQuality      *uint32 `protobuf:"varint,3,opt,name=item_quality" json:"item_quality,omitempty"`
+	ComponentFlags   *uint32 `protobuf:"varint,4,opt,name=component_flags" json:"component_flags,omitempty"`
+	ItemFlags        *uint32 `protobuf:"varint,5,opt,name=item_flags" json:"item_flags,omitempty"`
+	AttributesString *string `protobuf:"bytes,6,opt,name=attributes_string" json:"attributes_string,omitempty"`
+	NumRequired      *uint32 `protobuf:"varint,7,opt,name=num_required" json:"num_required,omitempty"`
+	ItemCount        *uint32 `protobuf:"varint,8,opt,name=item_count" json:"item_count,omitempty"`
+	NumFulfilled     *uint32 `protobuf:"varint,9,opt,name=num_fulfilled" json:"num_fulfilled,omitempty"`
+	ItemsFulfilled   *uint32 `protobuf:"varint,10,opt,name=items_fulfilled" json:"items_fulfilled,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CAttribute_DynamicRecipeComponent_COMPAT_NEVER_SERIALIZE_THIS_OUT) Reset() {
+	*m = CAttribute_DynamicRecipeComponent_COMPAT_NEVER_SERIALIZE_THIS_OUT{}
+}
+func (m *CAttribute_DynamicRecipeComponent_COMPAT_NEVER_SERIALIZE_THIS_OUT) String() string {
+	return proto.CompactTextString(m)
+}
+func (*CAttribute_DynamicRecipeComponent_COMPAT_NEVER_SERIALIZE_THIS_OUT) ProtoMessage() {}
+
+func (m *CAttribute_DynamicRecipeComponent_COMPAT_NEVER_SERIALIZE_THIS_OUT) GetDefIndex() uint32 {
+	if m != nil && m.DefIndex != nil {
+		return *m.DefIndex
+	}
+	return 0
+}
+
+func (m *CAttribute_DynamicRecipeComponent_COMPAT_NEVER_SERIALIZE_THIS_OUT) GetItemDef() uint32 {
+	if m != nil && m.ItemDef != nil {
+		return *m.ItemDef
+	}
+	return 0
+}
+
+func (m *CAttribute_DynamicRecipeComponent_COMPAT_NEVER_SERIALIZE_THIS_OUT) GetItemQuality() uint32 {
+	if m != nil && m.ItemQuality != nil {
+		return *m.ItemQuality
+	}
+	return 0
+}
+
+func (m *CAttribute_DynamicRecipeComponent_COMPAT_NEVER_SERIALIZE_THIS_OUT) GetComponentFlags() uint32 {
+	if m != nil && m.ComponentFlags != nil {
+		return *m.ComponentFlags
+	}
+	return 0
+}
+
+func (m *CAttribute_DynamicRecipeComponent_COMPAT_NEVER_SERIALIZE_THIS_OUT) GetItemFlags() uint32 {
+	if m != nil && m.ItemFlags != nil {
+		return *m.ItemFlags
+	}
+	return 0
+}
+
+func (m *CAttribute_DynamicRecipeComponent_COMPAT_NEVER_SERIALIZE_THIS_OUT) GetAttributesString() string {
+	if m != nil && m.AttributesString != nil {
+		return *m.AttributesString
+	}
+	return ""
+}
+
+func (m *CAttribute_DynamicRecipeComponent_COMPAT_NEVER_SERIALIZE_THIS_OUT) GetNumRequired() uint32 {
+	if m != nil && m.NumRequired != nil {
+		return *m.NumRequired
+	}
+	return 0
+}
+
+func (m *CAttribute_DynamicRecipeComponent_COMPAT_NEVER_SERIALIZE_THIS_OUT) GetItemCount() uint32 {
 	if m != nil && m.ItemCount != nil {
 		return *m.ItemCount
 	}
 	return 0
 }
 
-func (m *CAttribute_ItemDynamicRecipeComponentDefinedItem) GetItemsFulfilled() uint32 {
+func (m *CAttribute_DynamicRecipeComponent_COMPAT_NEVER_SERIALIZE_THIS_OUT) GetNumFulfilled() uint32 {
+	if m != nil && m.NumFulfilled != nil {
+		return *m.NumFulfilled
+	}
+	return 0
+}
+
+func (m *CAttribute_DynamicRecipeComponent_COMPAT_NEVER_SERIALIZE_THIS_OUT) GetItemsFulfilled() uint32 {
 	if m != nil && m.ItemsFulfilled != nil {
 		return *m.ItemsFulfilled
 	}
@@ -5003,6 +5197,288 @@ func (m *CMsgSetItemSlotAttribute) GetSlotIndex() uint32 {
 	return 0
 }
 
+type CGCMsgTFPlayerSkillRatingAdjustment struct {
+	Players          []*CGCMsgTFPlayerSkillRatingAdjustment_Player  `protobuf:"bytes,1,rep,name=players" json:"players,omitempty"`
+	MatchType        *CGCMsgTFPlayerSkillRatingAdjustment_MatchType `protobuf:"varint,2,opt,name=match_type,enum=CGCMsgTFPlayerSkillRatingAdjustment_MatchType,def=0" json:"match_type,omitempty"`
+	XXX_unrecognized []byte                                         `json:"-"`
+}
+
+func (m *CGCMsgTFPlayerSkillRatingAdjustment) Reset()         { *m = CGCMsgTFPlayerSkillRatingAdjustment{} }
+func (m *CGCMsgTFPlayerSkillRatingAdjustment) String() string { return proto.CompactTextString(m) }
+func (*CGCMsgTFPlayerSkillRatingAdjustment) ProtoMessage()    {}
+
+const Default_CGCMsgTFPlayerSkillRatingAdjustment_MatchType CGCMsgTFPlayerSkillRatingAdjustment_MatchType = CGCMsgTFPlayerSkillRatingAdjustment_PUBLIC
+
+func (m *CGCMsgTFPlayerSkillRatingAdjustment) GetPlayers() []*CGCMsgTFPlayerSkillRatingAdjustment_Player {
+	if m != nil {
+		return m.Players
+	}
+	return nil
+}
+
+func (m *CGCMsgTFPlayerSkillRatingAdjustment) GetMatchType() CGCMsgTFPlayerSkillRatingAdjustment_MatchType {
+	if m != nil && m.MatchType != nil {
+		return *m.MatchType
+	}
+	return Default_CGCMsgTFPlayerSkillRatingAdjustment_MatchType
+}
+
+type CGCMsgTFPlayerSkillRatingAdjustment_Player struct {
+	SteamId          *uint64 `protobuf:"fixed64,1,opt,name=steam_id" json:"steam_id,omitempty"`
+	Adjustment       *int32  `protobuf:"varint,3,opt,name=adjustment" json:"adjustment,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CGCMsgTFPlayerSkillRatingAdjustment_Player) Reset() {
+	*m = CGCMsgTFPlayerSkillRatingAdjustment_Player{}
+}
+func (m *CGCMsgTFPlayerSkillRatingAdjustment_Player) String() string {
+	return proto.CompactTextString(m)
+}
+func (*CGCMsgTFPlayerSkillRatingAdjustment_Player) ProtoMessage() {}
+
+func (m *CGCMsgTFPlayerSkillRatingAdjustment_Player) GetSteamId() uint64 {
+	if m != nil && m.SteamId != nil {
+		return *m.SteamId
+	}
+	return 0
+}
+
+func (m *CGCMsgTFPlayerSkillRatingAdjustment_Player) GetAdjustment() int32 {
+	if m != nil && m.Adjustment != nil {
+		return *m.Adjustment
+	}
+	return 0
+}
+
+type CSOTFSpyVsEngyWarData struct {
+	AccountId        *uint32 `protobuf:"varint,1,opt,name=account_id" json:"account_id,omitempty"`
+	Affiliation      *uint32 `protobuf:"varint,2,opt,name=affiliation" json:"affiliation,omitempty"`
+	PointsForEngy    *uint32 `protobuf:"varint,3,opt,name=points_for_engy" json:"points_for_engy,omitempty"`
+	PointsForSpy     *uint32 `protobuf:"varint,4,opt,name=points_for_spy" json:"points_for_spy,omitempty"`
+	KillsForEngy     *uint32 `protobuf:"varint,5,opt,name=kills_for_engy" json:"kills_for_engy,omitempty"`
+	KillsForSpy      *uint32 `protobuf:"varint,6,opt,name=kills_for_spy" json:"kills_for_spy,omitempty"`
+	KillcamMessage   *string `protobuf:"bytes,7,opt,name=killcam_message" json:"killcam_message,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CSOTFSpyVsEngyWarData) Reset()         { *m = CSOTFSpyVsEngyWarData{} }
+func (m *CSOTFSpyVsEngyWarData) String() string { return proto.CompactTextString(m) }
+func (*CSOTFSpyVsEngyWarData) ProtoMessage()    {}
+
+func (m *CSOTFSpyVsEngyWarData) GetAccountId() uint32 {
+	if m != nil && m.AccountId != nil {
+		return *m.AccountId
+	}
+	return 0
+}
+
+func (m *CSOTFSpyVsEngyWarData) GetAffiliation() uint32 {
+	if m != nil && m.Affiliation != nil {
+		return *m.Affiliation
+	}
+	return 0
+}
+
+func (m *CSOTFSpyVsEngyWarData) GetPointsForEngy() uint32 {
+	if m != nil && m.PointsForEngy != nil {
+		return *m.PointsForEngy
+	}
+	return 0
+}
+
+func (m *CSOTFSpyVsEngyWarData) GetPointsForSpy() uint32 {
+	if m != nil && m.PointsForSpy != nil {
+		return *m.PointsForSpy
+	}
+	return 0
+}
+
+func (m *CSOTFSpyVsEngyWarData) GetKillsForEngy() uint32 {
+	if m != nil && m.KillsForEngy != nil {
+		return *m.KillsForEngy
+	}
+	return 0
+}
+
+func (m *CSOTFSpyVsEngyWarData) GetKillsForSpy() uint32 {
+	if m != nil && m.KillsForSpy != nil {
+		return *m.KillsForSpy
+	}
+	return 0
+}
+
+func (m *CSOTFSpyVsEngyWarData) GetKillcamMessage() string {
+	if m != nil && m.KillcamMessage != nil {
+		return *m.KillcamMessage
+	}
+	return ""
+}
+
+type CGCMsgGC_SpyVsEngyWar_IndividualUpdate struct {
+	SteamId          *uint64 `protobuf:"fixed64,1,opt,name=steam_id" json:"steam_id,omitempty"`
+	EngyPointsScored *uint32 `protobuf:"varint,2,opt,name=engy_points_scored" json:"engy_points_scored,omitempty"`
+	SpyPointsScored  *uint32 `protobuf:"varint,3,opt,name=spy_points_scored" json:"spy_points_scored,omitempty"`
+	EngyKillsScored  *uint32 `protobuf:"varint,4,opt,name=engy_kills_scored" json:"engy_kills_scored,omitempty"`
+	SpyKillsScored   *uint32 `protobuf:"varint,5,opt,name=spy_kills_scored" json:"spy_kills_scored,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CGCMsgGC_SpyVsEngyWar_IndividualUpdate) Reset() {
+	*m = CGCMsgGC_SpyVsEngyWar_IndividualUpdate{}
+}
+func (m *CGCMsgGC_SpyVsEngyWar_IndividualUpdate) String() string { return proto.CompactTextString(m) }
+func (*CGCMsgGC_SpyVsEngyWar_IndividualUpdate) ProtoMessage()    {}
+
+func (m *CGCMsgGC_SpyVsEngyWar_IndividualUpdate) GetSteamId() uint64 {
+	if m != nil && m.SteamId != nil {
+		return *m.SteamId
+	}
+	return 0
+}
+
+func (m *CGCMsgGC_SpyVsEngyWar_IndividualUpdate) GetEngyPointsScored() uint32 {
+	if m != nil && m.EngyPointsScored != nil {
+		return *m.EngyPointsScored
+	}
+	return 0
+}
+
+func (m *CGCMsgGC_SpyVsEngyWar_IndividualUpdate) GetSpyPointsScored() uint32 {
+	if m != nil && m.SpyPointsScored != nil {
+		return *m.SpyPointsScored
+	}
+	return 0
+}
+
+func (m *CGCMsgGC_SpyVsEngyWar_IndividualUpdate) GetEngyKillsScored() uint32 {
+	if m != nil && m.EngyKillsScored != nil {
+		return *m.EngyKillsScored
+	}
+	return 0
+}
+
+func (m *CGCMsgGC_SpyVsEngyWar_IndividualUpdate) GetSpyKillsScored() uint32 {
+	if m != nil && m.SpyKillsScored != nil {
+		return *m.SpyKillsScored
+	}
+	return 0
+}
+
+type CGCMsgGC_SpyVsEngyWar_JoinWar struct {
+	Affiliation      *uint32 `protobuf:"varint,1,opt,name=affiliation" json:"affiliation,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CGCMsgGC_SpyVsEngyWar_JoinWar) Reset()         { *m = CGCMsgGC_SpyVsEngyWar_JoinWar{} }
+func (m *CGCMsgGC_SpyVsEngyWar_JoinWar) String() string { return proto.CompactTextString(m) }
+func (*CGCMsgGC_SpyVsEngyWar_JoinWar) ProtoMessage()    {}
+
+func (m *CGCMsgGC_SpyVsEngyWar_JoinWar) GetAffiliation() uint32 {
+	if m != nil && m.Affiliation != nil {
+		return *m.Affiliation
+	}
+	return 0
+}
+
+type CGCMsgGC_SpyVsEngyWar_SetKillCamMessage struct {
+	KillcamMessage   *string `protobuf:"bytes,1,opt,name=killcam_message" json:"killcam_message,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CGCMsgGC_SpyVsEngyWar_SetKillCamMessage) Reset() {
+	*m = CGCMsgGC_SpyVsEngyWar_SetKillCamMessage{}
+}
+func (m *CGCMsgGC_SpyVsEngyWar_SetKillCamMessage) String() string { return proto.CompactTextString(m) }
+func (*CGCMsgGC_SpyVsEngyWar_SetKillCamMessage) ProtoMessage()    {}
+
+func (m *CGCMsgGC_SpyVsEngyWar_SetKillCamMessage) GetKillcamMessage() string {
+	if m != nil && m.KillcamMessage != nil {
+		return *m.KillcamMessage
+	}
+	return ""
+}
+
+type CGCMsgGC_SpyVsEngyWar_RequestGlobalStats struct {
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *CGCMsgGC_SpyVsEngyWar_RequestGlobalStats) Reset() {
+	*m = CGCMsgGC_SpyVsEngyWar_RequestGlobalStats{}
+}
+func (m *CGCMsgGC_SpyVsEngyWar_RequestGlobalStats) String() string { return proto.CompactTextString(m) }
+func (*CGCMsgGC_SpyVsEngyWar_RequestGlobalStats) ProtoMessage()    {}
+
+type CGCMsgGC_SpyVsEngyWar_GlobalStatsResponse struct {
+	SpyScore         *uint64 `protobuf:"varint,1,opt,name=spy_score" json:"spy_score,omitempty"`
+	EngyScore        *uint64 `protobuf:"varint,2,opt,name=engy_score" json:"engy_score,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CGCMsgGC_SpyVsEngyWar_GlobalStatsResponse) Reset() {
+	*m = CGCMsgGC_SpyVsEngyWar_GlobalStatsResponse{}
+}
+func (m *CGCMsgGC_SpyVsEngyWar_GlobalStatsResponse) String() string { return proto.CompactTextString(m) }
+func (*CGCMsgGC_SpyVsEngyWar_GlobalStatsResponse) ProtoMessage()    {}
+
+func (m *CGCMsgGC_SpyVsEngyWar_GlobalStatsResponse) GetSpyScore() uint64 {
+	if m != nil && m.SpyScore != nil {
+		return *m.SpyScore
+	}
+	return 0
+}
+
+func (m *CGCMsgGC_SpyVsEngyWar_GlobalStatsResponse) GetEngyScore() uint64 {
+	if m != nil && m.EngyScore != nil {
+		return *m.EngyScore
+	}
+	return 0
+}
+
+type CGCMsgGC_PlayerDuckLeaderboard_IndividualUpdate struct {
+	Score            *uint32 `protobuf:"varint,2,opt,name=score" json:"score,omitempty"`
+	Type             *uint32 `protobuf:"varint,3,opt,name=type" json:"type,omitempty"`
+	ScoreId          []byte  `protobuf:"bytes,4,opt,name=score_id" json:"score_id,omitempty"`
+	ScoreCheck       *uint32 `protobuf:"varint,5,opt,name=score_check" json:"score_check,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CGCMsgGC_PlayerDuckLeaderboard_IndividualUpdate) Reset() {
+	*m = CGCMsgGC_PlayerDuckLeaderboard_IndividualUpdate{}
+}
+func (m *CGCMsgGC_PlayerDuckLeaderboard_IndividualUpdate) String() string {
+	return proto.CompactTextString(m)
+}
+func (*CGCMsgGC_PlayerDuckLeaderboard_IndividualUpdate) ProtoMessage() {}
+
+func (m *CGCMsgGC_PlayerDuckLeaderboard_IndividualUpdate) GetScore() uint32 {
+	if m != nil && m.Score != nil {
+		return *m.Score
+	}
+	return 0
+}
+
+func (m *CGCMsgGC_PlayerDuckLeaderboard_IndividualUpdate) GetType() uint32 {
+	if m != nil && m.Type != nil {
+		return *m.Type
+	}
+	return 0
+}
+
+func (m *CGCMsgGC_PlayerDuckLeaderboard_IndividualUpdate) GetScoreId() []byte {
+	if m != nil {
+		return m.ScoreId
+	}
+	return nil
+}
+
+func (m *CGCMsgGC_PlayerDuckLeaderboard_IndividualUpdate) GetScoreCheck() uint32 {
+	if m != nil && m.ScoreCheck != nil {
+		return *m.ScoreCheck
+	}
+	return 0
+}
+
 func init() {
 	proto.RegisterEnum("ETFGCMsg", ETFGCMsg_name, ETFGCMsg_value)
 	proto.RegisterEnum("EServerModificationItemType", EServerModificationItemType_name, EServerModificationItemType_value)
@@ -5024,4 +5500,5 @@ func init() {
 	proto.RegisterEnum("CMsgGameServerMatchmakingStatus_Event", CMsgGameServerMatchmakingStatus_Event_name, CMsgGameServerMatchmakingStatus_Event_value)
 	proto.RegisterEnum("CMsgMvMVictoryInfo_GrantReason", CMsgMvMVictoryInfo_GrantReason_name, CMsgMvMVictoryInfo_GrantReason_value)
 	proto.RegisterEnum("CMsgRemovePlayerFromLobby_RemoveReason", CMsgRemovePlayerFromLobby_RemoveReason_name, CMsgRemovePlayerFromLobby_RemoveReason_value)
+	proto.RegisterEnum("CGCMsgTFPlayerSkillRatingAdjustment_MatchType", CGCMsgTFPlayerSkillRatingAdjustment_MatchType_name, CGCMsgTFPlayerSkillRatingAdjustment_MatchType_value)
 }

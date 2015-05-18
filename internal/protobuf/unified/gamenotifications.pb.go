@@ -39,6 +39,7 @@ func (m *CGameNotifications_Variable) GetValue() string {
 type CGameNotifications_LocalizedText struct {
 	Token            *string                        `protobuf:"bytes,1,opt,name=token" json:"token,omitempty"`
 	Variables        []*CGameNotifications_Variable `protobuf:"bytes,2,rep,name=variables" json:"variables,omitempty"`
+	RenderedText     *string                        `protobuf:"bytes,3,opt,name=rendered_text" json:"rendered_text,omitempty"`
 	XXX_unrecognized []byte                         `json:"-"`
 }
 
@@ -58,6 +59,13 @@ func (m *CGameNotifications_LocalizedText) GetVariables() []*CGameNotifications_
 		return m.Variables
 	}
 	return nil
+}
+
+func (m *CGameNotifications_LocalizedText) GetRenderedText() string {
+	if m != nil && m.RenderedText != nil {
+		return *m.RenderedText
+	}
+	return ""
 }
 
 type CGameNotifications_UserStatus struct {
@@ -276,6 +284,7 @@ type CGameNotifications_EnumerateSessions_Request struct {
 	Appid                  *uint32 `protobuf:"varint,1,opt,name=appid" json:"appid,omitempty"`
 	IncludeAllUserMessages *bool   `protobuf:"varint,3,opt,name=include_all_user_messages" json:"include_all_user_messages,omitempty"`
 	IncludeAuthUserMessage *bool   `protobuf:"varint,4,opt,name=include_auth_user_message" json:"include_auth_user_message,omitempty"`
+	Language               *string `protobuf:"bytes,5,opt,name=language" json:"language,omitempty"`
 	XXX_unrecognized       []byte  `json:"-"`
 }
 
@@ -306,6 +315,13 @@ func (m *CGameNotifications_EnumerateSessions_Request) GetIncludeAuthUserMessage
 		return *m.IncludeAuthUserMessage
 	}
 	return false
+}
+
+func (m *CGameNotifications_EnumerateSessions_Request) GetLanguage() string {
+	if m != nil && m.Language != nil {
+		return *m.Language
+	}
+	return ""
 }
 
 type CGameNotifications_Session struct {
@@ -386,6 +402,90 @@ func (m *CGameNotifications_EnumerateSessions_Response) String() string {
 func (*CGameNotifications_EnumerateSessions_Response) ProtoMessage() {}
 
 func (m *CGameNotifications_EnumerateSessions_Response) GetSessions() []*CGameNotifications_Session {
+	if m != nil {
+		return m.Sessions
+	}
+	return nil
+}
+
+type CGameNotifications_GetSessionDetails_Request struct {
+	Sessions         []*CGameNotifications_GetSessionDetails_Request_RequestedSession `protobuf:"bytes,1,rep,name=sessions" json:"sessions,omitempty"`
+	Appid            *uint32                                                          `protobuf:"varint,2,opt,name=appid" json:"appid,omitempty"`
+	Language         *string                                                          `protobuf:"bytes,3,opt,name=language" json:"language,omitempty"`
+	XXX_unrecognized []byte                                                           `json:"-"`
+}
+
+func (m *CGameNotifications_GetSessionDetails_Request) Reset() {
+	*m = CGameNotifications_GetSessionDetails_Request{}
+}
+func (m *CGameNotifications_GetSessionDetails_Request) String() string {
+	return proto.CompactTextString(m)
+}
+func (*CGameNotifications_GetSessionDetails_Request) ProtoMessage() {}
+
+func (m *CGameNotifications_GetSessionDetails_Request) GetSessions() []*CGameNotifications_GetSessionDetails_Request_RequestedSession {
+	if m != nil {
+		return m.Sessions
+	}
+	return nil
+}
+
+func (m *CGameNotifications_GetSessionDetails_Request) GetAppid() uint32 {
+	if m != nil && m.Appid != nil {
+		return *m.Appid
+	}
+	return 0
+}
+
+func (m *CGameNotifications_GetSessionDetails_Request) GetLanguage() string {
+	if m != nil && m.Language != nil {
+		return *m.Language
+	}
+	return ""
+}
+
+type CGameNotifications_GetSessionDetails_Request_RequestedSession struct {
+	Sessionid              *uint64 `protobuf:"varint,1,opt,name=sessionid" json:"sessionid,omitempty"`
+	IncludeAuthUserMessage *bool   `protobuf:"varint,3,opt,name=include_auth_user_message" json:"include_auth_user_message,omitempty"`
+	XXX_unrecognized       []byte  `json:"-"`
+}
+
+func (m *CGameNotifications_GetSessionDetails_Request_RequestedSession) Reset() {
+	*m = CGameNotifications_GetSessionDetails_Request_RequestedSession{}
+}
+func (m *CGameNotifications_GetSessionDetails_Request_RequestedSession) String() string {
+	return proto.CompactTextString(m)
+}
+func (*CGameNotifications_GetSessionDetails_Request_RequestedSession) ProtoMessage() {}
+
+func (m *CGameNotifications_GetSessionDetails_Request_RequestedSession) GetSessionid() uint64 {
+	if m != nil && m.Sessionid != nil {
+		return *m.Sessionid
+	}
+	return 0
+}
+
+func (m *CGameNotifications_GetSessionDetails_Request_RequestedSession) GetIncludeAuthUserMessage() bool {
+	if m != nil && m.IncludeAuthUserMessage != nil {
+		return *m.IncludeAuthUserMessage
+	}
+	return false
+}
+
+type CGameNotifications_GetSessionDetails_Response struct {
+	Sessions         []*CGameNotifications_Session `protobuf:"bytes,1,rep,name=sessions" json:"sessions,omitempty"`
+	XXX_unrecognized []byte                        `json:"-"`
+}
+
+func (m *CGameNotifications_GetSessionDetails_Response) Reset() {
+	*m = CGameNotifications_GetSessionDetails_Response{}
+}
+func (m *CGameNotifications_GetSessionDetails_Response) String() string {
+	return proto.CompactTextString(m)
+}
+func (*CGameNotifications_GetSessionDetails_Response) ProtoMessage() {}
+
+func (m *CGameNotifications_GetSessionDetails_Response) GetSessions() []*CGameNotifications_Session {
 	if m != nil {
 		return m.Sessions
 	}
@@ -474,6 +574,58 @@ func (m *CGameNotifications_OnNotificationsRequested_Notification) GetAppid() ui
 		return *m.Appid
 	}
 	return 0
+}
+
+type CGameNotifications_OnUserStatusChanged_Notification struct {
+	Steamid          *uint64                        `protobuf:"fixed64,1,opt,name=steamid" json:"steamid,omitempty"`
+	Sessionid        *uint64                        `protobuf:"varint,2,opt,name=sessionid" json:"sessionid,omitempty"`
+	Appid            *uint32                        `protobuf:"varint,3,opt,name=appid" json:"appid,omitempty"`
+	Status           *CGameNotifications_UserStatus `protobuf:"bytes,4,opt,name=status" json:"status,omitempty"`
+	Removed          *bool                          `protobuf:"varint,5,opt,name=removed" json:"removed,omitempty"`
+	XXX_unrecognized []byte                         `json:"-"`
+}
+
+func (m *CGameNotifications_OnUserStatusChanged_Notification) Reset() {
+	*m = CGameNotifications_OnUserStatusChanged_Notification{}
+}
+func (m *CGameNotifications_OnUserStatusChanged_Notification) String() string {
+	return proto.CompactTextString(m)
+}
+func (*CGameNotifications_OnUserStatusChanged_Notification) ProtoMessage() {}
+
+func (m *CGameNotifications_OnUserStatusChanged_Notification) GetSteamid() uint64 {
+	if m != nil && m.Steamid != nil {
+		return *m.Steamid
+	}
+	return 0
+}
+
+func (m *CGameNotifications_OnUserStatusChanged_Notification) GetSessionid() uint64 {
+	if m != nil && m.Sessionid != nil {
+		return *m.Sessionid
+	}
+	return 0
+}
+
+func (m *CGameNotifications_OnUserStatusChanged_Notification) GetAppid() uint32 {
+	if m != nil && m.Appid != nil {
+		return *m.Appid
+	}
+	return 0
+}
+
+func (m *CGameNotifications_OnUserStatusChanged_Notification) GetStatus() *CGameNotifications_UserStatus {
+	if m != nil {
+		return m.Status
+	}
+	return nil
+}
+
+func (m *CGameNotifications_OnUserStatusChanged_Notification) GetRemoved() bool {
+	if m != nil && m.Removed != nil {
+		return *m.Removed
+	}
+	return false
 }
 
 func init() {

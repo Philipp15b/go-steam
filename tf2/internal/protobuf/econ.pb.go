@@ -165,6 +165,9 @@ const (
 	EGCItemMsg_k_EMsgGCToGCGrantSelfMadeItemToAccount         EGCItemMsg = 2555
 	EGCItemMsg_k_EMsgGCToGCThankedByNewUser                   EGCItemMsg = 2556
 	EGCItemMsg_k_EMsgGCShuffleCrateContents                   EGCItemMsg = 2557
+	EGCItemMsg_k_EMsgGCQuestObjective_Progress                EGCItemMsg = 2558
+	EGCItemMsg_k_EMsgGCQuestCompleted                         EGCItemMsg = 2559
+	EGCItemMsg_k_EMsgGCApplyDuckToken                         EGCItemMsg = 2560
 )
 
 var EGCItemMsg_name = map[int32]string{
@@ -318,6 +321,9 @@ var EGCItemMsg_name = map[int32]string{
 	2555: "k_EMsgGCToGCGrantSelfMadeItemToAccount",
 	2556: "k_EMsgGCToGCThankedByNewUser",
 	2557: "k_EMsgGCShuffleCrateContents",
+	2558: "k_EMsgGCQuestObjective_Progress",
+	2559: "k_EMsgGCQuestCompleted",
+	2560: "k_EMsgGCApplyDuckToken",
 }
 var EGCItemMsg_value = map[string]int32{
 	"k_EMsgGCBase":                                   1000,
@@ -470,6 +476,9 @@ var EGCItemMsg_value = map[string]int32{
 	"k_EMsgGCToGCGrantSelfMadeItemToAccount":         2555,
 	"k_EMsgGCToGCThankedByNewUser":                   2556,
 	"k_EMsgGCShuffleCrateContents":                   2557,
+	"k_EMsgGCQuestObjective_Progress":                2558,
+	"k_EMsgGCQuestCompleted":                         2559,
+	"k_EMsgGCApplyDuckToken":                         2560,
 }
 
 func (x EGCItemMsg) Enum() *EGCItemMsg {
@@ -1192,6 +1201,62 @@ func (m *CMsgGCShuffleCrateContents) GetUserCodeString() string {
 	}
 	return ""
 }
+
+type CMsgGCQuestObjective_Progress struct {
+	QuestItemId      *uint64 `protobuf:"varint,1,opt,name=quest_item_id" json:"quest_item_id,omitempty"`
+	QuestAttribIndex *uint32 `protobuf:"varint,2,opt,name=quest_attrib_index" json:"quest_attrib_index,omitempty"`
+	StartCount       *uint32 `protobuf:"varint,3,opt,name=start_count" json:"start_count,omitempty"`
+	ProposedCount    *uint32 `protobuf:"varint,4,opt,name=proposed_count" json:"proposed_count,omitempty"`
+	OwnerSteamid     *uint64 `protobuf:"fixed64,5,opt,name=owner_steamid" json:"owner_steamid,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CMsgGCQuestObjective_Progress) Reset()         { *m = CMsgGCQuestObjective_Progress{} }
+func (m *CMsgGCQuestObjective_Progress) String() string { return proto.CompactTextString(m) }
+func (*CMsgGCQuestObjective_Progress) ProtoMessage()    {}
+
+func (m *CMsgGCQuestObjective_Progress) GetQuestItemId() uint64 {
+	if m != nil && m.QuestItemId != nil {
+		return *m.QuestItemId
+	}
+	return 0
+}
+
+func (m *CMsgGCQuestObjective_Progress) GetQuestAttribIndex() uint32 {
+	if m != nil && m.QuestAttribIndex != nil {
+		return *m.QuestAttribIndex
+	}
+	return 0
+}
+
+func (m *CMsgGCQuestObjective_Progress) GetStartCount() uint32 {
+	if m != nil && m.StartCount != nil {
+		return *m.StartCount
+	}
+	return 0
+}
+
+func (m *CMsgGCQuestObjective_Progress) GetProposedCount() uint32 {
+	if m != nil && m.ProposedCount != nil {
+		return *m.ProposedCount
+	}
+	return 0
+}
+
+func (m *CMsgGCQuestObjective_Progress) GetOwnerSteamid() uint64 {
+	if m != nil && m.OwnerSteamid != nil {
+		return *m.OwnerSteamid
+	}
+	return 0
+}
+
+type CMsgGCQuestCompleted struct {
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *CMsgGCQuestCompleted) Reset()         { *m = CMsgGCQuestCompleted{} }
+func (m *CMsgGCQuestCompleted) String() string { return proto.CompactTextString(m) }
+func (*CMsgGCQuestCompleted) ProtoMessage()    {}
 
 func init() {
 	proto.RegisterEnum("EGCItemMsg", EGCItemMsg_name, EGCItemMsg_value)

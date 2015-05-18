@@ -588,8 +588,9 @@ const (
 	EMsg_ClientDPSendSpecialSurveyResponseReply                   EMsg = 1623
 	EMsg_DPStoreSaleStatistics                                    EMsg = 1624
 	EMsg_ClientDPUpdateAppJobReport                               EMsg = 1625
-	EMsg_ClientDPSteam2AppStarted                                 EMsg = 1627
+	EMsg_ClientDPSteam2AppStarted                                 EMsg = 1627 // Deprecated
 	EMsg_DPUpdateContentEvent                                     EMsg = 1626
+	EMsg_ClientDPContentStatsReport                               EMsg = 1630
 	EMsg_BaseCM                                                   EMsg = 1700
 	EMsg_CMSetAllowState                                          EMsg = 1701
 	EMsg_CMSpewAllowState                                         EMsg = 1702
@@ -1084,6 +1085,12 @@ const (
 	EMsg_AMPayelpPaymentResponse                                  EMsg = 4388
 	EMsg_AMPlayerGetClanBasicDetails                              EMsg = 4389
 	EMsg_AMPlayerGetClanBasicDetailsResponse                      EMsg = 4390
+	EMsg_AMTwoFactorRecoverAuthenticatorRequest                   EMsg = 4402
+	EMsg_AMTwoFactorRecoverAuthenticatorResponse                  EMsg = 4403
+	EMsg_AMValidatePasswordResetCodeAndSendSmsRequest             EMsg = 4406
+	EMsg_AMValidatePasswordResetCodeAndSendSmsResponse            EMsg = 4407
+	EMsg_AMGetAccountResetDetailsRequest                          EMsg = 4408
+	EMsg_AMGetAccountResetDetailsResponse                         EMsg = 4409
 	EMsg_BasePSRange                                              EMsg = 5000
 	EMsg_PSCreateShoppingCart                                     EMsg = 5001
 	EMsg_PSCreateShoppingCartResponse                             EMsg = 5002
@@ -1347,29 +1354,29 @@ const (
 	EMsg_DFSStartTransfer                                         EMsg = 5618
 	EMsg_DFSTransferComplete                                      EMsg = 5619
 	EMsg_BaseMDS                                                  EMsg = 5800
-	EMsg_ClientMDSLoginRequest                                    EMsg = 5801
-	EMsg_ClientMDSLoginResponse                                   EMsg = 5802
-	EMsg_ClientMDSUploadManifestRequest                           EMsg = 5803
-	EMsg_ClientMDSUploadManifestResponse                          EMsg = 5804
-	EMsg_ClientMDSTransmitManifestDataChunk                       EMsg = 5805
-	EMsg_ClientMDSHeartbeat                                       EMsg = 5806
-	EMsg_ClientMDSUploadDepotChunks                               EMsg = 5807
-	EMsg_ClientMDSUploadDepotChunksResponse                       EMsg = 5808
-	EMsg_ClientMDSInitDepotBuildRequest                           EMsg = 5809
-	EMsg_ClientMDSInitDepotBuildResponse                          EMsg = 5810
+	EMsg_ClientMDSLoginRequest                                    EMsg = 5801 // Deprecated
+	EMsg_ClientMDSLoginResponse                                   EMsg = 5802 // Deprecated
+	EMsg_ClientMDSUploadManifestRequest                           EMsg = 5803 // Deprecated
+	EMsg_ClientMDSUploadManifestResponse                          EMsg = 5804 // Deprecated
+	EMsg_ClientMDSTransmitManifestDataChunk                       EMsg = 5805 // Deprecated
+	EMsg_ClientMDSHeartbeat                                       EMsg = 5806 // Deprecated
+	EMsg_ClientMDSUploadDepotChunks                               EMsg = 5807 // Deprecated
+	EMsg_ClientMDSUploadDepotChunksResponse                       EMsg = 5808 // Deprecated
+	EMsg_ClientMDSInitDepotBuildRequest                           EMsg = 5809 // Deprecated
+	EMsg_ClientMDSInitDepotBuildResponse                          EMsg = 5810 // Deprecated
 	EMsg_AMToMDSGetDepotDecryptionKey                             EMsg = 5812
 	EMsg_MDSToAMGetDepotDecryptionKeyResponse                     EMsg = 5813
 	EMsg_MDSGetVersionsForDepot                                   EMsg = 5814
 	EMsg_MDSGetVersionsForDepotResponse                           EMsg = 5815
 	EMsg_MDSSetPublicVersionForDepot                              EMsg = 5816 // Deprecated
 	EMsg_MDSSetPublicVersionForDepotResponse                      EMsg = 5817 // Deprecated
-	EMsg_ClientMDSInitWorkshopBuildRequest                        EMsg = 5816
-	EMsg_ClientMDSInitWorkshopBuildResponse                       EMsg = 5817
-	EMsg_ClientMDSGetDepotManifest                                EMsg = 5818
-	EMsg_ClientMDSGetDepotManifestResponse                        EMsg = 5819
-	EMsg_ClientMDSGetDepotManifestChunk                           EMsg = 5820
-	EMsg_ClientMDSUploadRateTest                                  EMsg = 5823
-	EMsg_ClientMDSUploadRateTestResponse                          EMsg = 5824
+	EMsg_ClientMDSInitWorkshopBuildRequest                        EMsg = 5816 // Deprecated
+	EMsg_ClientMDSInitWorkshopBuildResponse                       EMsg = 5817 // Deprecated
+	EMsg_ClientMDSGetDepotManifest                                EMsg = 5818 // Deprecated
+	EMsg_ClientMDSGetDepotManifestResponse                        EMsg = 5819 // Deprecated
+	EMsg_ClientMDSGetDepotManifestChunk                           EMsg = 5820 // Deprecated
+	EMsg_ClientMDSUploadRateTest                                  EMsg = 5823 // Deprecated
+	EMsg_ClientMDSUploadRateTestResponse                          EMsg = 5824 // Deprecated
 	EMsg_MDSDownloadDepotChunksAck                                EMsg = 5825
 	EMsg_MDSContentServerStatsBroadcast                           EMsg = 5826
 	EMsg_MDSContentServerConfigRequest                            EMsg = 5827
@@ -1383,15 +1390,15 @@ const (
 	EMsg_MDSUpdateContentServerConfig                             EMsg = 5835
 	EMsg_MDSGetServerListForUser                                  EMsg = 5836
 	EMsg_MDSGetServerListForUserResponse                          EMsg = 5837
-	EMsg_ClientMDSRegisterAppBuild                                EMsg = 5838
-	EMsg_ClientMDSRegisterAppBuildResponse                        EMsg = 5839
+	EMsg_ClientMDSRegisterAppBuild                                EMsg = 5838 // Deprecated
+	EMsg_ClientMDSRegisterAppBuildResponse                        EMsg = 5839 // Deprecated
 	EMsg_ClientMDSSetAppBuildLive                                 EMsg = 5840
 	EMsg_ClientMDSSetAppBuildLiveResponse                         EMsg = 5841
 	EMsg_ClientMDSGetPrevDepotBuild                               EMsg = 5842
 	EMsg_ClientMDSGetPrevDepotBuildResponse                       EMsg = 5843
 	EMsg_MDSToCSFlushChunk                                        EMsg = 5844
-	EMsg_ClientMDSSignInstallScript                               EMsg = 5845
-	EMsg_ClientMDSSignInstallScriptResponse                       EMsg = 5846
+	EMsg_ClientMDSSignInstallScript                               EMsg = 5845 // Deprecated
+	EMsg_ClientMDSSignInstallScriptResponse                       EMsg = 5846 // Deprecated
 	EMsg_CSBase                                                   EMsg = 6200
 	EMsg_CSPing                                                   EMsg = 6201
 	EMsg_CSPingResponse                                           EMsg = 6202
@@ -1545,6 +1552,10 @@ const (
 	EMsg_ClientUCMEnumerateUserSubscribedFilesWithUpdatesResponse EMsg = 7379
 	EMsg_UCMPublishedFileContentUpdated                           EMsg = 7380
 	EMsg_UCMPublishedFileUpdated                                  EMsg = 7381
+	EMsg_ClientWorkshopItemChangesRequest                         EMsg = 7382
+	EMsg_ClientWorkshopItemChangesResponse                        EMsg = 7383
+	EMsg_ClientWorkshopItemInfoRequest                            EMsg = 7384
+	EMsg_ClientWorkshopItemInfoResponse                           EMsg = 7385
 	EMsg_FSBase                                                   EMsg = 7500
 	EMsg_ClientRichPresenceUpload                                 EMsg = 7501
 	EMsg_ClientRichPresenceRequest                                EMsg = 7502
@@ -1635,12 +1646,12 @@ const (
 	EMsg_BackpackAddToCurrency                                    EMsg = 8401
 	EMsg_BackpackAddToCurrencyResponse                            EMsg = 8402
 	EMsg_CREBase                                                  EMsg = 8500
-	EMsg_CRERankByTrend                                           EMsg = 8501
-	EMsg_CRERankByTrendResponse                                   EMsg = 8502
+	EMsg_CRERankByTrend                                           EMsg = 8501 // Deprecated
+	EMsg_CRERankByTrendResponse                                   EMsg = 8502 // Deprecated
 	EMsg_CREItemVoteSummary                                       EMsg = 8503
 	EMsg_CREItemVoteSummaryResponse                               EMsg = 8504
-	EMsg_CRERankByVote                                            EMsg = 8505
-	EMsg_CRERankByVoteResponse                                    EMsg = 8506
+	EMsg_CRERankByVote                                            EMsg = 8505 // Deprecated
+	EMsg_CRERankByVoteResponse                                    EMsg = 8506 // Deprecated
 	EMsg_CREUpdateUserPublishedItemVote                           EMsg = 8507
 	EMsg_CREUpdateUserPublishedItemVoteResponse                   EMsg = 8508
 	EMsg_CREGetUserPublishedItemVoteDetails                       EMsg = 8509
@@ -1721,6 +1732,13 @@ const (
 	EMsg_ClientUnlockStreamingResponse                            EMsg = 9508
 	EMsg_ClientPlayingSessionState                                EMsg = 9600
 	EMsg_ClientKickPlayingSession                                 EMsg = 9601
+	EMsg_ClientBroadcastInit                                      EMsg = 9700
+	EMsg_ClientBroadcastFrames                                    EMsg = 9701
+	EMsg_ClientBroadcastDisconnect                                EMsg = 9702
+	EMsg_ClientBroadcastScreenshot                                EMsg = 9703
+	EMsg_ClientBroadcastUploadConfig                              EMsg = 9704
+	EMsg_ClientVoiceCallPreAuthorize                              EMsg = 9800
+	EMsg_ClientVoiceCallPreAuthorizeResponse                      EMsg = 9801
 )
 
 var EMsg_name = map[EMsg]string{
@@ -2294,6 +2312,7 @@ var EMsg_name = map[EMsg]string{
 	1625: "EMsg_ClientDPUpdateAppJobReport",
 	1627: "EMsg_ClientDPSteam2AppStarted",
 	1626: "EMsg_DPUpdateContentEvent",
+	1630: "EMsg_ClientDPContentStatsReport",
 	1700: "EMsg_BaseCM",
 	1701: "EMsg_CMSetAllowState",
 	1702: "EMsg_CMSpewAllowState",
@@ -2784,6 +2803,12 @@ var EMsg_name = map[EMsg]string{
 	4388: "EMsg_AMPayelpPaymentResponse",
 	4389: "EMsg_AMPlayerGetClanBasicDetails",
 	4390: "EMsg_AMPlayerGetClanBasicDetailsResponse",
+	4402: "EMsg_AMTwoFactorRecoverAuthenticatorRequest",
+	4403: "EMsg_AMTwoFactorRecoverAuthenticatorResponse",
+	4406: "EMsg_AMValidatePasswordResetCodeAndSendSmsRequest",
+	4407: "EMsg_AMValidatePasswordResetCodeAndSendSmsResponse",
+	4408: "EMsg_AMGetAccountResetDetailsRequest",
+	4409: "EMsg_AMGetAccountResetDetailsResponse",
 	5000: "EMsg_BasePSRange",
 	5001: "EMsg_PSCreateShoppingCart",
 	5002: "EMsg_PSCreateShoppingCartResponse",
@@ -3241,6 +3266,10 @@ var EMsg_name = map[EMsg]string{
 	7379: "EMsg_ClientUCMEnumerateUserSubscribedFilesWithUpdatesResponse",
 	7380: "EMsg_UCMPublishedFileContentUpdated",
 	7381: "EMsg_UCMPublishedFileUpdated",
+	7382: "EMsg_ClientWorkshopItemChangesRequest",
+	7383: "EMsg_ClientWorkshopItemChangesResponse",
+	7384: "EMsg_ClientWorkshopItemInfoRequest",
+	7385: "EMsg_ClientWorkshopItemInfoResponse",
 	7500: "EMsg_FSBase",
 	7501: "EMsg_ClientRichPresenceUpload",
 	7502: "EMsg_ClientRichPresenceRequest",
@@ -3404,6 +3433,13 @@ var EMsg_name = map[EMsg]string{
 	9508: "EMsg_ClientUnlockStreamingResponse",
 	9600: "EMsg_ClientPlayingSessionState",
 	9601: "EMsg_ClientKickPlayingSession",
+	9700: "EMsg_ClientBroadcastInit",
+	9701: "EMsg_ClientBroadcastFrames",
+	9702: "EMsg_ClientBroadcastDisconnect",
+	9703: "EMsg_ClientBroadcastScreenshot",
+	9704: "EMsg_ClientBroadcastUploadConfig",
+	9800: "EMsg_ClientVoiceCallPreAuthorize",
+	9801: "EMsg_ClientVoiceCallPreAuthorizeResponse",
 }
 
 func (e EMsg) String() string {
@@ -3481,7 +3517,8 @@ const (
 	EResult_DataCorruption                          EResult = 53
 	EResult_DiskFull                                EResult = 54
 	EResult_RemoteCallFailed                        EResult = 55
-	EResult_PasswordNotSet                          EResult = 56
+	EResult_PasswordNotSet                          EResult = 56 // Deprecated: renamed to PasswordUnset
+	EResult_PasswordUnset                           EResult = 56
 	EResult_ExternalAccountUnlinked                 EResult = 57
 	EResult_PSNTicketInvalid                        EResult = 58
 	EResult_ExternalAccountAlreadyLinked            EResult = 59
@@ -3491,14 +3528,16 @@ const (
 	EResult_AccountLogonDenied                      EResult = 63
 	EResult_CannotUseOldPassword                    EResult = 64
 	EResult_InvalidLoginAuthCode                    EResult = 65
-	EResult_AccountLogonDeniedNoMailSent            EResult = 66
+	EResult_AccountLogonDeniedNoMailSent            EResult = 66 // Deprecated: renamed to AccountLogonDeniedNoMail
+	EResult_AccountLogonDeniedNoMail                EResult = 66
 	EResult_HardwareNotCapableOfIPT                 EResult = 67
 	EResult_IPTInitError                            EResult = 68
 	EResult_ParentalControlRestricted               EResult = 69
 	EResult_FacebookQueryError                      EResult = 70
 	EResult_ExpiredLoginAuthCode                    EResult = 71
 	EResult_IPLoginRestrictionFailed                EResult = 72
-	EResult_AccountLocked                           EResult = 73
+	EResult_AccountLocked                           EResult = 73 // Deprecated: renamed to AccountLockedDown
+	EResult_AccountLockedDown                       EResult = 73
 	EResult_AccountLogonDeniedVerifiedEmailRequired EResult = 74
 	EResult_NoMatchingURL                           EResult = 75
 	EResult_BadResponse                             EResult = 76
@@ -3510,8 +3549,22 @@ const (
 	EResult_RestrictedDevice                        EResult = 82
 	EResult_RegionLocked                            EResult = 83
 	EResult_RateLimitExceeded                       EResult = 84
-	EResult_AccountLogonDeniedNeedTwoFactorCode     EResult = 85
-	EResult_ItemOrEntryHasBeenDeleted               EResult = 86
+	EResult_AccountLogonDeniedNeedTwoFactorCode     EResult = 85 // Deprecated: renamed to AccountLoginDeniedNeedTwoFactor
+	EResult_AccountLoginDeniedNeedTwoFactor         EResult = 85
+	EResult_ItemOrEntryHasBeenDeleted               EResult = 86 // Deprecated: renamed to ItemDeleted
+	EResult_ItemDeleted                             EResult = 86
+	EResult_AccountLoginDeniedThrottle              EResult = 87
+	EResult_TwoFactorCodeMismatch                   EResult = 88
+	EResult_TwoFactorActivationCodeMismatch         EResult = 89
+	EResult_AccountAssociatedToMultiplePlayers      EResult = 90
+	EResult_NotModified                             EResult = 91
+	EResult_NoMobileDeviceAvailable                 EResult = 92
+	EResult_TimeIsOutOfSync                         EResult = 93
+	EResult_SMSCodeFailed                           EResult = 94
+	EResult_TooManyAccountsAccessThisResource       EResult = 95 // Deprecated: renamed to AccountLimitExceeded
+	EResult_AccountLimitExceeded                    EResult = 95
+	EResult_AccountActivityLimitExceeded            EResult = 96
+	EResult_PhoneActivityLimitExceeded              EResult = 97
 )
 
 var EResult_name = map[EResult]string{
@@ -3601,6 +3654,17 @@ var EResult_name = map[EResult]string{
 	84: "EResult_RateLimitExceeded",
 	85: "EResult_AccountLogonDeniedNeedTwoFactorCode",
 	86: "EResult_ItemOrEntryHasBeenDeleted",
+	87: "EResult_AccountLoginDeniedThrottle",
+	88: "EResult_TwoFactorCodeMismatch",
+	89: "EResult_TwoFactorActivationCodeMismatch",
+	90: "EResult_AccountAssociatedToMultiplePlayers",
+	91: "EResult_NotModified",
+	92: "EResult_NoMobileDeviceAvailable",
+	93: "EResult_TimeIsOutOfSync",
+	94: "EResult_SMSCodeFailed",
+	95: "EResult_TooManyAccountsAccessThisResource",
+	96: "EResult_AccountActivityLimitExceeded",
+	97: "EResult_PhoneActivityLimitExceeded",
 }
 
 func (e EResult) String() string {
@@ -3628,7 +3692,6 @@ const (
 	EUniverse_Beta     EUniverse = 2
 	EUniverse_Internal EUniverse = 3
 	EUniverse_Dev      EUniverse = 4
-	EUniverse_RC       EUniverse = 5 // Deprecated: Universe no longer exists
 	EUniverse_Max      EUniverse = 5
 )
 
@@ -3638,7 +3701,7 @@ var EUniverse_name = map[EUniverse]string{
 	2: "EUniverse_Beta",
 	3: "EUniverse_Internal",
 	4: "EUniverse_Dev",
-	5: "EUniverse_RC",
+	5: "EUniverse_Max",
 }
 
 func (e EUniverse) String() string {
@@ -3666,13 +3729,16 @@ const (
 	EChatEntryType_Typing           EChatEntryType = 2
 	EChatEntryType_InviteGame       EChatEntryType = 3
 	EChatEntryType_Emote            EChatEntryType = 4 // Deprecated: No longer supported by clients
-	EChatEntryType_LobbyGameStart   EChatEntryType = 5
+	EChatEntryType_LobbyGameStart   EChatEntryType = 5 // Deprecated: Listen for LobbyGameCreated_t callback instead
 	EChatEntryType_LeftConversation EChatEntryType = 6
 	EChatEntryType_Entered          EChatEntryType = 7
 	EChatEntryType_WasKicked        EChatEntryType = 8
 	EChatEntryType_WasBanned        EChatEntryType = 9
 	EChatEntryType_Disconnected     EChatEntryType = 10
 	EChatEntryType_HistoricalChat   EChatEntryType = 11
+	EChatEntryType_Reserved1        EChatEntryType = 12
+	EChatEntryType_Reserved2        EChatEntryType = 13
+	EChatEntryType_LinkBlocked      EChatEntryType = 14
 )
 
 var EChatEntryType_name = map[EChatEntryType]string{
@@ -3688,6 +3754,9 @@ var EChatEntryType_name = map[EChatEntryType]string{
 	9:  "EChatEntryType_WasBanned",
 	10: "EChatEntryType_Disconnected",
 	11: "EChatEntryType_HistoricalChat",
+	12: "EChatEntryType_Reserved1",
+	13: "EChatEntryType_Reserved2",
+	14: "EChatEntryType_LinkBlocked",
 }
 
 func (e EChatEntryType) String() string {
@@ -3802,11 +3871,9 @@ type EFriendRelationship int32
 const (
 	EFriendRelationship_None             EFriendRelationship = 0
 	EFriendRelationship_Blocked          EFriendRelationship = 1
-	EFriendRelationship_PendingInvitee   EFriendRelationship = 2 // Deprecated: renamed to RequestRecipient
 	EFriendRelationship_RequestRecipient EFriendRelationship = 2
 	EFriendRelationship_Friend           EFriendRelationship = 3
 	EFriendRelationship_RequestInitiator EFriendRelationship = 4
-	EFriendRelationship_PendingInviter   EFriendRelationship = 4 // Deprecated: renamed to RequestInitiator
 	EFriendRelationship_Ignored          EFriendRelationship = 5
 	EFriendRelationship_IgnoredFriend    EFriendRelationship = 6
 	EFriendRelationship_SuggestedFriend  EFriendRelationship = 7
@@ -3816,7 +3883,7 @@ const (
 var EFriendRelationship_name = map[EFriendRelationship]string{
 	0: "EFriendRelationship_None",
 	1: "EFriendRelationship_Blocked",
-	2: "EFriendRelationship_PendingInvitee",
+	2: "EFriendRelationship_RequestRecipient",
 	3: "EFriendRelationship_Friend",
 	4: "EFriendRelationship_RequestInitiator",
 	5: "EFriendRelationship_Ignored",
@@ -4040,7 +4107,6 @@ const (
 	EFriendFlags_FriendshipRequested  EFriendFlags = 2
 	EFriendFlags_Immediate            EFriendFlags = 4
 	EFriendFlags_ClanMember           EFriendFlags = 8
-	EFriendFlags_GameServer           EFriendFlags = 16 // Deprecated: renamed to OnGameServer
 	EFriendFlags_OnGameServer         EFriendFlags = 16
 	EFriendFlags_RequestingFriendship EFriendFlags = 128
 	EFriendFlags_RequestingInfo       EFriendFlags = 256
@@ -4056,7 +4122,7 @@ var EFriendFlags_name = map[EFriendFlags]string{
 	2:     "EFriendFlags_FriendshipRequested",
 	4:     "EFriendFlags_Immediate",
 	8:     "EFriendFlags_ClanMember",
-	16:    "EFriendFlags_GameServer",
+	16:    "EFriendFlags_OnGameServer",
 	128:   "EFriendFlags_RequestingFriendship",
 	256:   "EFriendFlags_RequestingInfo",
 	512:   "EFriendFlags_Ignored",
@@ -4597,6 +4663,7 @@ const (
 	EAuthSessionResponse_AuthTicketCanceled           EAuthSessionResponse = 6
 	EAuthSessionResponse_AuthTicketInvalidAlreadyUsed EAuthSessionResponse = 7
 	EAuthSessionResponse_AuthTicketInvalid            EAuthSessionResponse = 8
+	EAuthSessionResponse_PublisherIssuedBan           EAuthSessionResponse = 9
 )
 
 var EAuthSessionResponse_name = map[EAuthSessionResponse]string{
@@ -4609,6 +4676,7 @@ var EAuthSessionResponse_name = map[EAuthSessionResponse]string{
 	6: "EAuthSessionResponse_AuthTicketCanceled",
 	7: "EAuthSessionResponse_AuthTicketInvalidAlreadyUsed",
 	8: "EAuthSessionResponse_AuthTicketInvalid",
+	9: "EAuthSessionResponse_PublisherIssuedBan",
 }
 
 func (e EAuthSessionResponse) String() string {
@@ -4913,7 +4981,6 @@ const (
 	EContentDownloadSourceType_CS         EContentDownloadSourceType = 1
 	EContentDownloadSourceType_CDN        EContentDownloadSourceType = 2
 	EContentDownloadSourceType_LCS        EContentDownloadSourceType = 3
-	EContentDownloadSourceType_Proxy      EContentDownloadSourceType = 4 // Deprecated: renamed to ProxyCache
 	EContentDownloadSourceType_ProxyCache EContentDownloadSourceType = 4
 	EContentDownloadSourceType_Max        EContentDownloadSourceType = 5
 )
@@ -4923,7 +4990,7 @@ var EContentDownloadSourceType_name = map[EContentDownloadSourceType]string{
 	1: "EContentDownloadSourceType_CS",
 	2: "EContentDownloadSourceType_CDN",
 	3: "EContentDownloadSourceType_LCS",
-	4: "EContentDownloadSourceType_Proxy",
+	4: "EContentDownloadSourceType_ProxyCache",
 	5: "EContentDownloadSourceType_Max",
 }
 
@@ -5000,6 +5067,7 @@ const (
 	EOSType_MacOS107       EOSType = -90
 	EOSType_MacOS108       EOSType = -89
 	EOSType_MacOS109       EOSType = -88
+	EOSType_MacOS1010      EOSType = -87
 	EOSType_LinuxUnknown   EOSType = -203
 	EOSType_Linux22        EOSType = -202
 	EOSType_Linux24        EOSType = -201
@@ -5018,12 +5086,16 @@ const (
 	EOSType_WinXP          EOSType = 7
 	EOSType_Win2003        EOSType = 8
 	EOSType_WinVista       EOSType = 9
-	EOSType_Win7           EOSType = 10 // Deprecated: renamed to Windows7
-	EOSType_Windows7       EOSType = 10
+	EOSType_Win7           EOSType = 10
+	EOSType_Windows7       EOSType = 10 // Deprecated: renamed to Win7
 	EOSType_Win2008        EOSType = 11
 	EOSType_Win2012        EOSType = 12
-	EOSType_Windows8       EOSType = 13
-	EOSType_Windows81      EOSType = 14
+	EOSType_Win8           EOSType = 13
+	EOSType_Windows8       EOSType = 13 // Deprecated: renamed to Win8
+	EOSType_Win81          EOSType = 14
+	EOSType_Windows81      EOSType = 14 // Deprecated: renamed to Win81
+	EOSType_Win2012R2      EOSType = 15
+	EOSType_Win10          EOSType = 16
 	EOSType_WinMAX         EOSType = 15
 	EOSType_Max            EOSType = 26
 )
@@ -5043,6 +5115,7 @@ var EOSType_name = map[EOSType]string{
 	-90:  "EOSType_MacOS107",
 	-89:  "EOSType_MacOS108",
 	-88:  "EOSType_MacOS109",
+	-87:  "EOSType_MacOS1010",
 	-203: "EOSType_LinuxUnknown",
 	-202: "EOSType_Linux22",
 	-201: "EOSType_Linux24",
@@ -5064,9 +5137,10 @@ var EOSType_name = map[EOSType]string{
 	10:   "EOSType_Win7",
 	11:   "EOSType_Win2008",
 	12:   "EOSType_Win2012",
-	13:   "EOSType_Windows8",
-	14:   "EOSType_Windows81",
-	15:   "EOSType_WinMAX",
+	13:   "EOSType_Win8",
+	14:   "EOSType_Win81",
+	15:   "EOSType_Win2012R2",
+	16:   "EOSType_Win10",
 	26:   "EOSType_Max",
 }
 
@@ -5596,7 +5670,8 @@ const (
 	EWorkshopFileType_Merch                  EWorkshopFileType = 11
 	EWorkshopFileType_ControllerBinding      EWorkshopFileType = 12
 	EWorkshopFileType_SteamworksAccessInvite EWorkshopFileType = 13
-	EWorkshopFileType_Max                    EWorkshopFileType = 14
+	EWorkshopFileType_SteamVideo             EWorkshopFileType = 14
+	EWorkshopFileType_Max                    EWorkshopFileType = 15
 )
 
 var EWorkshopFileType_name = map[EWorkshopFileType]string{
@@ -5614,7 +5689,8 @@ var EWorkshopFileType_name = map[EWorkshopFileType]string{
 	11: "EWorkshopFileType_Merch",
 	12: "EWorkshopFileType_ControllerBinding",
 	13: "EWorkshopFileType_SteamworksAccessInvite",
-	14: "EWorkshopFileType_Max",
+	14: "EWorkshopFileType_SteamVideo",
+	15: "EWorkshopFileType_Max",
 }
 
 func (e EWorkshopFileType) String() string {
@@ -5668,9 +5744,7 @@ type EEconTradeResponse int32
 const (
 	EEconTradeResponse_Accepted                        EEconTradeResponse = 0
 	EEconTradeResponse_Declined                        EEconTradeResponse = 1
-	EEconTradeResponse_VacBannedInitiator              EEconTradeResponse = 2 // Deprecated: renamed to TradeBannedInitiator
 	EEconTradeResponse_TradeBannedInitiator            EEconTradeResponse = 2
-	EEconTradeResponse_VacBannedTarget                 EEconTradeResponse = 3 // Deprecated: renamed to TradeBannedTarget
 	EEconTradeResponse_TradeBannedTarget               EEconTradeResponse = 3
 	EEconTradeResponse_TargetAlreadyTrading            EEconTradeResponse = 4
 	EEconTradeResponse_Disabled                        EEconTradeResponse = 5
@@ -5679,11 +5753,8 @@ const (
 	EEconTradeResponse_TooSoon                         EEconTradeResponse = 8
 	EEconTradeResponse_TooSoonPenalty                  EEconTradeResponse = 9
 	EEconTradeResponse_ConnectionFailed                EEconTradeResponse = 10
-	EEconTradeResponse_InitiatorAlreadyTrading         EEconTradeResponse = 11 // Deprecated: renamed to AlreadyTrading
 	EEconTradeResponse_AlreadyTrading                  EEconTradeResponse = 11
-	EEconTradeResponse_Error                           EEconTradeResponse = 12 // Deprecated: renamed to AlreadyHasTradeRequest
 	EEconTradeResponse_AlreadyHasTradeRequest          EEconTradeResponse = 12
-	EEconTradeResponse_Timeout                         EEconTradeResponse = 13 // Deprecated: renamed to NoResponse
 	EEconTradeResponse_NoResponse                      EEconTradeResponse = 13
 	EEconTradeResponse_CyberCafeInitiator              EEconTradeResponse = 14
 	EEconTradeResponse_CyberCafeTarget                 EEconTradeResponse = 15
@@ -5702,8 +5773,8 @@ const (
 var EEconTradeResponse_name = map[EEconTradeResponse]string{
 	0:  "EEconTradeResponse_Accepted",
 	1:  "EEconTradeResponse_Declined",
-	2:  "EEconTradeResponse_VacBannedInitiator",
-	3:  "EEconTradeResponse_VacBannedTarget",
+	2:  "EEconTradeResponse_TradeBannedInitiator",
+	3:  "EEconTradeResponse_TradeBannedTarget",
 	4:  "EEconTradeResponse_TargetAlreadyTrading",
 	5:  "EEconTradeResponse_Disabled",
 	6:  "EEconTradeResponse_NotLoggedIn",
@@ -5711,9 +5782,9 @@ var EEconTradeResponse_name = map[EEconTradeResponse]string{
 	8:  "EEconTradeResponse_TooSoon",
 	9:  "EEconTradeResponse_TooSoonPenalty",
 	10: "EEconTradeResponse_ConnectionFailed",
-	11: "EEconTradeResponse_InitiatorAlreadyTrading",
-	12: "EEconTradeResponse_Error",
-	13: "EEconTradeResponse_Timeout",
+	11: "EEconTradeResponse_AlreadyTrading",
+	12: "EEconTradeResponse_AlreadyHasTradeRequest",
+	13: "EEconTradeResponse_NoResponse",
 	14: "EEconTradeResponse_CyberCafeInitiator",
 	15: "EEconTradeResponse_CyberCafeTarget",
 	16: "EEconTradeResponse_SchoolLabInitiator",
@@ -5903,7 +5974,8 @@ const (
 	ERemoteStoragePlatform_Windows   ERemoteStoragePlatform = 1
 	ERemoteStoragePlatform_OSX       ERemoteStoragePlatform = 2
 	ERemoteStoragePlatform_PS3       ERemoteStoragePlatform = 4
-	ERemoteStoragePlatform_Reserved1 ERemoteStoragePlatform = 8
+	ERemoteStoragePlatform_Linux     ERemoteStoragePlatform = 8
+	ERemoteStoragePlatform_Reserved1 ERemoteStoragePlatform = 8 // Deprecated
 	ERemoteStoragePlatform_Reserved2 ERemoteStoragePlatform = 16
 	ERemoteStoragePlatform_All       ERemoteStoragePlatform = -1
 )
@@ -5913,7 +5985,7 @@ var ERemoteStoragePlatform_name = map[ERemoteStoragePlatform]string{
 	1:  "ERemoteStoragePlatform_Windows",
 	2:  "ERemoteStoragePlatform_OSX",
 	4:  "ERemoteStoragePlatform_PS3",
-	8:  "ERemoteStoragePlatform_Reserved1",
+	8:  "ERemoteStoragePlatform_Linux",
 	16: "ERemoteStoragePlatform_Reserved2",
 	-1: "ERemoteStoragePlatform_All",
 }

@@ -47,6 +47,7 @@ type ParentalSettings struct {
 	Passwordhash           []byte         `protobuf:"bytes,8,opt,name=passwordhash" json:"passwordhash,omitempty"`
 	IsEnabled              *bool          `protobuf:"varint,9,opt,name=is_enabled" json:"is_enabled,omitempty"`
 	EnabledFeatures        *uint32        `protobuf:"varint,10,opt,name=enabled_features" json:"enabled_features,omitempty"`
+	RecoveryEmail          *string        `protobuf:"bytes,11,opt,name=recovery_email" json:"recovery_email,omitempty"`
 	XXX_unrecognized       []byte         `json:"-"`
 }
 
@@ -124,10 +125,18 @@ func (m *ParentalSettings) GetEnabledFeatures() uint32 {
 	return 0
 }
 
+func (m *ParentalSettings) GetRecoveryEmail() string {
+	if m != nil && m.RecoveryEmail != nil {
+		return *m.RecoveryEmail
+	}
+	return ""
+}
+
 type CParental_EnableParentalSettings_Request struct {
 	Password         *string           `protobuf:"bytes,1,opt,name=password" json:"password,omitempty"`
 	Settings         *ParentalSettings `protobuf:"bytes,2,opt,name=settings" json:"settings,omitempty"`
 	Sessionid        *string           `protobuf:"bytes,3,opt,name=sessionid" json:"sessionid,omitempty"`
+	Enablecode       *uint32           `protobuf:"varint,4,opt,name=enablecode" json:"enablecode,omitempty"`
 	Steamid          *uint64           `protobuf:"fixed64,10,opt,name=steamid" json:"steamid,omitempty"`
 	XXX_unrecognized []byte            `json:"-"`
 }
@@ -157,6 +166,13 @@ func (m *CParental_EnableParentalSettings_Request) GetSessionid() string {
 		return *m.Sessionid
 	}
 	return ""
+}
+
+func (m *CParental_EnableParentalSettings_Request) GetEnablecode() uint32 {
+	if m != nil && m.Enablecode != nil {
+		return *m.Enablecode
+	}
+	return 0
 }
 
 func (m *CParental_EnableParentalSettings_Request) GetSteamid() uint64 {
@@ -449,6 +465,62 @@ type CParental_LockClient_Response struct {
 func (m *CParental_LockClient_Response) Reset()         { *m = CParental_LockClient_Response{} }
 func (m *CParental_LockClient_Response) String() string { return proto.CompactTextString(m) }
 func (*CParental_LockClient_Response) ProtoMessage()    {}
+
+type CParental_RequestRecoveryCode_Request struct {
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *CParental_RequestRecoveryCode_Request) Reset()         { *m = CParental_RequestRecoveryCode_Request{} }
+func (m *CParental_RequestRecoveryCode_Request) String() string { return proto.CompactTextString(m) }
+func (*CParental_RequestRecoveryCode_Request) ProtoMessage()    {}
+
+type CParental_RequestRecoveryCode_Response struct {
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *CParental_RequestRecoveryCode_Response) Reset() {
+	*m = CParental_RequestRecoveryCode_Response{}
+}
+func (m *CParental_RequestRecoveryCode_Response) String() string { return proto.CompactTextString(m) }
+func (*CParental_RequestRecoveryCode_Response) ProtoMessage()    {}
+
+type CParental_DisableWithRecoveryCode_Request struct {
+	RecoveryCode     *uint32 `protobuf:"varint,1,opt,name=recovery_code" json:"recovery_code,omitempty"`
+	Steamid          *uint64 `protobuf:"fixed64,10,opt,name=steamid" json:"steamid,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CParental_DisableWithRecoveryCode_Request) Reset() {
+	*m = CParental_DisableWithRecoveryCode_Request{}
+}
+func (m *CParental_DisableWithRecoveryCode_Request) String() string { return proto.CompactTextString(m) }
+func (*CParental_DisableWithRecoveryCode_Request) ProtoMessage()    {}
+
+func (m *CParental_DisableWithRecoveryCode_Request) GetRecoveryCode() uint32 {
+	if m != nil && m.RecoveryCode != nil {
+		return *m.RecoveryCode
+	}
+	return 0
+}
+
+func (m *CParental_DisableWithRecoveryCode_Request) GetSteamid() uint64 {
+	if m != nil && m.Steamid != nil {
+		return *m.Steamid
+	}
+	return 0
+}
+
+type CParental_DisableWithRecoveryCode_Response struct {
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *CParental_DisableWithRecoveryCode_Response) Reset() {
+	*m = CParental_DisableWithRecoveryCode_Response{}
+}
+func (m *CParental_DisableWithRecoveryCode_Response) String() string {
+	return proto.CompactTextString(m)
+}
+func (*CParental_DisableWithRecoveryCode_Response) ProtoMessage() {}
 
 type CParental_ParentalSettingsChange_Notification struct {
 	SerializedSettings []byte  `protobuf:"bytes,1,opt,name=serialized_settings" json:"serialized_settings,omitempty"`

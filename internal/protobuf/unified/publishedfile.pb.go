@@ -12,6 +12,48 @@ import math "math"
 var _ = proto.Marshal
 var _ = math.Inf
 
+type PublishedFileDetails_EPublishedFileForSaleStatus int32
+
+const (
+	PublishedFileDetails_k_PFFSS_NotForSale      PublishedFileDetails_EPublishedFileForSaleStatus = 0
+	PublishedFileDetails_k_PFFSS_PendingApproval PublishedFileDetails_EPublishedFileForSaleStatus = 1
+	PublishedFileDetails_k_PFFSS_ApprovedForSale PublishedFileDetails_EPublishedFileForSaleStatus = 2
+	PublishedFileDetails_k_PFFSS_RejectedForSale PublishedFileDetails_EPublishedFileForSaleStatus = 3
+	PublishedFileDetails_k_PFFSS_NoLongerForSale PublishedFileDetails_EPublishedFileForSaleStatus = 4
+)
+
+var PublishedFileDetails_EPublishedFileForSaleStatus_name = map[int32]string{
+	0: "k_PFFSS_NotForSale",
+	1: "k_PFFSS_PendingApproval",
+	2: "k_PFFSS_ApprovedForSale",
+	3: "k_PFFSS_RejectedForSale",
+	4: "k_PFFSS_NoLongerForSale",
+}
+var PublishedFileDetails_EPublishedFileForSaleStatus_value = map[string]int32{
+	"k_PFFSS_NotForSale":      0,
+	"k_PFFSS_PendingApproval": 1,
+	"k_PFFSS_ApprovedForSale": 2,
+	"k_PFFSS_RejectedForSale": 3,
+	"k_PFFSS_NoLongerForSale": 4,
+}
+
+func (x PublishedFileDetails_EPublishedFileForSaleStatus) Enum() *PublishedFileDetails_EPublishedFileForSaleStatus {
+	p := new(PublishedFileDetails_EPublishedFileForSaleStatus)
+	*p = x
+	return p
+}
+func (x PublishedFileDetails_EPublishedFileForSaleStatus) String() string {
+	return proto.EnumName(PublishedFileDetails_EPublishedFileForSaleStatus_name, int32(x))
+}
+func (x *PublishedFileDetails_EPublishedFileForSaleStatus) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(PublishedFileDetails_EPublishedFileForSaleStatus_value, data, "PublishedFileDetails_EPublishedFileForSaleStatus")
+	if err != nil {
+		return err
+	}
+	*x = PublishedFileDetails_EPublishedFileForSaleStatus(value)
+	return nil
+}
+
 type CPublishedFile_Subscribe_Request struct {
 	Publishedfileid  *uint64 `protobuf:"varint,1,opt,name=publishedfileid" json:"publishedfileid,omitempty"`
 	ListType         *uint32 `protobuf:"varint,2,opt,name=list_type" json:"list_type,omitempty"`
@@ -107,6 +149,38 @@ type CPublishedFile_Unsubscribe_Response struct {
 func (m *CPublishedFile_Unsubscribe_Response) Reset()         { *m = CPublishedFile_Unsubscribe_Response{} }
 func (m *CPublishedFile_Unsubscribe_Response) String() string { return proto.CompactTextString(m) }
 func (*CPublishedFile_Unsubscribe_Response) ProtoMessage()    {}
+
+type CPublishedFile_CanSubscribe_Request struct {
+	Publishedfileid  *uint64 `protobuf:"varint,1,opt,name=publishedfileid" json:"publishedfileid,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CPublishedFile_CanSubscribe_Request) Reset()         { *m = CPublishedFile_CanSubscribe_Request{} }
+func (m *CPublishedFile_CanSubscribe_Request) String() string { return proto.CompactTextString(m) }
+func (*CPublishedFile_CanSubscribe_Request) ProtoMessage()    {}
+
+func (m *CPublishedFile_CanSubscribe_Request) GetPublishedfileid() uint64 {
+	if m != nil && m.Publishedfileid != nil {
+		return *m.Publishedfileid
+	}
+	return 0
+}
+
+type CPublishedFile_CanSubscribe_Response struct {
+	CanSubscribe     *bool  `protobuf:"varint,1,opt,name=can_subscribe" json:"can_subscribe,omitempty"`
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *CPublishedFile_CanSubscribe_Response) Reset()         { *m = CPublishedFile_CanSubscribe_Response{} }
+func (m *CPublishedFile_CanSubscribe_Response) String() string { return proto.CompactTextString(m) }
+func (*CPublishedFile_CanSubscribe_Response) ProtoMessage()    {}
+
+func (m *CPublishedFile_CanSubscribe_Response) GetCanSubscribe() bool {
+	if m != nil && m.CanSubscribe != nil {
+		return *m.CanSubscribe
+	}
+	return false
+}
 
 type CPublishedFile_Publish_Request struct {
 	Appid                *uint32  `protobuf:"varint,1,opt,name=appid" json:"appid,omitempty"`
@@ -276,6 +350,8 @@ type CPublishedFile_GetDetails_Request struct {
 	Includekvtags             *bool    `protobuf:"varint,5,opt,name=includekvtags" json:"includekvtags,omitempty"`
 	Includevotes              *bool    `protobuf:"varint,6,opt,name=includevotes" json:"includevotes,omitempty"`
 	ShortDescription          *bool    `protobuf:"varint,8,opt,name=short_description" json:"short_description,omitempty"`
+	Includeforsaledata        *bool    `protobuf:"varint,10,opt,name=includeforsaledata" json:"includeforsaledata,omitempty"`
+	Includemetadata           *bool    `protobuf:"varint,11,opt,name=includemetadata" json:"includemetadata,omitempty"`
 	XXX_unrecognized          []byte   `json:"-"`
 }
 
@@ -332,64 +408,80 @@ func (m *CPublishedFile_GetDetails_Request) GetShortDescription() bool {
 	return false
 }
 
+func (m *CPublishedFile_GetDetails_Request) GetIncludeforsaledata() bool {
+	if m != nil && m.Includeforsaledata != nil {
+		return *m.Includeforsaledata
+	}
+	return false
+}
+
+func (m *CPublishedFile_GetDetails_Request) GetIncludemetadata() bool {
+	if m != nil && m.Includemetadata != nil {
+		return *m.Includemetadata
+	}
+	return false
+}
+
 type PublishedFileDetails struct {
-	Result                *uint32                         `protobuf:"varint,1,opt,name=result" json:"result,omitempty"`
-	Publishedfileid       *uint64                         `protobuf:"varint,2,opt,name=publishedfileid" json:"publishedfileid,omitempty"`
-	Creator               *uint64                         `protobuf:"fixed64,3,opt,name=creator" json:"creator,omitempty"`
-	CreatorAppid          *uint32                         `protobuf:"varint,4,opt,name=creator_appid" json:"creator_appid,omitempty"`
-	ConsumerAppid         *uint32                         `protobuf:"varint,5,opt,name=consumer_appid" json:"consumer_appid,omitempty"`
-	ConsumerShortcutid    *uint32                         `protobuf:"varint,6,opt,name=consumer_shortcutid" json:"consumer_shortcutid,omitempty"`
-	Filename              *string                         `protobuf:"bytes,7,opt,name=filename" json:"filename,omitempty"`
-	FileSize              *uint64                         `protobuf:"varint,8,opt,name=file_size" json:"file_size,omitempty"`
-	PreviewFileSize       *uint64                         `protobuf:"varint,9,opt,name=preview_file_size" json:"preview_file_size,omitempty"`
-	FileUrl               *string                         `protobuf:"bytes,10,opt,name=file_url" json:"file_url,omitempty"`
-	PreviewUrl            *string                         `protobuf:"bytes,11,opt,name=preview_url" json:"preview_url,omitempty"`
-	Youtubevideoid        *string                         `protobuf:"bytes,12,opt,name=youtubevideoid" json:"youtubevideoid,omitempty"`
-	Url                   *string                         `protobuf:"bytes,13,opt,name=url" json:"url,omitempty"`
-	HcontentFile          *uint64                         `protobuf:"fixed64,14,opt,name=hcontent_file" json:"hcontent_file,omitempty"`
-	HcontentPreview       *uint64                         `protobuf:"fixed64,15,opt,name=hcontent_preview" json:"hcontent_preview,omitempty"`
-	Title                 *string                         `protobuf:"bytes,16,opt,name=title" json:"title,omitempty"`
-	FileDescription       *string                         `protobuf:"bytes,17,opt,name=file_description" json:"file_description,omitempty"`
-	ShortDescription      *string                         `protobuf:"bytes,18,opt,name=short_description" json:"short_description,omitempty"`
-	TimeCreated           *uint32                         `protobuf:"varint,19,opt,name=time_created" json:"time_created,omitempty"`
-	TimeUpdated           *uint32                         `protobuf:"varint,20,opt,name=time_updated" json:"time_updated,omitempty"`
-	Visibility            *uint32                         `protobuf:"varint,21,opt,name=visibility" json:"visibility,omitempty"`
-	Flags                 *uint32                         `protobuf:"varint,22,opt,name=flags" json:"flags,omitempty"`
-	WorkshopFile          *bool                           `protobuf:"varint,23,opt,name=workshop_file" json:"workshop_file,omitempty"`
-	WorkshopAccepted      *bool                           `protobuf:"varint,24,opt,name=workshop_accepted" json:"workshop_accepted,omitempty"`
-	ShowSubscribeAll      *bool                           `protobuf:"varint,25,opt,name=show_subscribe_all" json:"show_subscribe_all,omitempty"`
-	NumCommentsDeveloper  *int32                          `protobuf:"varint,26,opt,name=num_comments_developer" json:"num_comments_developer,omitempty"`
-	NumCommentsPublic     *int32                          `protobuf:"varint,27,opt,name=num_comments_public" json:"num_comments_public,omitempty"`
-	Banned                *bool                           `protobuf:"varint,28,opt,name=banned" json:"banned,omitempty"`
-	BanReason             *string                         `protobuf:"bytes,29,opt,name=ban_reason" json:"ban_reason,omitempty"`
-	Banner                *uint64                         `protobuf:"fixed64,30,opt,name=banner" json:"banner,omitempty"`
-	CanBeDeleted          *bool                           `protobuf:"varint,31,opt,name=can_be_deleted" json:"can_be_deleted,omitempty"`
-	Incompatible          *bool                           `protobuf:"varint,32,opt,name=incompatible" json:"incompatible,omitempty"`
-	AppName               *string                         `protobuf:"bytes,33,opt,name=app_name" json:"app_name,omitempty"`
-	FileType              *uint32                         `protobuf:"varint,34,opt,name=file_type" json:"file_type,omitempty"`
-	CanSubscribe          *bool                           `protobuf:"varint,35,opt,name=can_subscribe" json:"can_subscribe,omitempty"`
-	Subscriptions         *uint32                         `protobuf:"varint,36,opt,name=subscriptions" json:"subscriptions,omitempty"`
-	Favorited             *uint32                         `protobuf:"varint,37,opt,name=favorited" json:"favorited,omitempty"`
-	Followers             *uint32                         `protobuf:"varint,38,opt,name=followers" json:"followers,omitempty"`
-	LifetimeSubscriptions *uint32                         `protobuf:"varint,39,opt,name=lifetime_subscriptions" json:"lifetime_subscriptions,omitempty"`
-	LifetimeFavorited     *uint32                         `protobuf:"varint,40,opt,name=lifetime_favorited" json:"lifetime_favorited,omitempty"`
-	LifetimeFollowers     *uint32                         `protobuf:"varint,41,opt,name=lifetime_followers" json:"lifetime_followers,omitempty"`
-	Views                 *uint32                         `protobuf:"varint,42,opt,name=views" json:"views,omitempty"`
-	ImageWidth            *uint32                         `protobuf:"varint,43,opt,name=image_width" json:"image_width,omitempty"`
-	ImageHeight           *uint32                         `protobuf:"varint,44,opt,name=image_height" json:"image_height,omitempty"`
-	ImageUrl              *string                         `protobuf:"bytes,45,opt,name=image_url" json:"image_url,omitempty"`
-	SpoilerTag            *bool                           `protobuf:"varint,46,opt,name=spoiler_tag" json:"spoiler_tag,omitempty"`
-	Shortcutid            *uint32                         `protobuf:"varint,47,opt,name=shortcutid" json:"shortcutid,omitempty"`
-	Shortcutname          *string                         `protobuf:"bytes,48,opt,name=shortcutname" json:"shortcutname,omitempty"`
-	NumChildren           *uint32                         `protobuf:"varint,49,opt,name=num_children" json:"num_children,omitempty"`
-	NumReports            *uint32                         `protobuf:"varint,50,opt,name=num_reports" json:"num_reports,omitempty"`
-	Previews              []*PublishedFileDetails_Preview `protobuf:"bytes,51,rep,name=previews" json:"previews,omitempty"`
-	Tags                  []*PublishedFileDetails_Tag     `protobuf:"bytes,52,rep,name=tags" json:"tags,omitempty"`
-	Children              []*PublishedFileDetails_Child   `protobuf:"bytes,53,rep,name=children" json:"children,omitempty"`
-	Kvtags                []*PublishedFileDetails_KVTag   `protobuf:"bytes,54,rep,name=kvtags" json:"kvtags,omitempty"`
-	VoteData              *PublishedFileDetails_VoteData  `protobuf:"bytes,55,opt,name=vote_data" json:"vote_data,omitempty"`
-	TimeSubscribed        *uint32                         `protobuf:"varint,56,opt,name=time_subscribed" json:"time_subscribed,omitempty"`
-	XXX_unrecognized      []byte                          `json:"-"`
+	Result                *uint32                           `protobuf:"varint,1,opt,name=result" json:"result,omitempty"`
+	Publishedfileid       *uint64                           `protobuf:"varint,2,opt,name=publishedfileid" json:"publishedfileid,omitempty"`
+	Creator               *uint64                           `protobuf:"fixed64,3,opt,name=creator" json:"creator,omitempty"`
+	CreatorAppid          *uint32                           `protobuf:"varint,4,opt,name=creator_appid" json:"creator_appid,omitempty"`
+	ConsumerAppid         *uint32                           `protobuf:"varint,5,opt,name=consumer_appid" json:"consumer_appid,omitempty"`
+	ConsumerShortcutid    *uint32                           `protobuf:"varint,6,opt,name=consumer_shortcutid" json:"consumer_shortcutid,omitempty"`
+	Filename              *string                           `protobuf:"bytes,7,opt,name=filename" json:"filename,omitempty"`
+	FileSize              *uint64                           `protobuf:"varint,8,opt,name=file_size" json:"file_size,omitempty"`
+	PreviewFileSize       *uint64                           `protobuf:"varint,9,opt,name=preview_file_size" json:"preview_file_size,omitempty"`
+	FileUrl               *string                           `protobuf:"bytes,10,opt,name=file_url" json:"file_url,omitempty"`
+	PreviewUrl            *string                           `protobuf:"bytes,11,opt,name=preview_url" json:"preview_url,omitempty"`
+	Youtubevideoid        *string                           `protobuf:"bytes,12,opt,name=youtubevideoid" json:"youtubevideoid,omitempty"`
+	Url                   *string                           `protobuf:"bytes,13,opt,name=url" json:"url,omitempty"`
+	HcontentFile          *uint64                           `protobuf:"fixed64,14,opt,name=hcontent_file" json:"hcontent_file,omitempty"`
+	HcontentPreview       *uint64                           `protobuf:"fixed64,15,opt,name=hcontent_preview" json:"hcontent_preview,omitempty"`
+	Title                 *string                           `protobuf:"bytes,16,opt,name=title" json:"title,omitempty"`
+	FileDescription       *string                           `protobuf:"bytes,17,opt,name=file_description" json:"file_description,omitempty"`
+	ShortDescription      *string                           `protobuf:"bytes,18,opt,name=short_description" json:"short_description,omitempty"`
+	TimeCreated           *uint32                           `protobuf:"varint,19,opt,name=time_created" json:"time_created,omitempty"`
+	TimeUpdated           *uint32                           `protobuf:"varint,20,opt,name=time_updated" json:"time_updated,omitempty"`
+	Visibility            *uint32                           `protobuf:"varint,21,opt,name=visibility" json:"visibility,omitempty"`
+	Flags                 *uint32                           `protobuf:"varint,22,opt,name=flags" json:"flags,omitempty"`
+	WorkshopFile          *bool                             `protobuf:"varint,23,opt,name=workshop_file" json:"workshop_file,omitempty"`
+	WorkshopAccepted      *bool                             `protobuf:"varint,24,opt,name=workshop_accepted" json:"workshop_accepted,omitempty"`
+	ShowSubscribeAll      *bool                             `protobuf:"varint,25,opt,name=show_subscribe_all" json:"show_subscribe_all,omitempty"`
+	NumCommentsDeveloper  *int32                            `protobuf:"varint,26,opt,name=num_comments_developer" json:"num_comments_developer,omitempty"`
+	NumCommentsPublic     *int32                            `protobuf:"varint,27,opt,name=num_comments_public" json:"num_comments_public,omitempty"`
+	Banned                *bool                             `protobuf:"varint,28,opt,name=banned" json:"banned,omitempty"`
+	BanReason             *string                           `protobuf:"bytes,29,opt,name=ban_reason" json:"ban_reason,omitempty"`
+	Banner                *uint64                           `protobuf:"fixed64,30,opt,name=banner" json:"banner,omitempty"`
+	CanBeDeleted          *bool                             `protobuf:"varint,31,opt,name=can_be_deleted" json:"can_be_deleted,omitempty"`
+	Incompatible          *bool                             `protobuf:"varint,32,opt,name=incompatible" json:"incompatible,omitempty"`
+	AppName               *string                           `protobuf:"bytes,33,opt,name=app_name" json:"app_name,omitempty"`
+	FileType              *uint32                           `protobuf:"varint,34,opt,name=file_type" json:"file_type,omitempty"`
+	CanSubscribe          *bool                             `protobuf:"varint,35,opt,name=can_subscribe" json:"can_subscribe,omitempty"`
+	Subscriptions         *uint32                           `protobuf:"varint,36,opt,name=subscriptions" json:"subscriptions,omitempty"`
+	Favorited             *uint32                           `protobuf:"varint,37,opt,name=favorited" json:"favorited,omitempty"`
+	Followers             *uint32                           `protobuf:"varint,38,opt,name=followers" json:"followers,omitempty"`
+	LifetimeSubscriptions *uint32                           `protobuf:"varint,39,opt,name=lifetime_subscriptions" json:"lifetime_subscriptions,omitempty"`
+	LifetimeFavorited     *uint32                           `protobuf:"varint,40,opt,name=lifetime_favorited" json:"lifetime_favorited,omitempty"`
+	LifetimeFollowers     *uint32                           `protobuf:"varint,41,opt,name=lifetime_followers" json:"lifetime_followers,omitempty"`
+	Views                 *uint32                           `protobuf:"varint,42,opt,name=views" json:"views,omitempty"`
+	ImageWidth            *uint32                           `protobuf:"varint,43,opt,name=image_width" json:"image_width,omitempty"`
+	ImageHeight           *uint32                           `protobuf:"varint,44,opt,name=image_height" json:"image_height,omitempty"`
+	ImageUrl              *string                           `protobuf:"bytes,45,opt,name=image_url" json:"image_url,omitempty"`
+	SpoilerTag            *bool                             `protobuf:"varint,46,opt,name=spoiler_tag" json:"spoiler_tag,omitempty"`
+	Shortcutid            *uint32                           `protobuf:"varint,47,opt,name=shortcutid" json:"shortcutid,omitempty"`
+	Shortcutname          *string                           `protobuf:"bytes,48,opt,name=shortcutname" json:"shortcutname,omitempty"`
+	NumChildren           *uint32                           `protobuf:"varint,49,opt,name=num_children" json:"num_children,omitempty"`
+	NumReports            *uint32                           `protobuf:"varint,50,opt,name=num_reports" json:"num_reports,omitempty"`
+	Previews              []*PublishedFileDetails_Preview   `protobuf:"bytes,51,rep,name=previews" json:"previews,omitempty"`
+	Tags                  []*PublishedFileDetails_Tag       `protobuf:"bytes,52,rep,name=tags" json:"tags,omitempty"`
+	Children              []*PublishedFileDetails_Child     `protobuf:"bytes,53,rep,name=children" json:"children,omitempty"`
+	Kvtags                []*PublishedFileDetails_KVTag     `protobuf:"bytes,54,rep,name=kvtags" json:"kvtags,omitempty"`
+	VoteData              *PublishedFileDetails_VoteData    `protobuf:"bytes,55,opt,name=vote_data" json:"vote_data,omitempty"`
+	TimeSubscribed        *uint32                           `protobuf:"varint,56,opt,name=time_subscribed" json:"time_subscribed,omitempty"`
+	ForSaleData           *PublishedFileDetails_ForSaleData `protobuf:"bytes,57,opt,name=for_sale_data" json:"for_sale_data,omitempty"`
+	Metadata              *string                           `protobuf:"bytes,58,opt,name=metadata" json:"metadata,omitempty"`
+	XXX_unrecognized      []byte                            `json:"-"`
 }
 
 func (m *PublishedFileDetails) Reset()         { *m = PublishedFileDetails{} }
@@ -788,6 +880,20 @@ func (m *PublishedFileDetails) GetTimeSubscribed() uint32 {
 	return 0
 }
 
+func (m *PublishedFileDetails) GetForSaleData() *PublishedFileDetails_ForSaleData {
+	if m != nil {
+		return m.ForSaleData
+	}
+	return nil
+}
+
+func (m *PublishedFileDetails) GetMetadata() string {
+	if m != nil && m.Metadata != nil {
+		return *m.Metadata
+	}
+	return ""
+}
+
 type PublishedFileDetails_Tag struct {
 	Tag              *string `protobuf:"bytes,1,opt,name=tag" json:"tag,omitempty"`
 	Adminonly        *bool   `protobuf:"varint,2,opt,name=adminonly" json:"adminonly,omitempty"`
@@ -956,6 +1062,64 @@ func (m *PublishedFileDetails_VoteData) GetVotesDown() uint32 {
 	return 0
 }
 
+type PublishedFileDetails_ForSaleData struct {
+	IsForSale             *bool                                             `protobuf:"varint,1,opt,name=is_for_sale" json:"is_for_sale,omitempty"`
+	PriceCategory         *uint32                                           `protobuf:"varint,2,opt,name=price_category" json:"price_category,omitempty"`
+	Estatus               *PublishedFileDetails_EPublishedFileForSaleStatus `protobuf:"varint,3,opt,name=estatus,enum=PublishedFileDetails_EPublishedFileForSaleStatus,def=0" json:"estatus,omitempty"`
+	PriceCategoryFloor    *uint32                                           `protobuf:"varint,4,opt,name=price_category_floor" json:"price_category_floor,omitempty"`
+	PriceIsPayWhatYouWant *bool                                             `protobuf:"varint,5,opt,name=price_is_pay_what_you_want" json:"price_is_pay_what_you_want,omitempty"`
+	DiscountPercentage    *uint32                                           `protobuf:"varint,6,opt,name=discount_percentage" json:"discount_percentage,omitempty"`
+	XXX_unrecognized      []byte                                            `json:"-"`
+}
+
+func (m *PublishedFileDetails_ForSaleData) Reset()         { *m = PublishedFileDetails_ForSaleData{} }
+func (m *PublishedFileDetails_ForSaleData) String() string { return proto.CompactTextString(m) }
+func (*PublishedFileDetails_ForSaleData) ProtoMessage()    {}
+
+const Default_PublishedFileDetails_ForSaleData_Estatus PublishedFileDetails_EPublishedFileForSaleStatus = PublishedFileDetails_k_PFFSS_NotForSale
+
+func (m *PublishedFileDetails_ForSaleData) GetIsForSale() bool {
+	if m != nil && m.IsForSale != nil {
+		return *m.IsForSale
+	}
+	return false
+}
+
+func (m *PublishedFileDetails_ForSaleData) GetPriceCategory() uint32 {
+	if m != nil && m.PriceCategory != nil {
+		return *m.PriceCategory
+	}
+	return 0
+}
+
+func (m *PublishedFileDetails_ForSaleData) GetEstatus() PublishedFileDetails_EPublishedFileForSaleStatus {
+	if m != nil && m.Estatus != nil {
+		return *m.Estatus
+	}
+	return Default_PublishedFileDetails_ForSaleData_Estatus
+}
+
+func (m *PublishedFileDetails_ForSaleData) GetPriceCategoryFloor() uint32 {
+	if m != nil && m.PriceCategoryFloor != nil {
+		return *m.PriceCategoryFloor
+	}
+	return 0
+}
+
+func (m *PublishedFileDetails_ForSaleData) GetPriceIsPayWhatYouWant() bool {
+	if m != nil && m.PriceIsPayWhatYouWant != nil {
+		return *m.PriceIsPayWhatYouWant
+	}
+	return false
+}
+
+func (m *PublishedFileDetails_ForSaleData) GetDiscountPercentage() uint32 {
+	if m != nil && m.DiscountPercentage != nil {
+		return *m.DiscountPercentage
+	}
+	return 0
+}
+
 type CPublishedFile_GetDetails_Response struct {
 	Publishedfiledetails []*PublishedFileDetails `protobuf:"bytes,1,rep,name=publishedfiledetails" json:"publishedfiledetails,omitempty"`
 	XXX_unrecognized     []byte                  `json:"-"`
@@ -985,6 +1149,7 @@ type CPublishedFile_GetUserFiles_Request struct {
 	Filetype               *uint32  `protobuf:"varint,14,opt,name=filetype" json:"filetype,omitempty"`
 	CreatorAppid           *uint32  `protobuf:"varint,15,opt,name=creator_appid" json:"creator_appid,omitempty"`
 	MatchCloudFilename     *string  `protobuf:"bytes,16,opt,name=match_cloud_filename" json:"match_cloud_filename,omitempty"`
+	CacheMaxAgeSeconds     *uint32  `protobuf:"varint,27,opt,name=cache_max_age_seconds,def=0" json:"cache_max_age_seconds,omitempty"`
 	Totalonly              *bool    `protobuf:"varint,17,opt,name=totalonly" json:"totalonly,omitempty"`
 	IdsOnly                *bool    `protobuf:"varint,18,opt,name=ids_only" json:"ids_only,omitempty"`
 	ReturnVoteData         *bool    `protobuf:"varint,19,opt,name=return_vote_data,def=1" json:"return_vote_data,omitempty"`
@@ -993,6 +1158,8 @@ type CPublishedFile_GetUserFiles_Request struct {
 	ReturnPreviews         *bool    `protobuf:"varint,22,opt,name=return_previews" json:"return_previews,omitempty"`
 	ReturnChildren         *bool    `protobuf:"varint,23,opt,name=return_children" json:"return_children,omitempty"`
 	ReturnShortDescription *bool    `protobuf:"varint,24,opt,name=return_short_description,def=1" json:"return_short_description,omitempty"`
+	ReturnForSaleData      *bool    `protobuf:"varint,26,opt,name=return_for_sale_data" json:"return_for_sale_data,omitempty"`
+	ReturnMetadata         *bool    `protobuf:"varint,28,opt,name=return_metadata,def=0" json:"return_metadata,omitempty"`
 	XXX_unrecognized       []byte   `json:"-"`
 }
 
@@ -1004,9 +1171,11 @@ const Default_CPublishedFile_GetUserFiles_Request_Page uint32 = 1
 const Default_CPublishedFile_GetUserFiles_Request_Numperpage uint32 = 1
 const Default_CPublishedFile_GetUserFiles_Request_Type string = "myfiles"
 const Default_CPublishedFile_GetUserFiles_Request_Sortmethod string = "lastupdated"
+const Default_CPublishedFile_GetUserFiles_Request_CacheMaxAgeSeconds uint32 = 0
 const Default_CPublishedFile_GetUserFiles_Request_ReturnVoteData bool = true
 const Default_CPublishedFile_GetUserFiles_Request_ReturnKvTags bool = true
 const Default_CPublishedFile_GetUserFiles_Request_ReturnShortDescription bool = true
+const Default_CPublishedFile_GetUserFiles_Request_ReturnMetadata bool = false
 
 func (m *CPublishedFile_GetUserFiles_Request) GetSteamid() uint64 {
 	if m != nil && m.Steamid != nil {
@@ -1092,6 +1261,13 @@ func (m *CPublishedFile_GetUserFiles_Request) GetMatchCloudFilename() string {
 	return ""
 }
 
+func (m *CPublishedFile_GetUserFiles_Request) GetCacheMaxAgeSeconds() uint32 {
+	if m != nil && m.CacheMaxAgeSeconds != nil {
+		return *m.CacheMaxAgeSeconds
+	}
+	return Default_CPublishedFile_GetUserFiles_Request_CacheMaxAgeSeconds
+}
+
 func (m *CPublishedFile_GetUserFiles_Request) GetTotalonly() bool {
 	if m != nil && m.Totalonly != nil {
 		return *m.Totalonly
@@ -1146,6 +1322,20 @@ func (m *CPublishedFile_GetUserFiles_Request) GetReturnShortDescription() bool {
 		return *m.ReturnShortDescription
 	}
 	return Default_CPublishedFile_GetUserFiles_Request_ReturnShortDescription
+}
+
+func (m *CPublishedFile_GetUserFiles_Request) GetReturnForSaleData() bool {
+	if m != nil && m.ReturnForSaleData != nil {
+		return *m.ReturnForSaleData
+	}
+	return false
+}
+
+func (m *CPublishedFile_GetUserFiles_Request) GetReturnMetadata() bool {
+	if m != nil && m.ReturnMetadata != nil {
+		return *m.ReturnMetadata
+	}
+	return Default_CPublishedFile_GetUserFiles_Request_ReturnMetadata
 }
 
 type CPublishedFile_GetUserFiles_Response struct {
@@ -1326,6 +1516,166 @@ func (m *CPublishedFile_Update_Response) Reset()         { *m = CPublishedFile_U
 func (m *CPublishedFile_Update_Response) String() string { return proto.CompactTextString(m) }
 func (*CPublishedFile_Update_Response) ProtoMessage()    {}
 
+type CPublishedFile_GetChangeHistoryEntry_Request struct {
+	Publishedfileid  *uint64 `protobuf:"fixed64,1,opt,name=publishedfileid" json:"publishedfileid,omitempty"`
+	Timestamp        *uint32 `protobuf:"varint,2,opt,name=timestamp" json:"timestamp,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CPublishedFile_GetChangeHistoryEntry_Request) Reset() {
+	*m = CPublishedFile_GetChangeHistoryEntry_Request{}
+}
+func (m *CPublishedFile_GetChangeHistoryEntry_Request) String() string {
+	return proto.CompactTextString(m)
+}
+func (*CPublishedFile_GetChangeHistoryEntry_Request) ProtoMessage() {}
+
+func (m *CPublishedFile_GetChangeHistoryEntry_Request) GetPublishedfileid() uint64 {
+	if m != nil && m.Publishedfileid != nil {
+		return *m.Publishedfileid
+	}
+	return 0
+}
+
+func (m *CPublishedFile_GetChangeHistoryEntry_Request) GetTimestamp() uint32 {
+	if m != nil && m.Timestamp != nil {
+		return *m.Timestamp
+	}
+	return 0
+}
+
+type CPublishedFile_GetChangeHistoryEntry_Response struct {
+	Publishedfileid   *uint64 `protobuf:"fixed64,1,opt,name=publishedfileid" json:"publishedfileid,omitempty"`
+	Timestamp         *uint32 `protobuf:"varint,2,opt,name=timestamp" json:"timestamp,omitempty"`
+	ChangeDescription *string `protobuf:"bytes,3,opt,name=change_description" json:"change_description,omitempty"`
+	XXX_unrecognized  []byte  `json:"-"`
+}
+
+func (m *CPublishedFile_GetChangeHistoryEntry_Response) Reset() {
+	*m = CPublishedFile_GetChangeHistoryEntry_Response{}
+}
+func (m *CPublishedFile_GetChangeHistoryEntry_Response) String() string {
+	return proto.CompactTextString(m)
+}
+func (*CPublishedFile_GetChangeHistoryEntry_Response) ProtoMessage() {}
+
+func (m *CPublishedFile_GetChangeHistoryEntry_Response) GetPublishedfileid() uint64 {
+	if m != nil && m.Publishedfileid != nil {
+		return *m.Publishedfileid
+	}
+	return 0
+}
+
+func (m *CPublishedFile_GetChangeHistoryEntry_Response) GetTimestamp() uint32 {
+	if m != nil && m.Timestamp != nil {
+		return *m.Timestamp
+	}
+	return 0
+}
+
+func (m *CPublishedFile_GetChangeHistoryEntry_Response) GetChangeDescription() string {
+	if m != nil && m.ChangeDescription != nil {
+		return *m.ChangeDescription
+	}
+	return ""
+}
+
+type CPublishedFile_GetChangeHistory_Request struct {
+	Publishedfileid  *uint64 `protobuf:"fixed64,1,opt,name=publishedfileid" json:"publishedfileid,omitempty"`
+	TotalOnly        *bool   `protobuf:"varint,2,opt,name=total_only" json:"total_only,omitempty"`
+	Startindex       *uint32 `protobuf:"varint,3,opt,name=startindex" json:"startindex,omitempty"`
+	Count            *uint32 `protobuf:"varint,4,opt,name=count" json:"count,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CPublishedFile_GetChangeHistory_Request) Reset() {
+	*m = CPublishedFile_GetChangeHistory_Request{}
+}
+func (m *CPublishedFile_GetChangeHistory_Request) String() string { return proto.CompactTextString(m) }
+func (*CPublishedFile_GetChangeHistory_Request) ProtoMessage()    {}
+
+func (m *CPublishedFile_GetChangeHistory_Request) GetPublishedfileid() uint64 {
+	if m != nil && m.Publishedfileid != nil {
+		return *m.Publishedfileid
+	}
+	return 0
+}
+
+func (m *CPublishedFile_GetChangeHistory_Request) GetTotalOnly() bool {
+	if m != nil && m.TotalOnly != nil {
+		return *m.TotalOnly
+	}
+	return false
+}
+
+func (m *CPublishedFile_GetChangeHistory_Request) GetStartindex() uint32 {
+	if m != nil && m.Startindex != nil {
+		return *m.Startindex
+	}
+	return 0
+}
+
+func (m *CPublishedFile_GetChangeHistory_Request) GetCount() uint32 {
+	if m != nil && m.Count != nil {
+		return *m.Count
+	}
+	return 0
+}
+
+type CPublishedFile_GetChangeHistory_Response struct {
+	Changes          []*CPublishedFile_GetChangeHistory_Response_ChangeLog `protobuf:"bytes,1,rep,name=changes" json:"changes,omitempty"`
+	Total            *uint32                                               `protobuf:"varint,2,opt,name=total" json:"total,omitempty"`
+	XXX_unrecognized []byte                                                `json:"-"`
+}
+
+func (m *CPublishedFile_GetChangeHistory_Response) Reset() {
+	*m = CPublishedFile_GetChangeHistory_Response{}
+}
+func (m *CPublishedFile_GetChangeHistory_Response) String() string { return proto.CompactTextString(m) }
+func (*CPublishedFile_GetChangeHistory_Response) ProtoMessage()    {}
+
+func (m *CPublishedFile_GetChangeHistory_Response) GetChanges() []*CPublishedFile_GetChangeHistory_Response_ChangeLog {
+	if m != nil {
+		return m.Changes
+	}
+	return nil
+}
+
+func (m *CPublishedFile_GetChangeHistory_Response) GetTotal() uint32 {
+	if m != nil && m.Total != nil {
+		return *m.Total
+	}
+	return 0
+}
+
+type CPublishedFile_GetChangeHistory_Response_ChangeLog struct {
+	Timestamp         *uint32 `protobuf:"varint,1,opt,name=timestamp" json:"timestamp,omitempty"`
+	ChangeDescription *string `protobuf:"bytes,2,opt,name=change_description" json:"change_description,omitempty"`
+	XXX_unrecognized  []byte  `json:"-"`
+}
+
+func (m *CPublishedFile_GetChangeHistory_Response_ChangeLog) Reset() {
+	*m = CPublishedFile_GetChangeHistory_Response_ChangeLog{}
+}
+func (m *CPublishedFile_GetChangeHistory_Response_ChangeLog) String() string {
+	return proto.CompactTextString(m)
+}
+func (*CPublishedFile_GetChangeHistory_Response_ChangeLog) ProtoMessage() {}
+
+func (m *CPublishedFile_GetChangeHistory_Response_ChangeLog) GetTimestamp() uint32 {
+	if m != nil && m.Timestamp != nil {
+		return *m.Timestamp
+	}
+	return 0
+}
+
+func (m *CPublishedFile_GetChangeHistory_Response_ChangeLog) GetChangeDescription() string {
+	if m != nil && m.ChangeDescription != nil {
+		return *m.ChangeDescription
+	}
+	return ""
+}
+
 type CPublishedFile_RefreshVotingQueue_Request struct {
 	Appid            *uint32  `protobuf:"varint,1,opt,name=appid" json:"appid,omitempty"`
 	MatchingFileType *uint32  `protobuf:"varint,2,opt,name=matching_file_type" json:"matching_file_type,omitempty"`
@@ -1414,6 +1764,7 @@ type CPublishedFile_QueryFiles_Request struct {
 	ChildPublishedfileid   *uint64  `protobuf:"fixed64,13,opt,name=child_publishedfileid" json:"child_publishedfileid,omitempty"`
 	Days                   *uint32  `protobuf:"varint,14,opt,name=days" json:"days,omitempty"`
 	IncludeRecentVotesOnly *bool    `protobuf:"varint,15,opt,name=include_recent_votes_only" json:"include_recent_votes_only,omitempty"`
+	CacheMaxAgeSeconds     *uint32  `protobuf:"varint,31,opt,name=cache_max_age_seconds,def=0" json:"cache_max_age_seconds,omitempty"`
 	Totalonly              *bool    `protobuf:"varint,16,opt,name=totalonly" json:"totalonly,omitempty"`
 	ReturnVoteData         *bool    `protobuf:"varint,17,opt,name=return_vote_data" json:"return_vote_data,omitempty"`
 	ReturnTags             *bool    `protobuf:"varint,18,opt,name=return_tags" json:"return_tags,omitempty"`
@@ -1421,6 +1772,8 @@ type CPublishedFile_QueryFiles_Request struct {
 	ReturnPreviews         *bool    `protobuf:"varint,20,opt,name=return_previews" json:"return_previews,omitempty"`
 	ReturnChildren         *bool    `protobuf:"varint,21,opt,name=return_children" json:"return_children,omitempty"`
 	ReturnShortDescription *bool    `protobuf:"varint,22,opt,name=return_short_description" json:"return_short_description,omitempty"`
+	ReturnForSaleData      *bool    `protobuf:"varint,30,opt,name=return_for_sale_data" json:"return_for_sale_data,omitempty"`
+	ReturnMetadata         *bool    `protobuf:"varint,32,opt,name=return_metadata,def=0" json:"return_metadata,omitempty"`
 	XXX_unrecognized       []byte   `json:"-"`
 }
 
@@ -1430,6 +1783,8 @@ func (*CPublishedFile_QueryFiles_Request) ProtoMessage()    {}
 
 const Default_CPublishedFile_QueryFiles_Request_Numperpage uint32 = 1
 const Default_CPublishedFile_QueryFiles_Request_MatchAllTags bool = true
+const Default_CPublishedFile_QueryFiles_Request_CacheMaxAgeSeconds uint32 = 0
+const Default_CPublishedFile_QueryFiles_Request_ReturnMetadata bool = false
 
 func (m *CPublishedFile_QueryFiles_Request) GetQueryType() uint32 {
 	if m != nil && m.QueryType != nil {
@@ -1536,6 +1891,13 @@ func (m *CPublishedFile_QueryFiles_Request) GetIncludeRecentVotesOnly() bool {
 	return false
 }
 
+func (m *CPublishedFile_QueryFiles_Request) GetCacheMaxAgeSeconds() uint32 {
+	if m != nil && m.CacheMaxAgeSeconds != nil {
+		return *m.CacheMaxAgeSeconds
+	}
+	return Default_CPublishedFile_QueryFiles_Request_CacheMaxAgeSeconds
+}
+
 func (m *CPublishedFile_QueryFiles_Request) GetTotalonly() bool {
 	if m != nil && m.Totalonly != nil {
 		return *m.Totalonly
@@ -1585,6 +1947,20 @@ func (m *CPublishedFile_QueryFiles_Request) GetReturnShortDescription() bool {
 	return false
 }
 
+func (m *CPublishedFile_QueryFiles_Request) GetReturnForSaleData() bool {
+	if m != nil && m.ReturnForSaleData != nil {
+		return *m.ReturnForSaleData
+	}
+	return false
+}
+
+func (m *CPublishedFile_QueryFiles_Request) GetReturnMetadata() bool {
+	if m != nil && m.ReturnMetadata != nil {
+		return *m.ReturnMetadata
+	}
+	return Default_CPublishedFile_QueryFiles_Request_ReturnMetadata
+}
+
 type CPublishedFile_QueryFiles_Response struct {
 	Total                *uint32                 `protobuf:"varint,1,opt,name=total" json:"total,omitempty"`
 	Publishedfiledetails []*PublishedFileDetails `protobuf:"bytes,2,rep,name=publishedfiledetails" json:"publishedfiledetails,omitempty"`
@@ -1610,4 +1986,5 @@ func (m *CPublishedFile_QueryFiles_Response) GetPublishedfiledetails() []*Publis
 }
 
 func init() {
+	proto.RegisterEnum("PublishedFileDetails_EPublishedFileForSaleStatus", PublishedFileDetails_EPublishedFileForSaleStatus_name, PublishedFileDetails_EPublishedFileForSaleStatus_value)
 }

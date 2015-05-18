@@ -648,6 +648,7 @@ type CCloud_ClientBeginFileUpload_Request struct {
 	PlatformsToSync  *uint32 `protobuf:"varint,7,opt,name=platforms_to_sync,def=4294967295" json:"platforms_to_sync,omitempty"`
 	CellId           *uint32 `protobuf:"varint,9,opt,name=cell_id" json:"cell_id,omitempty"`
 	CanEncrypt       *bool   `protobuf:"varint,10,opt,name=can_encrypt" json:"can_encrypt,omitempty"`
+	IsSharedFile     *bool   `protobuf:"varint,11,opt,name=is_shared_file" json:"is_shared_file,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
@@ -716,6 +717,13 @@ func (m *CCloud_ClientBeginFileUpload_Request) GetCellId() uint32 {
 func (m *CCloud_ClientBeginFileUpload_Request) GetCanEncrypt() bool {
 	if m != nil && m.CanEncrypt != nil {
 		return *m.CanEncrypt
+	}
+	return false
+}
+
+func (m *CCloud_ClientBeginFileUpload_Request) GetIsSharedFile() bool {
+	if m != nil && m.IsSharedFile != nil {
+		return *m.IsSharedFile
 	}
 	return false
 }

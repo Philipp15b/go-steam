@@ -19,50 +19,6 @@ func (m *CMsgClientHeartBeat) Reset()         { *m = CMsgClientHeartBeat{} }
 func (m *CMsgClientHeartBeat) String() string { return proto.CompactTextString(m) }
 func (*CMsgClientHeartBeat) ProtoMessage()    {}
 
-type CMsgClientSubscribeToPersonaFeed struct {
-	PersonaFeeds     []*CMsgClientSubscribeToPersonaFeed_PersonaFeed `protobuf:"bytes,1,rep,name=persona_feeds" json:"persona_feeds,omitempty"`
-	XXX_unrecognized []byte                                          `json:"-"`
-}
-
-func (m *CMsgClientSubscribeToPersonaFeed) Reset()         { *m = CMsgClientSubscribeToPersonaFeed{} }
-func (m *CMsgClientSubscribeToPersonaFeed) String() string { return proto.CompactTextString(m) }
-func (*CMsgClientSubscribeToPersonaFeed) ProtoMessage()    {}
-
-func (m *CMsgClientSubscribeToPersonaFeed) GetPersonaFeeds() []*CMsgClientSubscribeToPersonaFeed_PersonaFeed {
-	if m != nil {
-		return m.PersonaFeeds
-	}
-	return nil
-}
-
-type CMsgClientSubscribeToPersonaFeed_PersonaFeed struct {
-	SteamID          *uint64 `protobuf:"fixed64,1,opt,name=steamID" json:"steamID,omitempty"`
-	Subscribe        *bool   `protobuf:"varint,2,opt,name=subscribe" json:"subscribe,omitempty"`
-	XXX_unrecognized []byte  `json:"-"`
-}
-
-func (m *CMsgClientSubscribeToPersonaFeed_PersonaFeed) Reset() {
-	*m = CMsgClientSubscribeToPersonaFeed_PersonaFeed{}
-}
-func (m *CMsgClientSubscribeToPersonaFeed_PersonaFeed) String() string {
-	return proto.CompactTextString(m)
-}
-func (*CMsgClientSubscribeToPersonaFeed_PersonaFeed) ProtoMessage() {}
-
-func (m *CMsgClientSubscribeToPersonaFeed_PersonaFeed) GetSteamID() uint64 {
-	if m != nil && m.SteamID != nil {
-		return *m.SteamID
-	}
-	return 0
-}
-
-func (m *CMsgClientSubscribeToPersonaFeed_PersonaFeed) GetSubscribe() bool {
-	if m != nil && m.Subscribe != nil {
-		return *m.Subscribe
-	}
-	return false
-}
-
 type CMsgClientUDSP2PSessionStarted struct {
 	SteamidRemote    *uint64 `protobuf:"fixed64,1,opt,name=steamid_remote" json:"steamid_remote,omitempty"`
 	Appid            *int32  `protobuf:"varint,2,opt,name=appid" json:"appid,omitempty"`
@@ -6759,6 +6715,8 @@ type CMsgClientPICSChangesSinceRequest struct {
 	SinceChangeNumber      *uint32 `protobuf:"varint,1,opt,name=since_change_number" json:"since_change_number,omitempty"`
 	SendAppInfoChanges     *bool   `protobuf:"varint,2,opt,name=send_app_info_changes" json:"send_app_info_changes,omitempty"`
 	SendPackageInfoChanges *bool   `protobuf:"varint,3,opt,name=send_package_info_changes" json:"send_package_info_changes,omitempty"`
+	NumAppInfoCached       *uint32 `protobuf:"varint,4,opt,name=num_app_info_cached" json:"num_app_info_cached,omitempty"`
+	NumPackageInfoCached   *uint32 `protobuf:"varint,5,opt,name=num_package_info_cached" json:"num_package_info_cached,omitempty"`
 	XXX_unrecognized       []byte  `json:"-"`
 }
 
@@ -6787,13 +6745,29 @@ func (m *CMsgClientPICSChangesSinceRequest) GetSendPackageInfoChanges() bool {
 	return false
 }
 
+func (m *CMsgClientPICSChangesSinceRequest) GetNumAppInfoCached() uint32 {
+	if m != nil && m.NumAppInfoCached != nil {
+		return *m.NumAppInfoCached
+	}
+	return 0
+}
+
+func (m *CMsgClientPICSChangesSinceRequest) GetNumPackageInfoCached() uint32 {
+	if m != nil && m.NumPackageInfoCached != nil {
+		return *m.NumPackageInfoCached
+	}
+	return 0
+}
+
 type CMsgClientPICSChangesSinceResponse struct {
-	CurrentChangeNumber *uint32                                             `protobuf:"varint,1,opt,name=current_change_number" json:"current_change_number,omitempty"`
-	SinceChangeNumber   *uint32                                             `protobuf:"varint,2,opt,name=since_change_number" json:"since_change_number,omitempty"`
-	ForceFullUpdate     *bool                                               `protobuf:"varint,3,opt,name=force_full_update" json:"force_full_update,omitempty"`
-	PackageChanges      []*CMsgClientPICSChangesSinceResponse_PackageChange `protobuf:"bytes,4,rep,name=package_changes" json:"package_changes,omitempty"`
-	AppChanges          []*CMsgClientPICSChangesSinceResponse_AppChange     `protobuf:"bytes,5,rep,name=app_changes" json:"app_changes,omitempty"`
-	XXX_unrecognized    []byte                                              `json:"-"`
+	CurrentChangeNumber    *uint32                                             `protobuf:"varint,1,opt,name=current_change_number" json:"current_change_number,omitempty"`
+	SinceChangeNumber      *uint32                                             `protobuf:"varint,2,opt,name=since_change_number" json:"since_change_number,omitempty"`
+	ForceFullUpdate        *bool                                               `protobuf:"varint,3,opt,name=force_full_update" json:"force_full_update,omitempty"`
+	PackageChanges         []*CMsgClientPICSChangesSinceResponse_PackageChange `protobuf:"bytes,4,rep,name=package_changes" json:"package_changes,omitempty"`
+	AppChanges             []*CMsgClientPICSChangesSinceResponse_AppChange     `protobuf:"bytes,5,rep,name=app_changes" json:"app_changes,omitempty"`
+	ForceFullAppUpdate     *bool                                               `protobuf:"varint,6,opt,name=force_full_app_update" json:"force_full_app_update,omitempty"`
+	ForceFullPackageUpdate *bool                                               `protobuf:"varint,7,opt,name=force_full_package_update" json:"force_full_package_update,omitempty"`
+	XXX_unrecognized       []byte                                              `json:"-"`
 }
 
 func (m *CMsgClientPICSChangesSinceResponse) Reset()         { *m = CMsgClientPICSChangesSinceResponse{} }
@@ -6833,6 +6807,20 @@ func (m *CMsgClientPICSChangesSinceResponse) GetAppChanges() []*CMsgClientPICSCh
 		return m.AppChanges
 	}
 	return nil
+}
+
+func (m *CMsgClientPICSChangesSinceResponse) GetForceFullAppUpdate() bool {
+	if m != nil && m.ForceFullAppUpdate != nil {
+		return *m.ForceFullAppUpdate
+	}
+	return false
+}
+
+func (m *CMsgClientPICSChangesSinceResponse) GetForceFullPackageUpdate() bool {
+	if m != nil && m.ForceFullPackageUpdate != nil {
+		return *m.ForceFullPackageUpdate
+	}
+	return false
 }
 
 type CMsgClientPICSChangesSinceResponse_PackageChange struct {
@@ -7354,6 +7342,7 @@ type CMsgClientUFSGetUGCDetailsResponse struct {
 	FileSize           *uint32 `protobuf:"varint,6,opt,name=file_size" json:"file_size,omitempty"`
 	CompressedFileSize *uint32 `protobuf:"varint,7,opt,name=compressed_file_size" json:"compressed_file_size,omitempty"`
 	RangecheckHost     *string `protobuf:"bytes,8,opt,name=rangecheck_host" json:"rangecheck_host,omitempty"`
+	FileEncodedSha1    *string `protobuf:"bytes,9,opt,name=file_encoded_sha1" json:"file_encoded_sha1,omitempty"`
 	XXX_unrecognized   []byte  `json:"-"`
 }
 
@@ -7415,6 +7404,13 @@ func (m *CMsgClientUFSGetUGCDetailsResponse) GetCompressedFileSize() uint32 {
 func (m *CMsgClientUFSGetUGCDetailsResponse) GetRangecheckHost() string {
 	if m != nil && m.RangecheckHost != nil {
 		return *m.RangecheckHost
+	}
+	return ""
+}
+
+func (m *CMsgClientUFSGetUGCDetailsResponse) GetFileEncodedSha1() string {
+	if m != nil && m.FileEncodedSha1 != nil {
+		return *m.FileEncodedSha1
 	}
 	return ""
 }

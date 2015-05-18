@@ -263,6 +263,7 @@ type CCredentials_GetSteamGuardDetails_Response_SessionData struct {
 	AuthenticationExistsFromGeolocBeforeMintime *bool                                                           `protobuf:"varint,4,opt,name=authentication_exists_from_geoloc_before_mintime" json:"authentication_exists_from_geoloc_before_mintime,omitempty"`
 	Newauthentication                           []*CCredentials_GetSteamGuardDetails_Response_NewAuthentication `protobuf:"bytes,5,rep,name=newauthentication" json:"newauthentication,omitempty"`
 	AuthenticationExistsFromSameIpBeforeMintime *bool                                                           `protobuf:"varint,6,opt,name=authentication_exists_from_same_ip_before_mintime" json:"authentication_exists_from_same_ip_before_mintime,omitempty"`
+	PublicIpv4                                  *uint32                                                         `protobuf:"varint,7,opt,name=public_ipv4" json:"public_ipv4,omitempty"`
 	XXX_unrecognized                            []byte                                                          `json:"-"`
 }
 
@@ -314,6 +315,13 @@ func (m *CCredentials_GetSteamGuardDetails_Response_SessionData) GetAuthenticati
 		return *m.AuthenticationExistsFromSameIpBeforeMintime
 	}
 	return false
+}
+
+func (m *CCredentials_GetSteamGuardDetails_Response_SessionData) GetPublicIpv4() uint32 {
+	if m != nil && m.PublicIpv4 != nil {
+		return *m.PublicIpv4
+	}
+	return 0
 }
 
 type CCredentials_NewMachineNotificationDialog_Request struct {

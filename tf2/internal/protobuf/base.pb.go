@@ -1634,6 +1634,7 @@ type CMsgUpdateItemSchema struct {
 	ItemsGame         []byte  `protobuf:"bytes,1,opt,name=items_game" json:"items_game,omitempty"`
 	ItemSchemaVersion *uint32 `protobuf:"fixed32,2,opt,name=item_schema_version" json:"item_schema_version,omitempty"`
 	ItemsGameUrl      *string `protobuf:"bytes,3,opt,name=items_game_url" json:"items_game_url,omitempty"`
+	Signature         []byte  `protobuf:"bytes,4,opt,name=signature" json:"signature,omitempty"`
 	XXX_unrecognized  []byte  `json:"-"`
 }
 
@@ -1660,6 +1661,13 @@ func (m *CMsgUpdateItemSchema) GetItemsGameUrl() string {
 		return *m.ItemsGameUrl
 	}
 	return ""
+}
+
+func (m *CMsgUpdateItemSchema) GetSignature() []byte {
+	if m != nil {
+		return m.Signature
+	}
+	return nil
 }
 
 type CMsgGCError struct {
@@ -2809,6 +2817,276 @@ func (m *CMsgDeliverGiftResponseGiver) GetReceiverAccountName() string {
 	}
 	return ""
 }
+
+type CSOEconGameAccountForGameServers struct {
+	SkillRating      *uint32 `protobuf:"varint,3,opt,name=skill_rating" json:"skill_rating,omitempty"`
+	SkillRatingBeta  *uint32 `protobuf:"varint,2,opt,name=skill_rating_beta" json:"skill_rating_beta,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CSOEconGameAccountForGameServers) Reset()         { *m = CSOEconGameAccountForGameServers{} }
+func (m *CSOEconGameAccountForGameServers) String() string { return proto.CompactTextString(m) }
+func (*CSOEconGameAccountForGameServers) ProtoMessage()    {}
+
+func (m *CSOEconGameAccountForGameServers) GetSkillRating() uint32 {
+	if m != nil && m.SkillRating != nil {
+		return *m.SkillRating
+	}
+	return 0
+}
+
+func (m *CSOEconGameAccountForGameServers) GetSkillRatingBeta() uint32 {
+	if m != nil && m.SkillRatingBeta != nil {
+		return *m.SkillRatingBeta
+	}
+	return 0
+}
+
+type CWorkshop_PopulateItemDescriptions_Request struct {
+	Appid            *uint32                                                                     `protobuf:"varint,1,opt,name=appid" json:"appid,omitempty"`
+	Languages        []*CWorkshop_PopulateItemDescriptions_Request_ItemDescriptionsLanguageBlock `protobuf:"bytes,2,rep,name=languages" json:"languages,omitempty"`
+	XXX_unrecognized []byte                                                                      `json:"-"`
+}
+
+func (m *CWorkshop_PopulateItemDescriptions_Request) Reset() {
+	*m = CWorkshop_PopulateItemDescriptions_Request{}
+}
+func (m *CWorkshop_PopulateItemDescriptions_Request) String() string {
+	return proto.CompactTextString(m)
+}
+func (*CWorkshop_PopulateItemDescriptions_Request) ProtoMessage() {}
+
+func (m *CWorkshop_PopulateItemDescriptions_Request) GetAppid() uint32 {
+	if m != nil && m.Appid != nil {
+		return *m.Appid
+	}
+	return 0
+}
+
+func (m *CWorkshop_PopulateItemDescriptions_Request) GetLanguages() []*CWorkshop_PopulateItemDescriptions_Request_ItemDescriptionsLanguageBlock {
+	if m != nil {
+		return m.Languages
+	}
+	return nil
+}
+
+type CWorkshop_PopulateItemDescriptions_Request_SingleItemDescription struct {
+	Gameitemid       *uint32 `protobuf:"varint,1,opt,name=gameitemid" json:"gameitemid,omitempty"`
+	ItemDescription  *string `protobuf:"bytes,2,opt,name=item_description" json:"item_description,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CWorkshop_PopulateItemDescriptions_Request_SingleItemDescription) Reset() {
+	*m = CWorkshop_PopulateItemDescriptions_Request_SingleItemDescription{}
+}
+func (m *CWorkshop_PopulateItemDescriptions_Request_SingleItemDescription) String() string {
+	return proto.CompactTextString(m)
+}
+func (*CWorkshop_PopulateItemDescriptions_Request_SingleItemDescription) ProtoMessage() {}
+
+func (m *CWorkshop_PopulateItemDescriptions_Request_SingleItemDescription) GetGameitemid() uint32 {
+	if m != nil && m.Gameitemid != nil {
+		return *m.Gameitemid
+	}
+	return 0
+}
+
+func (m *CWorkshop_PopulateItemDescriptions_Request_SingleItemDescription) GetItemDescription() string {
+	if m != nil && m.ItemDescription != nil {
+		return *m.ItemDescription
+	}
+	return ""
+}
+
+type CWorkshop_PopulateItemDescriptions_Request_ItemDescriptionsLanguageBlock struct {
+	Language         *string                                                             `protobuf:"bytes,1,opt,name=language" json:"language,omitempty"`
+	Descriptions     []*CWorkshop_PopulateItemDescriptions_Request_SingleItemDescription `protobuf:"bytes,2,rep,name=descriptions" json:"descriptions,omitempty"`
+	XXX_unrecognized []byte                                                              `json:"-"`
+}
+
+func (m *CWorkshop_PopulateItemDescriptions_Request_ItemDescriptionsLanguageBlock) Reset() {
+	*m = CWorkshop_PopulateItemDescriptions_Request_ItemDescriptionsLanguageBlock{}
+}
+func (m *CWorkshop_PopulateItemDescriptions_Request_ItemDescriptionsLanguageBlock) String() string {
+	return proto.CompactTextString(m)
+}
+func (*CWorkshop_PopulateItemDescriptions_Request_ItemDescriptionsLanguageBlock) ProtoMessage() {}
+
+func (m *CWorkshop_PopulateItemDescriptions_Request_ItemDescriptionsLanguageBlock) GetLanguage() string {
+	if m != nil && m.Language != nil {
+		return *m.Language
+	}
+	return ""
+}
+
+func (m *CWorkshop_PopulateItemDescriptions_Request_ItemDescriptionsLanguageBlock) GetDescriptions() []*CWorkshop_PopulateItemDescriptions_Request_SingleItemDescription {
+	if m != nil {
+		return m.Descriptions
+	}
+	return nil
+}
+
+type CWorkshop_GetContributors_Request struct {
+	Appid            *uint32 `protobuf:"varint,1,opt,name=appid" json:"appid,omitempty"`
+	Gameitemid       *uint32 `protobuf:"varint,2,opt,name=gameitemid" json:"gameitemid,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CWorkshop_GetContributors_Request) Reset()         { *m = CWorkshop_GetContributors_Request{} }
+func (m *CWorkshop_GetContributors_Request) String() string { return proto.CompactTextString(m) }
+func (*CWorkshop_GetContributors_Request) ProtoMessage()    {}
+
+func (m *CWorkshop_GetContributors_Request) GetAppid() uint32 {
+	if m != nil && m.Appid != nil {
+		return *m.Appid
+	}
+	return 0
+}
+
+func (m *CWorkshop_GetContributors_Request) GetGameitemid() uint32 {
+	if m != nil && m.Gameitemid != nil {
+		return *m.Gameitemid
+	}
+	return 0
+}
+
+type CWorkshop_GetContributors_Response struct {
+	Contributors     []uint64 `protobuf:"fixed64,1,rep,name=contributors" json:"contributors,omitempty"`
+	XXX_unrecognized []byte   `json:"-"`
+}
+
+func (m *CWorkshop_GetContributors_Response) Reset()         { *m = CWorkshop_GetContributors_Response{} }
+func (m *CWorkshop_GetContributors_Response) String() string { return proto.CompactTextString(m) }
+func (*CWorkshop_GetContributors_Response) ProtoMessage()    {}
+
+func (m *CWorkshop_GetContributors_Response) GetContributors() []uint64 {
+	if m != nil {
+		return m.Contributors
+	}
+	return nil
+}
+
+type CWorkshop_SetItemPaymentRules_Request struct {
+	Appid                   *uint32                                                          `protobuf:"varint,1,opt,name=appid" json:"appid,omitempty"`
+	Gameitemid              *uint32                                                          `protobuf:"varint,2,opt,name=gameitemid" json:"gameitemid,omitempty"`
+	AssociatedWorkshopFiles []*CWorkshop_SetItemPaymentRules_Request_WorkshopItemPaymentRule `protobuf:"bytes,3,rep,name=associated_workshop_files" json:"associated_workshop_files,omitempty"`
+	PartnerAccounts         []*CWorkshop_SetItemPaymentRules_Request_PartnerItemPaymentRule  `protobuf:"bytes,4,rep,name=partner_accounts" json:"partner_accounts,omitempty"`
+	XXX_unrecognized        []byte                                                           `json:"-"`
+}
+
+func (m *CWorkshop_SetItemPaymentRules_Request) Reset()         { *m = CWorkshop_SetItemPaymentRules_Request{} }
+func (m *CWorkshop_SetItemPaymentRules_Request) String() string { return proto.CompactTextString(m) }
+func (*CWorkshop_SetItemPaymentRules_Request) ProtoMessage()    {}
+
+func (m *CWorkshop_SetItemPaymentRules_Request) GetAppid() uint32 {
+	if m != nil && m.Appid != nil {
+		return *m.Appid
+	}
+	return 0
+}
+
+func (m *CWorkshop_SetItemPaymentRules_Request) GetGameitemid() uint32 {
+	if m != nil && m.Gameitemid != nil {
+		return *m.Gameitemid
+	}
+	return 0
+}
+
+func (m *CWorkshop_SetItemPaymentRules_Request) GetAssociatedWorkshopFiles() []*CWorkshop_SetItemPaymentRules_Request_WorkshopItemPaymentRule {
+	if m != nil {
+		return m.AssociatedWorkshopFiles
+	}
+	return nil
+}
+
+func (m *CWorkshop_SetItemPaymentRules_Request) GetPartnerAccounts() []*CWorkshop_SetItemPaymentRules_Request_PartnerItemPaymentRule {
+	if m != nil {
+		return m.PartnerAccounts
+	}
+	return nil
+}
+
+type CWorkshop_SetItemPaymentRules_Request_WorkshopItemPaymentRule struct {
+	WorkshopFileId    *uint64  `protobuf:"varint,1,opt,name=workshop_file_id" json:"workshop_file_id,omitempty"`
+	RevenuePercentage *float32 `protobuf:"fixed32,2,opt,name=revenue_percentage" json:"revenue_percentage,omitempty"`
+	RuleDescription   *string  `protobuf:"bytes,3,opt,name=rule_description" json:"rule_description,omitempty"`
+	XXX_unrecognized  []byte   `json:"-"`
+}
+
+func (m *CWorkshop_SetItemPaymentRules_Request_WorkshopItemPaymentRule) Reset() {
+	*m = CWorkshop_SetItemPaymentRules_Request_WorkshopItemPaymentRule{}
+}
+func (m *CWorkshop_SetItemPaymentRules_Request_WorkshopItemPaymentRule) String() string {
+	return proto.CompactTextString(m)
+}
+func (*CWorkshop_SetItemPaymentRules_Request_WorkshopItemPaymentRule) ProtoMessage() {}
+
+func (m *CWorkshop_SetItemPaymentRules_Request_WorkshopItemPaymentRule) GetWorkshopFileId() uint64 {
+	if m != nil && m.WorkshopFileId != nil {
+		return *m.WorkshopFileId
+	}
+	return 0
+}
+
+func (m *CWorkshop_SetItemPaymentRules_Request_WorkshopItemPaymentRule) GetRevenuePercentage() float32 {
+	if m != nil && m.RevenuePercentage != nil {
+		return *m.RevenuePercentage
+	}
+	return 0
+}
+
+func (m *CWorkshop_SetItemPaymentRules_Request_WorkshopItemPaymentRule) GetRuleDescription() string {
+	if m != nil && m.RuleDescription != nil {
+		return *m.RuleDescription
+	}
+	return ""
+}
+
+type CWorkshop_SetItemPaymentRules_Request_PartnerItemPaymentRule struct {
+	AccountId         *uint32  `protobuf:"varint,1,opt,name=account_id" json:"account_id,omitempty"`
+	RevenuePercentage *float32 `protobuf:"fixed32,2,opt,name=revenue_percentage" json:"revenue_percentage,omitempty"`
+	RuleDescription   *string  `protobuf:"bytes,3,opt,name=rule_description" json:"rule_description,omitempty"`
+	XXX_unrecognized  []byte   `json:"-"`
+}
+
+func (m *CWorkshop_SetItemPaymentRules_Request_PartnerItemPaymentRule) Reset() {
+	*m = CWorkshop_SetItemPaymentRules_Request_PartnerItemPaymentRule{}
+}
+func (m *CWorkshop_SetItemPaymentRules_Request_PartnerItemPaymentRule) String() string {
+	return proto.CompactTextString(m)
+}
+func (*CWorkshop_SetItemPaymentRules_Request_PartnerItemPaymentRule) ProtoMessage() {}
+
+func (m *CWorkshop_SetItemPaymentRules_Request_PartnerItemPaymentRule) GetAccountId() uint32 {
+	if m != nil && m.AccountId != nil {
+		return *m.AccountId
+	}
+	return 0
+}
+
+func (m *CWorkshop_SetItemPaymentRules_Request_PartnerItemPaymentRule) GetRevenuePercentage() float32 {
+	if m != nil && m.RevenuePercentage != nil {
+		return *m.RevenuePercentage
+	}
+	return 0
+}
+
+func (m *CWorkshop_SetItemPaymentRules_Request_PartnerItemPaymentRule) GetRuleDescription() string {
+	if m != nil && m.RuleDescription != nil {
+		return *m.RuleDescription
+	}
+	return ""
+}
+
+type CWorkshop_SetItemPaymentRules_Response struct {
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *CWorkshop_SetItemPaymentRules_Response) Reset() {
+	*m = CWorkshop_SetItemPaymentRules_Response{}
+}
+func (m *CWorkshop_SetItemPaymentRules_Response) String() string { return proto.CompactTextString(m) }
+func (*CWorkshop_SetItemPaymentRules_Response) ProtoMessage()    {}
 
 func init() {
 	proto.RegisterEnum("EGCBaseMsg", EGCBaseMsg_name, EGCBaseMsg_value)

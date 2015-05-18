@@ -395,6 +395,8 @@ type CMsgClientUCMUpdatePublishedFile struct {
 	Url                   *string  `protobuf:"bytes,17,opt,name=url" json:"url,omitempty"`
 	UpdateContentManifest *bool    `protobuf:"varint,18,opt,name=update_content_manifest" json:"update_content_manifest,omitempty"`
 	ContentManifest       *uint64  `protobuf:"fixed64,19,opt,name=content_manifest" json:"content_manifest,omitempty"`
+	Metadata              *string  `protobuf:"bytes,20,opt,name=metadata" json:"metadata,omitempty"`
+	UpdateMetadata        *bool    `protobuf:"varint,21,opt,name=update_metadata" json:"update_metadata,omitempty"`
 	XXX_unrecognized      []byte   `json:"-"`
 }
 
@@ -533,6 +535,20 @@ func (m *CMsgClientUCMUpdatePublishedFile) GetContentManifest() uint64 {
 		return *m.ContentManifest
 	}
 	return 0
+}
+
+func (m *CMsgClientUCMUpdatePublishedFile) GetMetadata() string {
+	if m != nil && m.Metadata != nil {
+		return *m.Metadata
+	}
+	return ""
+}
+
+func (m *CMsgClientUCMUpdatePublishedFile) GetUpdateMetadata() bool {
+	if m != nil && m.UpdateMetadata != nil {
+		return *m.UpdateMetadata
+	}
+	return false
 }
 
 type CMsgClientUCMUpdatePublishedFileResponse struct {
@@ -1057,6 +1073,7 @@ type CMsgClientUCMPublishedFileSubscribed struct {
 	FileSize         *uint32 `protobuf:"varint,4,opt,name=file_size" json:"file_size,omitempty"`
 	RtimeSubscribed  *uint32 `protobuf:"varint,5,opt,name=rtime_subscribed" json:"rtime_subscribed,omitempty"`
 	IsDepotContent   *bool   `protobuf:"varint,6,opt,name=is_depot_content" json:"is_depot_content,omitempty"`
+	RtimeUpdated     *uint32 `protobuf:"varint,7,opt,name=rtime_updated" json:"rtime_updated,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
@@ -1104,6 +1121,13 @@ func (m *CMsgClientUCMPublishedFileSubscribed) GetIsDepotContent() bool {
 		return *m.IsDepotContent
 	}
 	return false
+}
+
+func (m *CMsgClientUCMPublishedFileSubscribed) GetRtimeUpdated() uint32 {
+	if m != nil && m.RtimeUpdated != nil {
+		return *m.RtimeUpdated
+	}
+	return 0
 }
 
 type CMsgClientUCMPublishedFileUnsubscribed struct {
@@ -1210,6 +1234,238 @@ func (m *CMsgClientUCMPublishedFileUpdated) GetIsDepotContent() bool {
 		return *m.IsDepotContent
 	}
 	return false
+}
+
+type CMsgClientWorkshopItemChangesRequest struct {
+	AppId            *uint32 `protobuf:"varint,1,opt,name=app_id" json:"app_id,omitempty"`
+	LastTimeUpdated  *uint32 `protobuf:"varint,2,opt,name=last_time_updated" json:"last_time_updated,omitempty"`
+	NumItemsNeeded   *uint32 `protobuf:"varint,3,opt,name=num_items_needed" json:"num_items_needed,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CMsgClientWorkshopItemChangesRequest) Reset()         { *m = CMsgClientWorkshopItemChangesRequest{} }
+func (m *CMsgClientWorkshopItemChangesRequest) String() string { return proto.CompactTextString(m) }
+func (*CMsgClientWorkshopItemChangesRequest) ProtoMessage()    {}
+
+func (m *CMsgClientWorkshopItemChangesRequest) GetAppId() uint32 {
+	if m != nil && m.AppId != nil {
+		return *m.AppId
+	}
+	return 0
+}
+
+func (m *CMsgClientWorkshopItemChangesRequest) GetLastTimeUpdated() uint32 {
+	if m != nil && m.LastTimeUpdated != nil {
+		return *m.LastTimeUpdated
+	}
+	return 0
+}
+
+func (m *CMsgClientWorkshopItemChangesRequest) GetNumItemsNeeded() uint32 {
+	if m != nil && m.NumItemsNeeded != nil {
+		return *m.NumItemsNeeded
+	}
+	return 0
+}
+
+type CMsgClientWorkshopItemChangesResponse struct {
+	Eresult          *int32                                                    `protobuf:"varint,1,opt,name=eresult,def=2" json:"eresult,omitempty"`
+	UpdateTime       *uint32                                                   `protobuf:"varint,2,opt,name=update_time" json:"update_time,omitempty"`
+	WorkshopItems    []*CMsgClientWorkshopItemChangesResponse_WorkshopItemInfo `protobuf:"bytes,5,rep,name=workshop_items" json:"workshop_items,omitempty"`
+	XXX_unrecognized []byte                                                    `json:"-"`
+}
+
+func (m *CMsgClientWorkshopItemChangesResponse) Reset()         { *m = CMsgClientWorkshopItemChangesResponse{} }
+func (m *CMsgClientWorkshopItemChangesResponse) String() string { return proto.CompactTextString(m) }
+func (*CMsgClientWorkshopItemChangesResponse) ProtoMessage()    {}
+
+const Default_CMsgClientWorkshopItemChangesResponse_Eresult int32 = 2
+
+func (m *CMsgClientWorkshopItemChangesResponse) GetEresult() int32 {
+	if m != nil && m.Eresult != nil {
+		return *m.Eresult
+	}
+	return Default_CMsgClientWorkshopItemChangesResponse_Eresult
+}
+
+func (m *CMsgClientWorkshopItemChangesResponse) GetUpdateTime() uint32 {
+	if m != nil && m.UpdateTime != nil {
+		return *m.UpdateTime
+	}
+	return 0
+}
+
+func (m *CMsgClientWorkshopItemChangesResponse) GetWorkshopItems() []*CMsgClientWorkshopItemChangesResponse_WorkshopItemInfo {
+	if m != nil {
+		return m.WorkshopItems
+	}
+	return nil
+}
+
+type CMsgClientWorkshopItemChangesResponse_WorkshopItemInfo struct {
+	PublishedFileId  *uint64 `protobuf:"fixed64,1,opt,name=published_file_id" json:"published_file_id,omitempty"`
+	TimeUpdated      *uint32 `protobuf:"varint,2,opt,name=time_updated" json:"time_updated,omitempty"`
+	ManifestId       *uint64 `protobuf:"fixed64,3,opt,name=manifest_id" json:"manifest_id,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CMsgClientWorkshopItemChangesResponse_WorkshopItemInfo) Reset() {
+	*m = CMsgClientWorkshopItemChangesResponse_WorkshopItemInfo{}
+}
+func (m *CMsgClientWorkshopItemChangesResponse_WorkshopItemInfo) String() string {
+	return proto.CompactTextString(m)
+}
+func (*CMsgClientWorkshopItemChangesResponse_WorkshopItemInfo) ProtoMessage() {}
+
+func (m *CMsgClientWorkshopItemChangesResponse_WorkshopItemInfo) GetPublishedFileId() uint64 {
+	if m != nil && m.PublishedFileId != nil {
+		return *m.PublishedFileId
+	}
+	return 0
+}
+
+func (m *CMsgClientWorkshopItemChangesResponse_WorkshopItemInfo) GetTimeUpdated() uint32 {
+	if m != nil && m.TimeUpdated != nil {
+		return *m.TimeUpdated
+	}
+	return 0
+}
+
+func (m *CMsgClientWorkshopItemChangesResponse_WorkshopItemInfo) GetManifestId() uint64 {
+	if m != nil && m.ManifestId != nil {
+		return *m.ManifestId
+	}
+	return 0
+}
+
+type CMsgClientWorkshopItemInfoRequest struct {
+	AppId            *uint32                                           `protobuf:"varint,1,opt,name=app_id" json:"app_id,omitempty"`
+	LastTimeUpdated  *uint32                                           `protobuf:"varint,2,opt,name=last_time_updated" json:"last_time_updated,omitempty"`
+	WorkshopItems    []*CMsgClientWorkshopItemInfoRequest_WorkshopItem `protobuf:"bytes,3,rep,name=workshop_items" json:"workshop_items,omitempty"`
+	XXX_unrecognized []byte                                            `json:"-"`
+}
+
+func (m *CMsgClientWorkshopItemInfoRequest) Reset()         { *m = CMsgClientWorkshopItemInfoRequest{} }
+func (m *CMsgClientWorkshopItemInfoRequest) String() string { return proto.CompactTextString(m) }
+func (*CMsgClientWorkshopItemInfoRequest) ProtoMessage()    {}
+
+func (m *CMsgClientWorkshopItemInfoRequest) GetAppId() uint32 {
+	if m != nil && m.AppId != nil {
+		return *m.AppId
+	}
+	return 0
+}
+
+func (m *CMsgClientWorkshopItemInfoRequest) GetLastTimeUpdated() uint32 {
+	if m != nil && m.LastTimeUpdated != nil {
+		return *m.LastTimeUpdated
+	}
+	return 0
+}
+
+func (m *CMsgClientWorkshopItemInfoRequest) GetWorkshopItems() []*CMsgClientWorkshopItemInfoRequest_WorkshopItem {
+	if m != nil {
+		return m.WorkshopItems
+	}
+	return nil
+}
+
+type CMsgClientWorkshopItemInfoRequest_WorkshopItem struct {
+	PublishedFileId  *uint64 `protobuf:"fixed64,1,opt,name=published_file_id" json:"published_file_id,omitempty"`
+	TimeUpdated      *uint32 `protobuf:"varint,2,opt,name=time_updated" json:"time_updated,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CMsgClientWorkshopItemInfoRequest_WorkshopItem) Reset() {
+	*m = CMsgClientWorkshopItemInfoRequest_WorkshopItem{}
+}
+func (m *CMsgClientWorkshopItemInfoRequest_WorkshopItem) String() string {
+	return proto.CompactTextString(m)
+}
+func (*CMsgClientWorkshopItemInfoRequest_WorkshopItem) ProtoMessage() {}
+
+func (m *CMsgClientWorkshopItemInfoRequest_WorkshopItem) GetPublishedFileId() uint64 {
+	if m != nil && m.PublishedFileId != nil {
+		return *m.PublishedFileId
+	}
+	return 0
+}
+
+func (m *CMsgClientWorkshopItemInfoRequest_WorkshopItem) GetTimeUpdated() uint32 {
+	if m != nil && m.TimeUpdated != nil {
+		return *m.TimeUpdated
+	}
+	return 0
+}
+
+type CMsgClientWorkshopItemInfoResponse struct {
+	Eresult          *int32                                                 `protobuf:"varint,1,opt,name=eresult,def=2" json:"eresult,omitempty"`
+	UpdateTime       *uint32                                                `protobuf:"varint,2,opt,name=update_time" json:"update_time,omitempty"`
+	WorkshopItems    []*CMsgClientWorkshopItemInfoResponse_WorkshopItemInfo `protobuf:"bytes,3,rep,name=workshop_items" json:"workshop_items,omitempty"`
+	XXX_unrecognized []byte                                                 `json:"-"`
+}
+
+func (m *CMsgClientWorkshopItemInfoResponse) Reset()         { *m = CMsgClientWorkshopItemInfoResponse{} }
+func (m *CMsgClientWorkshopItemInfoResponse) String() string { return proto.CompactTextString(m) }
+func (*CMsgClientWorkshopItemInfoResponse) ProtoMessage()    {}
+
+const Default_CMsgClientWorkshopItemInfoResponse_Eresult int32 = 2
+
+func (m *CMsgClientWorkshopItemInfoResponse) GetEresult() int32 {
+	if m != nil && m.Eresult != nil {
+		return *m.Eresult
+	}
+	return Default_CMsgClientWorkshopItemInfoResponse_Eresult
+}
+
+func (m *CMsgClientWorkshopItemInfoResponse) GetUpdateTime() uint32 {
+	if m != nil && m.UpdateTime != nil {
+		return *m.UpdateTime
+	}
+	return 0
+}
+
+func (m *CMsgClientWorkshopItemInfoResponse) GetWorkshopItems() []*CMsgClientWorkshopItemInfoResponse_WorkshopItemInfo {
+	if m != nil {
+		return m.WorkshopItems
+	}
+	return nil
+}
+
+type CMsgClientWorkshopItemInfoResponse_WorkshopItemInfo struct {
+	PublishedFileId  *uint64 `protobuf:"fixed64,1,opt,name=published_file_id" json:"published_file_id,omitempty"`
+	TimeUpdated      *uint32 `protobuf:"varint,2,opt,name=time_updated" json:"time_updated,omitempty"`
+	ManifestId       *uint64 `protobuf:"fixed64,3,opt,name=manifest_id" json:"manifest_id,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CMsgClientWorkshopItemInfoResponse_WorkshopItemInfo) Reset() {
+	*m = CMsgClientWorkshopItemInfoResponse_WorkshopItemInfo{}
+}
+func (m *CMsgClientWorkshopItemInfoResponse_WorkshopItemInfo) String() string {
+	return proto.CompactTextString(m)
+}
+func (*CMsgClientWorkshopItemInfoResponse_WorkshopItemInfo) ProtoMessage() {}
+
+func (m *CMsgClientWorkshopItemInfoResponse_WorkshopItemInfo) GetPublishedFileId() uint64 {
+	if m != nil && m.PublishedFileId != nil {
+		return *m.PublishedFileId
+	}
+	return 0
+}
+
+func (m *CMsgClientWorkshopItemInfoResponse_WorkshopItemInfo) GetTimeUpdated() uint32 {
+	if m != nil && m.TimeUpdated != nil {
+		return *m.TimeUpdated
+	}
+	return 0
+}
+
+func (m *CMsgClientWorkshopItemInfoResponse_WorkshopItemInfo) GetManifestId() uint64 {
+	if m != nil && m.ManifestId != nil {
+		return *m.ManifestId
+	}
+	return 0
 }
 
 type CMsgClientUCMGetPublishedFilesForUser struct {
@@ -2574,6 +2830,8 @@ type CMsgTrading_InitiateTradeResponse struct {
 	NewDeviceCooldownDays             *uint32 `protobuf:"varint,5,opt,name=new_device_cooldown_days" json:"new_device_cooldown_days,omitempty"`
 	DefaultPasswordResetProbationDays *uint32 `protobuf:"varint,6,opt,name=default_password_reset_probation_days" json:"default_password_reset_probation_days,omitempty"`
 	PasswordResetProbationDays        *uint32 `protobuf:"varint,7,opt,name=password_reset_probation_days" json:"password_reset_probation_days,omitempty"`
+	DefaultEmailChangeProbationDays   *uint32 `protobuf:"varint,8,opt,name=default_email_change_probation_days" json:"default_email_change_probation_days,omitempty"`
+	EmailChangeProbationDays          *uint32 `protobuf:"varint,9,opt,name=email_change_probation_days" json:"email_change_probation_days,omitempty"`
 	XXX_unrecognized                  []byte  `json:"-"`
 }
 
@@ -2626,6 +2884,20 @@ func (m *CMsgTrading_InitiateTradeResponse) GetDefaultPasswordResetProbationDays
 func (m *CMsgTrading_InitiateTradeResponse) GetPasswordResetProbationDays() uint32 {
 	if m != nil && m.PasswordResetProbationDays != nil {
 		return *m.PasswordResetProbationDays
+	}
+	return 0
+}
+
+func (m *CMsgTrading_InitiateTradeResponse) GetDefaultEmailChangeProbationDays() uint32 {
+	if m != nil && m.DefaultEmailChangeProbationDays != nil {
+		return *m.DefaultEmailChangeProbationDays
+	}
+	return 0
+}
+
+func (m *CMsgTrading_InitiateTradeResponse) GetEmailChangeProbationDays() uint32 {
+	if m != nil && m.EmailChangeProbationDays != nil {
+		return *m.EmailChangeProbationDays
 	}
 	return 0
 }
@@ -3468,6 +3740,7 @@ type CMsgClientEmailChange struct {
 	Code             *string `protobuf:"bytes,3,opt,name=code" json:"code,omitempty"`
 	Final            *bool   `protobuf:"varint,4,opt,name=final" json:"final,omitempty"`
 	Newmethod        *bool   `protobuf:"varint,5,opt,name=newmethod" json:"newmethod,omitempty"`
+	TwofactorCode    *string `protobuf:"bytes,6,opt,name=twofactor_code" json:"twofactor_code,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
@@ -3508,6 +3781,13 @@ func (m *CMsgClientEmailChange) GetNewmethod() bool {
 		return *m.Newmethod
 	}
 	return false
+}
+
+func (m *CMsgClientEmailChange) GetTwofactorCode() string {
+	if m != nil && m.TwofactorCode != nil {
+		return *m.TwofactorCode
+	}
+	return ""
 }
 
 type CMsgClientEmailChangeResponse struct {
@@ -3702,6 +3982,7 @@ type CMsgClientUpdateAppJobReport struct {
 	BytesStaged           *uint64  `protobuf:"varint,9,opt,name=bytes_staged" json:"bytes_staged,omitempty"`
 	BytesComitted         *uint64  `protobuf:"varint,10,opt,name=bytes_comitted" json:"bytes_comitted,omitempty"`
 	StartAppState         *uint32  `protobuf:"varint,11,opt,name=start_app_state" json:"start_app_state,omitempty"`
+	StatsMachineId        *uint64  `protobuf:"fixed64,12,opt,name=stats_machine_id" json:"stats_machine_id,omitempty"`
 	XXX_unrecognized      []byte   `json:"-"`
 }
 
@@ -3786,28 +4067,75 @@ func (m *CMsgClientUpdateAppJobReport) GetStartAppState() uint32 {
 	return 0
 }
 
-type CMsgClientSteam2AppStarted struct {
-	AppId            *uint32 `protobuf:"varint,1,opt,name=app_id" json:"app_id,omitempty"`
-	CommandLine      *string `protobuf:"bytes,2,opt,name=command_line" json:"command_line,omitempty"`
-	XXX_unrecognized []byte  `json:"-"`
-}
-
-func (m *CMsgClientSteam2AppStarted) Reset()         { *m = CMsgClientSteam2AppStarted{} }
-func (m *CMsgClientSteam2AppStarted) String() string { return proto.CompactTextString(m) }
-func (*CMsgClientSteam2AppStarted) ProtoMessage()    {}
-
-func (m *CMsgClientSteam2AppStarted) GetAppId() uint32 {
-	if m != nil && m.AppId != nil {
-		return *m.AppId
+func (m *CMsgClientUpdateAppJobReport) GetStatsMachineId() uint64 {
+	if m != nil && m.StatsMachineId != nil {
+		return *m.StatsMachineId
 	}
 	return 0
 }
 
-func (m *CMsgClientSteam2AppStarted) GetCommandLine() string {
-	if m != nil && m.CommandLine != nil {
-		return *m.CommandLine
+type CMsgClientDPContentStatsReport struct {
+	StatsMachineId     *uint64 `protobuf:"fixed64,1,opt,name=stats_machine_id" json:"stats_machine_id,omitempty"`
+	CountryCode        *string `protobuf:"bytes,2,opt,name=country_code" json:"country_code,omitempty"`
+	OsType             *int32  `protobuf:"varint,3,opt,name=os_type" json:"os_type,omitempty"`
+	Language           *int32  `protobuf:"varint,4,opt,name=language" json:"language,omitempty"`
+	NumInstallFolders  *uint32 `protobuf:"varint,5,opt,name=num_install_folders" json:"num_install_folders,omitempty"`
+	NumInstalledGames  *uint32 `protobuf:"varint,6,opt,name=num_installed_games" json:"num_installed_games,omitempty"`
+	SizeInstalledGames *uint64 `protobuf:"varint,7,opt,name=size_installed_games" json:"size_installed_games,omitempty"`
+	XXX_unrecognized   []byte  `json:"-"`
+}
+
+func (m *CMsgClientDPContentStatsReport) Reset()         { *m = CMsgClientDPContentStatsReport{} }
+func (m *CMsgClientDPContentStatsReport) String() string { return proto.CompactTextString(m) }
+func (*CMsgClientDPContentStatsReport) ProtoMessage()    {}
+
+func (m *CMsgClientDPContentStatsReport) GetStatsMachineId() uint64 {
+	if m != nil && m.StatsMachineId != nil {
+		return *m.StatsMachineId
+	}
+	return 0
+}
+
+func (m *CMsgClientDPContentStatsReport) GetCountryCode() string {
+	if m != nil && m.CountryCode != nil {
+		return *m.CountryCode
 	}
 	return ""
+}
+
+func (m *CMsgClientDPContentStatsReport) GetOsType() int32 {
+	if m != nil && m.OsType != nil {
+		return *m.OsType
+	}
+	return 0
+}
+
+func (m *CMsgClientDPContentStatsReport) GetLanguage() int32 {
+	if m != nil && m.Language != nil {
+		return *m.Language
+	}
+	return 0
+}
+
+func (m *CMsgClientDPContentStatsReport) GetNumInstallFolders() uint32 {
+	if m != nil && m.NumInstallFolders != nil {
+		return *m.NumInstallFolders
+	}
+	return 0
+}
+
+func (m *CMsgClientDPContentStatsReport) GetNumInstalledGames() uint32 {
+	if m != nil && m.NumInstalledGames != nil {
+		return *m.NumInstalledGames
+	}
+	return 0
+}
+
+func (m *CMsgClientDPContentStatsReport) GetSizeInstalledGames() uint64 {
+	if m != nil && m.SizeInstalledGames != nil {
+		return *m.SizeInstalledGames
+	}
+	return 0
 }
 
 type CMsgClientGetCDNAuthTokenResponse struct {
@@ -5832,280 +6160,6 @@ func (m *CMsgCREEnumeratePublishedFilesResponse_PublishedFileId) GetScore() floa
 	return 0
 }
 
-type CMsgCRERankByVote struct {
-	AppId            *uint32  `protobuf:"varint,1,opt,name=app_id" json:"app_id,omitempty"`
-	StartIndex       *uint32  `protobuf:"varint,2,opt,name=start_index" json:"start_index,omitempty"`
-	Count            *uint32  `protobuf:"varint,3,opt,name=count" json:"count,omitempty"`
-	Tags             []string `protobuf:"bytes,4,rep,name=tags" json:"tags,omitempty"`
-	UserTags         []string `protobuf:"bytes,5,rep,name=user_tags" json:"user_tags,omitempty"`
-	XXX_unrecognized []byte   `json:"-"`
-}
-
-func (m *CMsgCRERankByVote) Reset()         { *m = CMsgCRERankByVote{} }
-func (m *CMsgCRERankByVote) String() string { return proto.CompactTextString(m) }
-func (*CMsgCRERankByVote) ProtoMessage()    {}
-
-func (m *CMsgCRERankByVote) GetAppId() uint32 {
-	if m != nil && m.AppId != nil {
-		return *m.AppId
-	}
-	return 0
-}
-
-func (m *CMsgCRERankByVote) GetStartIndex() uint32 {
-	if m != nil && m.StartIndex != nil {
-		return *m.StartIndex
-	}
-	return 0
-}
-
-func (m *CMsgCRERankByVote) GetCount() uint32 {
-	if m != nil && m.Count != nil {
-		return *m.Count
-	}
-	return 0
-}
-
-func (m *CMsgCRERankByVote) GetTags() []string {
-	if m != nil {
-		return m.Tags
-	}
-	return nil
-}
-
-func (m *CMsgCRERankByVote) GetUserTags() []string {
-	if m != nil {
-		return m.UserTags
-	}
-	return nil
-}
-
-type CMsgCRERankByVoteResponse struct {
-	Eresult          *int32                                       `protobuf:"varint,1,opt,name=eresult,def=2" json:"eresult,omitempty"`
-	PublishedFiles   []*CMsgCRERankByVoteResponse_PublishedFileId `protobuf:"bytes,2,rep,name=published_files" json:"published_files,omitempty"`
-	TotalResults     *uint32                                      `protobuf:"varint,3,opt,name=total_results" json:"total_results,omitempty"`
-	XXX_unrecognized []byte                                       `json:"-"`
-}
-
-func (m *CMsgCRERankByVoteResponse) Reset()         { *m = CMsgCRERankByVoteResponse{} }
-func (m *CMsgCRERankByVoteResponse) String() string { return proto.CompactTextString(m) }
-func (*CMsgCRERankByVoteResponse) ProtoMessage()    {}
-
-const Default_CMsgCRERankByVoteResponse_Eresult int32 = 2
-
-func (m *CMsgCRERankByVoteResponse) GetEresult() int32 {
-	if m != nil && m.Eresult != nil {
-		return *m.Eresult
-	}
-	return Default_CMsgCRERankByVoteResponse_Eresult
-}
-
-func (m *CMsgCRERankByVoteResponse) GetPublishedFiles() []*CMsgCRERankByVoteResponse_PublishedFileId {
-	if m != nil {
-		return m.PublishedFiles
-	}
-	return nil
-}
-
-func (m *CMsgCRERankByVoteResponse) GetTotalResults() uint32 {
-	if m != nil && m.TotalResults != nil {
-		return *m.TotalResults
-	}
-	return 0
-}
-
-type CMsgCRERankByVoteResponse_PublishedFileId struct {
-	PublishedFileId  *uint64  `protobuf:"fixed64,1,opt,name=published_file_id" json:"published_file_id,omitempty"`
-	VotesFor         *int32   `protobuf:"varint,2,opt,name=votes_for" json:"votes_for,omitempty"`
-	VotesAgainst     *int32   `protobuf:"varint,3,opt,name=votes_against" json:"votes_against,omitempty"`
-	Reports          *int32   `protobuf:"varint,4,opt,name=reports" json:"reports,omitempty"`
-	Score            *float32 `protobuf:"fixed32,5,opt,name=score" json:"score,omitempty"`
-	XXX_unrecognized []byte   `json:"-"`
-}
-
-func (m *CMsgCRERankByVoteResponse_PublishedFileId) Reset() {
-	*m = CMsgCRERankByVoteResponse_PublishedFileId{}
-}
-func (m *CMsgCRERankByVoteResponse_PublishedFileId) String() string { return proto.CompactTextString(m) }
-func (*CMsgCRERankByVoteResponse_PublishedFileId) ProtoMessage()    {}
-
-func (m *CMsgCRERankByVoteResponse_PublishedFileId) GetPublishedFileId() uint64 {
-	if m != nil && m.PublishedFileId != nil {
-		return *m.PublishedFileId
-	}
-	return 0
-}
-
-func (m *CMsgCRERankByVoteResponse_PublishedFileId) GetVotesFor() int32 {
-	if m != nil && m.VotesFor != nil {
-		return *m.VotesFor
-	}
-	return 0
-}
-
-func (m *CMsgCRERankByVoteResponse_PublishedFileId) GetVotesAgainst() int32 {
-	if m != nil && m.VotesAgainst != nil {
-		return *m.VotesAgainst
-	}
-	return 0
-}
-
-func (m *CMsgCRERankByVoteResponse_PublishedFileId) GetReports() int32 {
-	if m != nil && m.Reports != nil {
-		return *m.Reports
-	}
-	return 0
-}
-
-func (m *CMsgCRERankByVoteResponse_PublishedFileId) GetScore() float32 {
-	if m != nil && m.Score != nil {
-		return *m.Score
-	}
-	return 0
-}
-
-type CMsgCRERankByTrend struct {
-	AppId            *uint32  `protobuf:"varint,1,opt,name=app_id" json:"app_id,omitempty"`
-	StartIndex       *uint32  `protobuf:"varint,2,opt,name=start_index" json:"start_index,omitempty"`
-	Days             *uint32  `protobuf:"varint,3,opt,name=days" json:"days,omitempty"`
-	Count            *uint32  `protobuf:"varint,4,opt,name=count" json:"count,omitempty"`
-	Tags             []string `protobuf:"bytes,5,rep,name=tags" json:"tags,omitempty"`
-	UserTags         []string `protobuf:"bytes,6,rep,name=user_tags" json:"user_tags,omitempty"`
-	XXX_unrecognized []byte   `json:"-"`
-}
-
-func (m *CMsgCRERankByTrend) Reset()         { *m = CMsgCRERankByTrend{} }
-func (m *CMsgCRERankByTrend) String() string { return proto.CompactTextString(m) }
-func (*CMsgCRERankByTrend) ProtoMessage()    {}
-
-func (m *CMsgCRERankByTrend) GetAppId() uint32 {
-	if m != nil && m.AppId != nil {
-		return *m.AppId
-	}
-	return 0
-}
-
-func (m *CMsgCRERankByTrend) GetStartIndex() uint32 {
-	if m != nil && m.StartIndex != nil {
-		return *m.StartIndex
-	}
-	return 0
-}
-
-func (m *CMsgCRERankByTrend) GetDays() uint32 {
-	if m != nil && m.Days != nil {
-		return *m.Days
-	}
-	return 0
-}
-
-func (m *CMsgCRERankByTrend) GetCount() uint32 {
-	if m != nil && m.Count != nil {
-		return *m.Count
-	}
-	return 0
-}
-
-func (m *CMsgCRERankByTrend) GetTags() []string {
-	if m != nil {
-		return m.Tags
-	}
-	return nil
-}
-
-func (m *CMsgCRERankByTrend) GetUserTags() []string {
-	if m != nil {
-		return m.UserTags
-	}
-	return nil
-}
-
-type CMsgCRERankByTrendResponse struct {
-	Eresult          *int32                                        `protobuf:"varint,1,opt,name=eresult,def=2" json:"eresult,omitempty"`
-	PublishedFiles   []*CMsgCRERankByTrendResponse_PublishedFileId `protobuf:"bytes,2,rep,name=published_files" json:"published_files,omitempty"`
-	TotalResults     *uint32                                       `protobuf:"varint,3,opt,name=total_results" json:"total_results,omitempty"`
-	XXX_unrecognized []byte                                        `json:"-"`
-}
-
-func (m *CMsgCRERankByTrendResponse) Reset()         { *m = CMsgCRERankByTrendResponse{} }
-func (m *CMsgCRERankByTrendResponse) String() string { return proto.CompactTextString(m) }
-func (*CMsgCRERankByTrendResponse) ProtoMessage()    {}
-
-const Default_CMsgCRERankByTrendResponse_Eresult int32 = 2
-
-func (m *CMsgCRERankByTrendResponse) GetEresult() int32 {
-	if m != nil && m.Eresult != nil {
-		return *m.Eresult
-	}
-	return Default_CMsgCRERankByTrendResponse_Eresult
-}
-
-func (m *CMsgCRERankByTrendResponse) GetPublishedFiles() []*CMsgCRERankByTrendResponse_PublishedFileId {
-	if m != nil {
-		return m.PublishedFiles
-	}
-	return nil
-}
-
-func (m *CMsgCRERankByTrendResponse) GetTotalResults() uint32 {
-	if m != nil && m.TotalResults != nil {
-		return *m.TotalResults
-	}
-	return 0
-}
-
-type CMsgCRERankByTrendResponse_PublishedFileId struct {
-	PublishedFileId  *uint64  `protobuf:"fixed64,1,opt,name=published_file_id" json:"published_file_id,omitempty"`
-	VotesFor         *int32   `protobuf:"varint,2,opt,name=votes_for" json:"votes_for,omitempty"`
-	VotesAgainst     *int32   `protobuf:"varint,3,opt,name=votes_against" json:"votes_against,omitempty"`
-	Reports          *int32   `protobuf:"varint,4,opt,name=reports" json:"reports,omitempty"`
-	Score            *float32 `protobuf:"fixed32,5,opt,name=score" json:"score,omitempty"`
-	XXX_unrecognized []byte   `json:"-"`
-}
-
-func (m *CMsgCRERankByTrendResponse_PublishedFileId) Reset() {
-	*m = CMsgCRERankByTrendResponse_PublishedFileId{}
-}
-func (m *CMsgCRERankByTrendResponse_PublishedFileId) String() string {
-	return proto.CompactTextString(m)
-}
-func (*CMsgCRERankByTrendResponse_PublishedFileId) ProtoMessage() {}
-
-func (m *CMsgCRERankByTrendResponse_PublishedFileId) GetPublishedFileId() uint64 {
-	if m != nil && m.PublishedFileId != nil {
-		return *m.PublishedFileId
-	}
-	return 0
-}
-
-func (m *CMsgCRERankByTrendResponse_PublishedFileId) GetVotesFor() int32 {
-	if m != nil && m.VotesFor != nil {
-		return *m.VotesFor
-	}
-	return 0
-}
-
-func (m *CMsgCRERankByTrendResponse_PublishedFileId) GetVotesAgainst() int32 {
-	if m != nil && m.VotesAgainst != nil {
-		return *m.VotesAgainst
-	}
-	return 0
-}
-
-func (m *CMsgCRERankByTrendResponse_PublishedFileId) GetReports() int32 {
-	if m != nil && m.Reports != nil {
-		return *m.Reports
-	}
-	return 0
-}
-
-func (m *CMsgCRERankByTrendResponse_PublishedFileId) GetScore() float32 {
-	if m != nil && m.Score != nil {
-		return *m.Score
-	}
-	return 0
-}
-
 type CMsgCREItemVoteSummary struct {
 	PublishedFileIds []*CMsgCREItemVoteSummary_PublishedFileId `protobuf:"bytes,1,rep,name=published_file_ids" json:"published_file_ids,omitempty"`
 	XXX_unrecognized []byte                                    `json:"-"`
@@ -7514,6 +7568,90 @@ func (m *CMsgClientCreateAccountResponse) GetEresult() int32 {
 func (m *CMsgClientCreateAccountResponse) GetSteamid() uint64 {
 	if m != nil && m.Steamid != nil {
 		return *m.Steamid
+	}
+	return 0
+}
+
+type CMsgClientVoiceCallPreAuthorize struct {
+	CallerSteamid    *uint64 `protobuf:"fixed64,1,opt,name=caller_steamid" json:"caller_steamid,omitempty"`
+	ReceiverSteamid  *uint64 `protobuf:"fixed64,2,opt,name=receiver_steamid" json:"receiver_steamid,omitempty"`
+	CallerId         *int32  `protobuf:"varint,3,opt,name=caller_id" json:"caller_id,omitempty"`
+	Hangup           *bool   `protobuf:"varint,4,opt,name=hangup" json:"hangup,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CMsgClientVoiceCallPreAuthorize) Reset()         { *m = CMsgClientVoiceCallPreAuthorize{} }
+func (m *CMsgClientVoiceCallPreAuthorize) String() string { return proto.CompactTextString(m) }
+func (*CMsgClientVoiceCallPreAuthorize) ProtoMessage()    {}
+
+func (m *CMsgClientVoiceCallPreAuthorize) GetCallerSteamid() uint64 {
+	if m != nil && m.CallerSteamid != nil {
+		return *m.CallerSteamid
+	}
+	return 0
+}
+
+func (m *CMsgClientVoiceCallPreAuthorize) GetReceiverSteamid() uint64 {
+	if m != nil && m.ReceiverSteamid != nil {
+		return *m.ReceiverSteamid
+	}
+	return 0
+}
+
+func (m *CMsgClientVoiceCallPreAuthorize) GetCallerId() int32 {
+	if m != nil && m.CallerId != nil {
+		return *m.CallerId
+	}
+	return 0
+}
+
+func (m *CMsgClientVoiceCallPreAuthorize) GetHangup() bool {
+	if m != nil && m.Hangup != nil {
+		return *m.Hangup
+	}
+	return false
+}
+
+type CMsgClientVoiceCallPreAuthorizeResponse struct {
+	CallerSteamid    *uint64 `protobuf:"fixed64,1,opt,name=caller_steamid" json:"caller_steamid,omitempty"`
+	ReceiverSteamid  *uint64 `protobuf:"fixed64,2,opt,name=receiver_steamid" json:"receiver_steamid,omitempty"`
+	Eresult          *int32  `protobuf:"varint,3,opt,name=eresult,def=2" json:"eresult,omitempty"`
+	CallerId         *int32  `protobuf:"varint,4,opt,name=caller_id" json:"caller_id,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CMsgClientVoiceCallPreAuthorizeResponse) Reset() {
+	*m = CMsgClientVoiceCallPreAuthorizeResponse{}
+}
+func (m *CMsgClientVoiceCallPreAuthorizeResponse) String() string { return proto.CompactTextString(m) }
+func (*CMsgClientVoiceCallPreAuthorizeResponse) ProtoMessage()    {}
+
+const Default_CMsgClientVoiceCallPreAuthorizeResponse_Eresult int32 = 2
+
+func (m *CMsgClientVoiceCallPreAuthorizeResponse) GetCallerSteamid() uint64 {
+	if m != nil && m.CallerSteamid != nil {
+		return *m.CallerSteamid
+	}
+	return 0
+}
+
+func (m *CMsgClientVoiceCallPreAuthorizeResponse) GetReceiverSteamid() uint64 {
+	if m != nil && m.ReceiverSteamid != nil {
+		return *m.ReceiverSteamid
+	}
+	return 0
+}
+
+func (m *CMsgClientVoiceCallPreAuthorizeResponse) GetEresult() int32 {
+	if m != nil && m.Eresult != nil {
+		return *m.Eresult
+	}
+	return Default_CMsgClientVoiceCallPreAuthorizeResponse_Eresult
+}
+
+func (m *CMsgClientVoiceCallPreAuthorizeResponse) GetCallerId() int32 {
+	if m != nil && m.CallerId != nil {
+		return *m.CallerId
 	}
 	return 0
 }
