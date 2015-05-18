@@ -5,6 +5,8 @@ package main
 
 import (
 	"bytes"
+	"fmt"
+	"go/ast"
 	"go/parser"
 	"go/token"
 	"io"
@@ -165,19 +167,19 @@ func fixProto(path string) {
 		panic("Error parsing " + path + ": " + err.Error())
 	}
 
-	importsToRemove := make([]string, 0)
+	importsToRemove := make([]*ast.ImportSpec, 0)
 	for _, i := range f.Imports {
-		// We remove all imports that include ".pb". This assumes unified and protobuf packages don't share anything.
-		if i.Name.Name != "google_protobuf" && strings.Contains(i.Path.Value, ".pb") {
-			importsToRemove = append(importsToRemove, i.Name.Name)
+		// We remove all local imports
+		if i.Path.Value == "\".\"" {
+			importsToRemove = append(importsToRemove, i)
 		}
 	}
 
 	for _, itr := range importsToRemove {
 		// remove the package name from all types
-		file = bytes.Replace(file, []byte(itr+"."), []byte{}, -1)
+		file = bytes.Replace(file, []byte(itr.Name.Name+"."), []byte{}, -1)
 		// and remove the import itself
-		file = bytes.Replace(file, []byte("import "+itr+" \"pb\"\n"), []byte{}, -1)
+		file = bytes.Replace(file, []byte(fmt.Sprintf("import %v %v\n", itr.Name.Name, itr.Path.Value)), []byte{}, -1)
 	}
 
 	// remove the package comment because it just includes a list of all messages and
@@ -189,7 +191,7 @@ func fixProto(path string) {
 
 	// fix the google dependency;
 	// we just reuse the one from protoc-gen-go
-	file = bytes.Replace(file, []byte("google/protobuf/descriptor.pb"), []byte("github.com/golang/protobuf/protoc-gen-go//descriptor"), -1)
+	file = bytes.Replace(file, []byte("google/protobuf"), []byte("github.com/golang/protobuf/protoc-gen-go/descriptor"), -1)
 
 	err = ioutil.WriteFile(path, file, os.ModePerm)
 	if err != nil {
