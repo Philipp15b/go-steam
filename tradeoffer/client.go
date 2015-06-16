@@ -81,22 +81,22 @@ func (c *Client) Cancel(id TradeOfferId) error {
 }
 
 func (c *Client) Accept(id TradeOfferId) error {
-    req := netutil.NewPostForm(fmt.Sprintf("https://steamcommunity.com/tradeoffer/%d/accept", id), netutil.ToUrlValues(map[string]string{
-        "sessionid":    c.sessionId,
-        "serverid":     "1",
-    }))
-    req.Header.Add("Referer", fmt.Sprintf("https://steamcommunity.com/tradeoffer/%d/", id))
+	req := netutil.NewPostForm(fmt.Sprintf("https://steamcommunity.com/tradeoffer/%d/accept", id), netutil.ToUrlValues(map[string]string{
+		"sessionid":    c.sessionId,
+		"serverid":     "1",
+	}))
+	req.Header.Add("Referer", fmt.Sprintf("https://steamcommunity.com/tradeoffer/%d/", id))
 
-    resp, err := c.client.Do(req)
-    if err != nil {
-        return err
-    }
-    defer resp.Body.Close()
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
 
-    if resp.StatusCode != 200 {
-        return errors.New("accept error: status code not 200")
-    }
-    return nil
+	if resp.StatusCode != 200 {
+		return errors.New("accept error: status code not 200")
+	}
+	return nil
 }
 
 type TradeItem struct {
