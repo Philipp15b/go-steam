@@ -94,7 +94,7 @@ func (c *Client) Accept(id TradeOfferId) error {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		return errors.New("accept error: status code not 200")
+		return fmt.Errorf("accept error: status code %d", resp.StatusCode)
 	}
 	return nil
 }
