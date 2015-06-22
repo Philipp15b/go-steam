@@ -4,36 +4,42 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
+	"strconv"
+
 	"github.com/Philipp15b/go-steam/community"
 	"github.com/Philipp15b/go-steam/economy/inventory"
 	"github.com/Philipp15b/go-steam/netutil"
 	"github.com/Philipp15b/go-steam/steamid"
-	"net/http"
-	"strconv"
 )
 
+// APIKey is the key you got from steam
 type APIKey string
 
-const apiUrl = "https://api.steampowered.com/IEconService/%s/v%d"
+// apiURL is the URL used by steam
+const apiURL = "https://api.steampowered.com/IEconService/%s/v%d"
 
+// Client is the container for the API info
 type Client struct {
 	client    *http.Client
 	key       APIKey
-	sessionId string
+	sessionID string
 }
 
-func NewClient(key APIKey, sessionId, steamLogin, steamLoginSecure string) *Client {
+// NewClient will create a new client and returns the right struct
+func NewClient(key APIKey, sessionID, steamLogin, steamLoginSecure string) *Client {
 	c := &Client{
 		new(http.Client),
 		key,
-		sessionId,
+		sessionID,
 	}
-	community.SetCookies(c.client, sessionId, steamLogin, steamLoginSecure)
+	community.SetCookies(c.client, sessionID, steamLogin, steamLoginSecure)
 	return c
 }
 
+// GetOffers will return all the tradeoffers on a specific account
 func (c *Client) GetOffers() (*TradeOffers, error) {
-	resp, err := c.client.Get(fmt.Sprintf(apiUrl, "GetTradeOffers", 1) + "?" + netutil.ToUrlValues(map[string]string{
+	resp, err := c.client.Get(fmt.Sprintf(apiURL, "GetTradeOffers", 1) + "?" + netutil.ToUrlValues(map[string]string{
 		"key":                 string(c.key),
 		"get_sent_offers":     "1",
 		"get_received_offers": "1",
@@ -52,13 +58,8 @@ func (c *Client) GetOffers() (*TradeOffers, error) {
 	return t.Response, nil
 }
 
-type actionResult struct {
-	Success bool
-	Error   string
-}
-
 func (c *Client) action(method string, version uint, id TradeOfferId) error {
-	resp, err := c.client.Do(netutil.NewPostForm(fmt.Sprintf(apiUrl, method, version), netutil.ToUrlValues(map[string]string{
+	resp, err := c.client.Do(netutil.NewPostForm(fmt.Sprintf(apiURL, method, version), netutil.ToUrlValues(map[string]string{
 		"key":          string(c.key),
 		"tradeofferid": strconv.FormatUint(uint64(id), 10),
 	})))
@@ -72,18 +73,21 @@ func (c *Client) action(method string, version uint, id TradeOfferId) error {
 	return nil
 }
 
+// Decline will declient a specific tradeoffer id
 func (c *Client) Decline(id TradeOfferId) error {
 	return c.action("DeclineTradeOffer", 1, id)
 }
 
+// Cancel will cancel a specific tradeoffer id
 func (c *Client) Cancel(id TradeOfferId) error {
 	return c.action("CancelTradeOffer", 1, id)
 }
 
+// Accept will accept a specific tradeoffer id
 func (c *Client) Accept(id TradeOfferId) error {
 	baseurl := fmt.Sprintf("https://steamcommunity.com/tradeoffer/%d/", id)
 	req := netutil.NewPostForm(baseurl+"accept", netutil.ToUrlValues(map[string]string{
-		"sessionid":    c.sessionId,
+		"sessionid":    c.sessionID,
 		"serverid":     "1",
 		"tradeofferid": strconv.FormatUint(uint64(id), 10),
 	}))
@@ -100,11 +104,12 @@ func (c *Client) Accept(id TradeOfferId) error {
 	return nil
 }
 
+// TradeItem represents a traded item in an offer, either received or proposed
 type TradeItem struct {
 	AppId     uint32 `json:"appid"`
-	ContextId uint64 `json:"contextid"`
+	ContextId string `json:"contextid"`
 	Amount    uint   `json:"amount"`
-	AssetId   uint64 `json:"assetid"`
+	AssetId   string `json:"assetid"`
 }
 
 type TradeCreateResult struct {
@@ -145,7 +150,7 @@ func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, the
 	}
 
 	data := map[string]string{
-		"sessionid":                 c.sessionId,
+		"sessionid":                 c.sessionID,
 		"serverid":                  "1",
 		"partner":                   fmt.Sprintf("%d", other),
 		"tradeoffermessage":         message,
@@ -159,7 +164,7 @@ func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, the
 		referer = fmt.Sprintf("https://steamcommunity.com/tradeoffer/%d/", *countered)
 		data["tradeofferid_countered"] = fmt.Sprintf("%d", *countered)
 	} else {
-		referer = fmt.Sprintf("https://steamcommunity.com/tradeoffer/new?partner=%d", other)
+		referer = fmt.Sprintf("https://steamcommunity.com/tradeoffer/new?partner=%d", other.GetAccountId())
 	}
 
 	req := netutil.NewPostForm("https://steamcommunity.com/tradeoffer/new/send", netutil.ToUrlValues(data))
@@ -173,20 +178,26 @@ func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, the
 
 	// If we failed, error out
 	if resp.StatusCode != 200 {
-		return nil, errors.New("create error: status code not 200")
+		return nil, fmt.Errorf("accept error: status code %d", resp.StatusCode)
 	}
 
 	// Load the JSON result into TradeCreateResult
 	result := new(TradeCreateResult)
 	decoder := json.NewDecoder(resp.Body)
-	decoder.Decode(result)
+	err = decoder.Decode(result)
+	if err != nil {
+		return nil, err
+	}
+
 	return result, nil
 }
 
+// GetOwnInventory gets self inventory
 func (c *Client) GetOwnInventory(contextId uint64, appId uint32) (*inventory.Inventory, error) {
 	return inventory.GetOwnInventory(c.client, contextId, appId)
 }
 
+// GetTheirInventory get other party inventory
 func (c *Client) GetTheirInventory(other steamid.SteamId, contextId uint64, appId uint32) (*inventory.Inventory, error) {
 	return inventory.GetFullInventory(func() (*inventory.PartialInventory, error) {
 		return c.getPartialTheirInventory(other, contextId, appId, nil)
@@ -197,7 +208,7 @@ func (c *Client) GetTheirInventory(other steamid.SteamId, contextId uint64, appI
 
 func (c *Client) getPartialTheirInventory(other steamid.SteamId, contextId uint64, appId uint32, start *uint) (*inventory.PartialInventory, error) {
 	data := map[string]string{
-		"sessionid": c.sessionId,
+		"sessionid": c.sessionID,
 		"partner":   fmt.Sprintf("%d", other),
 		"contextid": strconv.FormatUint(contextId, 10),
 		"appid":     strconv.FormatUint(uint64(appId), 10),
