@@ -1,11 +1,13 @@
 package steam
 
 import (
-	"github.com/Philipp15b/go-steam/netutil"
 	"math/rand"
 	"time"
+
+	"github.com/Philipp15b/go-steam/netutil"
 )
 
+// CMServers contains a list of worlwide servers
 var CMServers = [][]string{
 	{ //North American Servers
 		// Qwest, Seattle
@@ -40,6 +42,10 @@ var CMServers = [][]string{
 		"146.66.152.15:27018",
 		"146.66.152.15:27019",
 	},
+	{ // Starhub, Singapore (non-optimal route)
+		"103.28.54.10:27017",
+		"103.28.54.11:27017",
+	},
 	/* Highwinds, Netherlands (not live)
 	"81.171.115.5":27017",
 	"81.171.115.5":27018",
@@ -53,11 +59,9 @@ var CMServers = [][]string{
 	"81.171.115.8":27017",
 	"81.171.115.8":27018",
 	"81.171.115.8":27019",*/
-	/* Starhub, Singapore (non-optimal route)
-	"103.28.54.10":27017",
-	"103.28.54.11":27017,*/
 }
 
+// GetRandomCM returns back a random server anywhere
 func GetRandomCM() *netutil.PortAddr {
 	rng := rand.New(rand.NewSource(time.Now().UnixNano()))
 	servers := append(CMServers[0], CMServers[1]...)
@@ -68,6 +72,7 @@ func GetRandomCM() *netutil.PortAddr {
 	return addr
 }
 
+// GetRandomNorthAmericaCM returns back a random server in north america
 func GetRandomNorthAmericaCM() *netutil.PortAddr {
 	rng := rand.New(rand.NewSource(time.Now().UnixNano()))
 	addr := netutil.ParsePortAddr(CMServers[0][rng.Int31n(int32(len(CMServers[0])))])
@@ -77,9 +82,20 @@ func GetRandomNorthAmericaCM() *netutil.PortAddr {
 	return addr
 }
 
+// GetRandomEuropeCM returns back a random server in europe
 func GetRandomEuropeCM() *netutil.PortAddr {
 	rng := rand.New(rand.NewSource(time.Now().UnixNano()))
 	addr := netutil.ParsePortAddr(CMServers[1][rng.Int31n(int32(len(CMServers[0])))])
+	if addr == nil {
+		panic("invalid address in CMServers slice")
+	}
+	return addr
+}
+
+// GetRandomSingaporeCM returns back a random server in singapore
+func GetRandomSingaporeCM() *netutil.PortAddr {
+	rng := rand.New(rand.NewSource(time.Now().UnixNano()))
+	addr := netutil.ParsePortAddr(CMServers[2][rng.Int31n(int32(len(CMServers[2])))])
 	if addr == nil {
 		panic("invalid address in CMServers slice")
 	}
