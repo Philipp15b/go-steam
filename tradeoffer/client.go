@@ -100,11 +100,17 @@ func (c *Client) Accept(id TradeOfferId) error {
 	return nil
 }
 
+type AssetId uint64
+
+func (a AssetId) MarshalJSON() ([]byte, error) {
+	return []byte(`"` + fmt.Sprint(a) + `"`), nil
+}
+
 type TradeItem struct {
 	AppId     uint32 `json:"appid"`
 	ContextId uint64 `json:"contextid"`
 	Amount    uint   `json:"amount"`
-	AssetId   uint64 `json:"assetid"`
+	AssetId   AssetId `json:"assetid"`
 }
 
 type TradeCreateResult struct {
