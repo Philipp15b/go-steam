@@ -101,10 +101,10 @@ func (c *Client) Accept(id TradeOfferId) error {
 }
 
 type TradeItem struct {
-	AppId     uint32 `json:"appid"`
-	ContextId uint64 `json:"contextid"`
-	Amount    uint   `json:"amount"`
-	AssetId   uint64 `json:"assetid"`
+	AppId     uint32 `json:"appid,string"`
+	ContextId uint64 `json:"contextid,string"`
+	Amount    uint   `json:"amount,string"`
+	AssetId   uint64 `json:"assetid,string"`
 }
 
 type TradeCreateResult struct {
