@@ -26,6 +26,10 @@ type LoggedOnEvent struct {
 	NumDisconnectsToMigrate   int32
 }
 
+type LogOnFailedEvent struct {
+	Result EResult
+}
+
 type LoginKeyEvent struct {
 	UniqueId uint32
 	LoginKey string

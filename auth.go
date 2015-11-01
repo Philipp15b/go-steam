@@ -111,7 +111,9 @@ func (a *Auth) handleLogOnResponse(packet *Packet) {
 	} else if result == EResult_Fail || result == EResult_ServiceUnavailable || result == EResult_TryAnotherCM {
 		// some error on Steam's side, we'll get an EOF later
 	} else {
-		a.client.Fatalf("Login error: %v", result)
+		a.client.Emit(&LogOnFailedEvent{
+			Result: EResult(body.GetEresult()),
+		})
 	}
 }
 
