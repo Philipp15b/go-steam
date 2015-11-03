@@ -64,11 +64,13 @@ type Description struct {
 	ClassId    economy.ClassId    `json:",string"`
 	InstanceId economy.InstanceId `json:",string"`
 
-	IconUrl     string `json:"icon_url"`
-	IconDragUrl string `json:"icon_drag_url"`
+	IconUrl      string `json:"icon_url"`
+	IconUrlLarge string `json:"icon_url_large"`
+	IconDragUrl  string `json:"icon_drag_url"`
 
-	Name       string
-	MarketName string `json:"market_name"`
+	Name           string
+	MarketName     string `json:"market_name"`
+	MarketHashName string `json:"market_hash_name"`
 
 	// Colors in hex, for example `B2B2B2`
 	NameColor       string `json:"name_color"`
@@ -98,7 +100,7 @@ func (d *DescriptionLines) UnmarshalJSON(data []byte) error {
 type DescriptionLine struct {
 	Value string
 	Type  *string // Is `html` for HTML descriptions
-	Label *string
+	Color *string
 }
 
 type Action struct {
