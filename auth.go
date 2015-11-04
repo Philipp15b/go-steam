@@ -114,6 +114,7 @@ func (a *Auth) handleLogOnResponse(packet *Packet) {
 		a.client.Emit(&LogOnFailedEvent{
 			Result: EResult(body.GetEresult()),
 		})
+		a.client.Disconnect()
 	}
 }
 
