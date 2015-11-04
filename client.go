@@ -134,7 +134,12 @@ func (c *Client) Connected() bool {
 // You will receive a ServerListEvent after logging in which contains a new list of servers of which you
 // should choose one yourself and connect with ConnectTo since the included list may not always be up to date.
 func (c *Client) Connect() *netutil.PortAddr {
-	server := GetRandomCM()
+	var server *netutil.PortAddr
+	if steamDirectoryCache.IsInitialized() {
+		server = steamDirectoryCache.GetRandomCM()
+	} else {
+		server = GetRandomCM()
+	}
 	c.ConnectTo(server)
 	return server
 }
