@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"hash/crc32"
 	"io/ioutil"
-	"log"
 	"net"
 	"sync"
 	"sync/atomic"
@@ -167,7 +166,7 @@ func (c *Client) ConnectTo(addr *netutil.PortAddr) {
 
 	conn, err := dialTCP(addr.ToTCPAddr(), nil)
 	if err != nil {
-		log.Fatal(err)
+		c.Fatalf("Connect failed: %v", err)
 	}
 	c.conn = conn
 
@@ -181,7 +180,7 @@ func (c *Client) ConnectToBind(addr *netutil.PortAddr, local *net.TCPAddr) {
 
 	conn, err := dialTCP(addr.ToTCPAddr(), local)
 	if err != nil {
-		log.Fatal(err)
+		c.Fatalf("Connect failed: %v", err)
 	}
 	c.conn = conn
 
