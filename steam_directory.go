@@ -11,9 +11,9 @@ import (
 	"github.com/Philipp15b/go-steam/netutil"
 )
 
-// Allows to load initial server list from Steam Directory Web API.
-// Call InitializeSteamDirectory() before Connect(), and Connect()
-// will use loaded server list instead of hardcoded one
+// Load initial server list from Steam Directory Web API.
+// Call InitializeSteamDirectory() before Connect() to use
+// steam directory server list instead of static one.
 func InitializeSteamDirectory() error {
 	return steamDirectoryCache.Initialize()
 }
@@ -26,7 +26,7 @@ type steamDirectory struct {
 	isInitialized bool
 }
 
-// Get servers list from steam directory and save them for later use
+// Get server list from steam directory and save it for later
 func (sd *steamDirectory) Initialize() error {
 	sd.Lock()
 	defer sd.Unlock()
