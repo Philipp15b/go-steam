@@ -64,7 +64,7 @@ func (w *Web) LogOn() {
 			}
 		}
 		if err != nil {
-			w.client.Emit(WebLogonErrorEvent(err))
+			w.client.Emit(WebLogOnErrorEvent(err))
 			return
 		}
 	}()
