@@ -245,7 +245,6 @@ func (c *Client) readLoop() {
 }
 
 func (c *Client) writeLoop() {
-	defer c.Disconnect()
 	for {
 		c.mutex.RLock()
 		conn := c.conn
@@ -262,7 +261,7 @@ func (c *Client) writeLoop() {
 		err := msg.Serialize(c.writeBuf)
 		if err != nil {
 			c.writeBuf.Reset()
-			c.Errorf("Error serializing message %v: %v", msg, err)
+			c.Fatalf("Error serializing message %v: %v", msg, err)
 			return
 		}
 
@@ -271,7 +270,7 @@ func (c *Client) writeLoop() {
 		c.writeBuf.Reset()
 
 		if err != nil {
-			c.Errorf("Error writing message %v: %v", msg, err)
+			c.Fatalf("Error writing message %v: %v", msg, err)
 			return
 		}
 	}
