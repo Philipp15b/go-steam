@@ -6,7 +6,6 @@ package inventory
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/Philipp15b/go-steam/economy"
 	"github.com/Philipp15b/go-steam/jsont"
 )
 
@@ -45,30 +44,32 @@ func (d *Descriptions) UnmarshalJSON(data []byte) error {
 }
 
 type Item struct {
-	Id         economy.AssetId    `json:",string"`
-	ClassId    economy.ClassId    `json:",string"`
-	InstanceId economy.InstanceId `json:",string"`
-	Amount     uint64             `json:",string"`
+	Id         uint64 `json:",string"`
+	ClassId    uint64 `json:",string"`
+	InstanceId uint64 `json:",string"`
+	Amount     uint64 `json:",string"`
 	Pos        uint32
 }
 
 type Currency struct {
-	Id         economy.AssetId `json:",string"`
-	ClassId    economy.ClassId `json:",string"`
-	IsCurrency bool            `json:"is_currency"`
+	Id         uint64 `json:",string"`
+	ClassId    uint64 `json:",string"`
+	IsCurrency bool   `json:"is_currency"`
 	Pos        uint32
 }
 
 type Description struct {
-	AppId      uint32             `json:",string"`
-	ClassId    economy.ClassId    `json:",string"`
-	InstanceId economy.InstanceId `json:",string"`
+	AppId      uint32 `json:",string"`
+	ClassId    uint64 `json:",string"`
+	InstanceId uint64 `json:",string"`
 
-	IconUrl     string `json:"icon_url"`
-	IconDragUrl string `json:"icon_drag_url"`
+	IconUrl      string `json:"icon_url"`
+	IconUrlLarge string `json:"icon_url_large"`
+	IconDragUrl  string `json:"icon_drag_url"`
 
-	Name       string
-	MarketName string `json:"market_name"`
+	Name           string
+	MarketName     string `json:"market_name"`
+	MarketHashName string `json:"market_hash_name"`
 
 	// Colors in hex, for example `B2B2B2`
 	NameColor       string `json:"name_color"`
@@ -98,7 +99,7 @@ func (d *DescriptionLines) UnmarshalJSON(data []byte) error {
 type DescriptionLine struct {
 	Value string
 	Type  *string // Is `html` for HTML descriptions
-	Label *string
+	Color *string
 }
 
 type Action struct {

@@ -6,7 +6,6 @@ See: https://developer.valvesoftware.com/wiki/Steam_Web_API/IEconService
 package tradeoffer
 
 import (
-	"github.com/Philipp15b/go-steam/economy"
 	"github.com/Philipp15b/go-steam/economy/inventory"
 	"github.com/Philipp15b/go-steam/steamid"
 )
@@ -14,31 +13,31 @@ import (
 type TradeOfferState uint
 
 const (
-	TradeOfferState_Invalid      TradeOfferState = 1 // Invalid
-	TradeOfferState_Active                       = 2 // This trade offer has been sent, neither party has acted on it yet.
-	TradeOfferState_Accepted                     = 3 // The trade offer was accepted by the recipient and items were exchanged.
-	TradeOfferState_Countered                    = 4 // The recipient made a counter offer
-	TradeOfferState_Expired                      = 5 // The trade offer was not accepted before the expiration date
-	TradeOfferState_Canceled                     = 6 // The sender cancelled the offer
-	TradeOfferState_Declined                     = 7 // The recipient declined the offer
-	TradeOfferState_InvalidItems                 = 8 // Some of the items in the offer are no longer available (indicated by the missing flag in the output)
+	TradeOfferState_Invalid       TradeOfferState = 1  // Invalid
+	TradeOfferState_Active                        = 2  // This trade offer has been sent, neither party has acted on it yet.
+	TradeOfferState_Accepted                      = 3  // The trade offer was accepted by the recipient and items were exchanged.
+	TradeOfferState_Countered                     = 4  // The recipient made a counter offer
+	TradeOfferState_Expired                       = 5  // The trade offer was not accepted before the expiration date
+	TradeOfferState_Canceled                      = 6  // The sender cancelled the offer
+	TradeOfferState_Declined                      = 7  // The recipient declined the offer
+	TradeOfferState_InvalidItems                  = 8  // Some of the items in the offer are no longer available (indicated by the missing flag in the output)
+	TradeOfferState_EmailPending                  = 9  // The offer hasn't been sent yet and is awaiting email confirmation. The offer is only visible to the sender.
+	TradeOfferState_EmailCanceled                 = 10 // Either party canceled the offer via email. The offer is visible to both parties, even if the sender canceled it before it was sent.
 )
 
 type Asset struct {
-	AppId      uint64             `json:",string"`
-	ContextId  economy.ContextId  `json:",string"`
-	AssetId    economy.AssetId    `json:",string"`
-	CurrencyId uint64             `json:",string"`
-	ClassId    economy.ClassId    `json:",string"`
-	InstanceId economy.InstanceId `json:",string"`
-	Amount     uint64             `json:",string"`
+	AppId      uint64 `json:",string"`
+	ContextId  uint64 `json:",string"`
+	AssetId    uint64 `json:",string"`
+	CurrencyId uint64 `json:",string"`
+	ClassId    uint64 `json:",string"`
+	InstanceId uint64 `json:",string"`
+	Amount     uint64 `json:",string"`
 	Missing    bool
 }
 
-type TradeOfferId uint64
-
 type TradeOffer struct {
-	TradeOfferId   TradeOfferId    `json:",string"`
+	TradeOfferId   uint64          `json:",string"`
 	OtherAccountId steamid.SteamId `json:"accountid_other"`
 	Message        string
 	ExpirationTime uint32          `json:"expiraton_time"`
@@ -50,8 +49,13 @@ type TradeOffer struct {
 	TimeUpdated    uint32          `json:"time_updated"`
 }
 
-type TradeOffers struct {
+type TradeOffersResult struct {
 	Sent         []*TradeOffer `json:"trade_offers_sent"`
 	Received     []*TradeOffer `json:"trade_offers_received"`
+	Descriptions inventory.Descriptions
+}
+
+type TradeOfferResult struct {
+	Offer        *TradeOffer
 	Descriptions inventory.Descriptions
 }
