@@ -7,6 +7,7 @@ import (
 	"github.com/Philipp15b/go-steam/economy/inventory"
 	"github.com/Philipp15b/go-steam/netutil"
 	"github.com/Philipp15b/go-steam/steamid"
+	"io/ioutil"
 	"net/http"
 	"strconv"
 	"time"
@@ -48,6 +49,10 @@ func (c *Client) GetOffer(offerId uint64) (*TradeOfferResult, error) {
 	if err = json.NewDecoder(resp.Body).Decode(t); err != nil {
 		return nil, err
 	}
+	if t.Response == nil || t.Response.Offer == nil {
+		return nil, newSteamErrorf("steam returned empty offer result\n")
+	}
+
 	return t.Response, nil
 }
 
@@ -89,9 +94,17 @@ func (c *Client) GetOffers(getSent bool, getReceived bool, getDescriptions bool,
 	if err = json.NewDecoder(resp.Body).Decode(t); err != nil {
 		return nil, err
 	}
+	if t.Response == nil {
+		return nil, newSteamErrorf("steam returned empty offers result\n")
+	}
 	return t.Response, nil
 }
 
+// action() is used by Decline() and Cancel()
+// Steam only return success and error fields for malformed requests,
+// hence client shall use GetOffer() to check action result
+// It is also possible to implement Decline/Cancel using steamcommunity,
+// which have more predictable responses
 func (c *Client) action(method string, version uint, offerId uint64) error {
 	resp, err := c.client.Do(netutil.NewPostForm(fmt.Sprintf(apiUrl, method, version), netutil.ToUrlValues(map[string]string{
 		"key":          string(c.key),
@@ -103,18 +116,6 @@ func (c *Client) action(method string, version uint, offerId uint64) error {
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
 		return fmt.Errorf(method+" error: status code %d", resp.StatusCode)
-	}
-
-	var result map[string]string
-	if err = json.NewDecoder(resp.Body).Decode(result); err != nil {
-		return err
-	}
-	success, ok := result["success"]
-	if !ok {
-		return newSteamErrorf(method + " error: no success field\n")
-	}
-	if success != "1" {
-		return newSteamErrorf(method+" error: success field is %v\n", success)
 	}
 	return nil
 }
@@ -142,15 +143,15 @@ func (c *Client) Accept(offerId uint64) (uint64, error) {
 		return 0, err
 	}
 	defer resp.Body.Close()
-	if resp.StatusCode != 200 {
-		return 0, fmt.Errorf("accept error: status code %d", resp.StatusCode)
-	}
-	var result map[string]string
-	if err = json.NewDecoder(resp.Body).Decode(result); err != nil {
+	result := make(map[string]string)
+	if err = json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		return 0, err
 	}
 	if strError, ok := result["strError"]; ok {
 		return 0, newSteamErrorf("accept error: %v\n", strError)
+	}
+	if resp.StatusCode != 200 {
+		return 0, fmt.Errorf("accept error: status code %d", resp.StatusCode)
 	}
 	tradeIdString, ok := result["tradeid"]
 	if !ok {
@@ -164,11 +165,11 @@ func (c *Client) Accept(offerId uint64) (uint64, error) {
 }
 
 type TradeItem struct {
-	AppId      uint32
-	ContextId  uint64
-	Amount     uint64
-	AssetId    uint64 `json:",string,omitempty"`
-	CurrencyId uint64 `json:",string,omitempty"`
+	AppId      uint32 `json:"appid"`
+	ContextId  uint64 `json:"contextid,string"`
+	Amount     uint64 `json:"amount"`
+	AssetId    uint64 `json:"assetid,string,omitempty"`
+	CurrencyId uint64 `json:"currencyid,string,omitempty"`
 }
 
 // Sends a new trade offer to the given Steam user. You can optionally specify an access token if you've got one.
@@ -203,7 +204,6 @@ func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, the
 		"partner":           other.ToString(),
 		"tradeoffermessage": message,
 		"json_tradeoffer":   string(jto),
-		"captcha":           "",
 	}
 
 	var referer string
@@ -240,15 +240,22 @@ func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, the
 		return 0, err
 	}
 	defer resp.Body.Close()
-	if resp.StatusCode != 200 {
-		return 0, fmt.Errorf("create error: status code %d", resp.StatusCode)
-	}
-	var result map[string]string
-	if err = json.NewDecoder(resp.Body).Decode(result); err != nil {
+	result := make(map[string]string)
+	if err = json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		return 0, err
 	}
+	// strError code descriptions:
+	// 15	invalide trade access token
+	// 16	timeout
+	// 20	wrong contextid
+	// 25	can't send more offers until some is accepted/cancelled...
+	// 26	object is not in our inventory
+	// error code names are in internal/steamlang/enums.go EResult_name
 	if strError, ok := result["strError"]; ok {
 		return 0, newSteamErrorf("create error: %v\n", strError)
+	}
+	if resp.StatusCode != 200 {
+		return 0, fmt.Errorf("create error: status code %d", resp.StatusCode)
 	}
 	offerIdString, ok := result["tradeofferid"]
 	if !ok {
@@ -265,18 +272,18 @@ func (c *Client) GetOwnInventory(contextId uint64, appId uint32) (*inventory.Inv
 	return inventory.GetOwnInventory(c.client, contextId, appId)
 }
 
-func (c *Client) GetTheirInventory(other steamid.SteamId, contextId uint64, appId uint32) (*inventory.Inventory, error) {
+func (c *Client) GetPartnerInventory(other steamid.SteamId, contextId uint64, appId uint32, offerId *uint64) (*inventory.Inventory, error) {
 	return inventory.GetFullInventory(func() (*inventory.PartialInventory, error) {
-		return c.getPartialTheirInventory(other, contextId, appId, nil)
+		return c.getPartialPartnerInventory(other, contextId, appId, offerId, nil)
 	}, func(start uint) (*inventory.PartialInventory, error) {
-		return c.getPartialTheirInventory(other, contextId, appId, &start)
+		return c.getPartialPartnerInventory(other, contextId, appId, offerId, &start)
 	})
 }
 
-func (c *Client) getPartialTheirInventory(other steamid.SteamId, contextId uint64, appId uint32, start *uint) (*inventory.PartialInventory, error) {
+func (c *Client) getPartialPartnerInventory(other steamid.SteamId, contextId uint64, appId uint32, offerId *uint64, start *uint) (*inventory.PartialInventory, error) {
 	data := map[string]string{
 		"sessionid": c.sessionId,
-		"partner":   fmt.Sprintf("%d", other),
+		"partner":   other.ToString(),
 		"contextid": strconv.FormatUint(contextId, 10),
 		"appid":     strconv.FormatUint(uint64(appId), 10),
 	}
@@ -284,85 +291,152 @@ func (c *Client) getPartialTheirInventory(other steamid.SteamId, contextId uint6
 		data["start"] = strconv.FormatUint(uint64(*start), 10)
 	}
 
-	const baseUrl = "https://steamcommunity.com/tradeoffer/new/"
+	baseUrl := "https://steamcommunity.com/tradeoffer/%v/"
+	if offerId != nil {
+		baseUrl = fmt.Sprintf(baseUrl, *offerId)
+	} else {
+		baseUrl = fmt.Sprintf(baseUrl, "new")
+	}
+
 	req, err := http.NewRequest("GET", baseUrl+"partnerinventory/?"+netutil.ToUrlValues(data).Encode(), nil)
 	if err != nil {
 		panic(err)
 	}
-	req.Header.Add("Referer", baseUrl+"?partner="+fmt.Sprintf("%d", other))
+	req.Header.Add("Referer", baseUrl+"?partner="+strconv.FormatUint(uint64(other.GetAccountId()), 10))
 
 	return inventory.DoInventoryRequest(c.client, req)
 }
 
-func (c *Client) GetOfferWithRetry(offerId uint64, retryCount int, retryWait time.Duration) (*TradeOfferResult, error) {
+// Can be used to verify accepted tradeoffer and find out received asset ids
+func (c *Client) GetTradeReceipt(tradeId uint64) ([]*TradeReceiptItem, error) {
+	url := fmt.Sprintf("https://steamcommunity.com/trade/%d/receipt", tradeId)
+	resp, err := c.client.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	respBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	items, err := parseTradeReceipt(respBody)
+	if err != nil {
+		return nil, newSteamErrorf("failed to parse trade receipt: %v", err)
+	}
+	return items, nil
+}
+
+// Get duration of escrow in days. Call this before sending a trade offer
+func (c *Client) GetPartnerEscrowDuration(other steamid.SteamId, accessToken *string) (*EscrowDuration, error) {
+	data := map[string]string{
+		"partner": strconv.FormatUint(uint64(other.GetAccountId()), 10),
+	}
+	if accessToken != nil {
+		data["token"] = *accessToken
+	}
+	return c.getEscrowDuration("https://steamcommunity.com/tradeoffer/new/?" + netutil.ToUrlValues(data).Encode())
+}
+
+// Get duration of escrow in days. Call this after receiving a trade offer
+func (c *Client) GetOfferEscrowDuration(offerId uint64) (*EscrowDuration, error) {
+	return c.getEscrowDuration("http://steamcommunity.com/tradeoffer/" + strconv.FormatUint(offerId, 10))
+}
+
+func (c *Client) getEscrowDuration(queryUrl string) (*EscrowDuration, error) {
+	resp, err := c.client.Get(queryUrl)
+	if err != nil {
+		return nil, fmt.Errorf("failed to retrieve escrow duration: %v", err)
+	}
+	defer resp.Body.Close()
+	respBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	escrowDuration, err := parseEscrowDuration(respBody)
+	if err != nil {
+		return nil, newSteamErrorf("failed to parse escrow duration: %v", err)
+	}
+	return escrowDuration, nil
+}
+
+func (c *Client) GetOfferWithRetry(offerId uint64, retryCount int, retryDelay time.Duration) (*TradeOfferResult, error) {
 	var res *TradeOfferResult
 	return res, withRetry(
 		func() (err error) {
 			res, err = c.GetOffer(offerId)
 			return err
-		}, retryCount, retryWait)
+		}, retryCount, retryDelay)
 }
 
-func (c *Client) GetOffersWithRetry(getSent bool, getReceived bool, getDescriptions bool, activeOnly bool, historicalOnly bool, timeHistoricalCutoff *uint32, retryCount int, retryWait time.Duration) (*TradeOffersResult, error) {
+func (c *Client) GetOffersWithRetry(getSent bool, getReceived bool, getDescriptions bool, activeOnly bool, historicalOnly bool, timeHistoricalCutoff *uint32, retryCount int, retryDelay time.Duration) (*TradeOffersResult, error) {
 	var res *TradeOffersResult
 	return res, withRetry(
 		func() (err error) {
 			res, err = c.GetOffers(getSent, getReceived, getDescriptions, activeOnly, historicalOnly, timeHistoricalCutoff)
 			return err
-		}, retryCount, retryWait)
+		}, retryCount, retryDelay)
 }
 
-func (c *Client) DeclineWithRetry(offerId uint64, retryCount int, retryWait time.Duration) error {
+func (c *Client) DeclineWithRetry(offerId uint64, retryCount int, retryDelay time.Duration) error {
 	return withRetry(
 		func() error {
 			return c.Decline(offerId)
-		}, retryCount, retryWait)
+		}, retryCount, retryDelay)
 }
 
-func (c *Client) CancelWithRetry(offerId uint64, retryCount int, retryWait time.Duration) error {
+func (c *Client) CancelWithRetry(offerId uint64, retryCount int, retryDelay time.Duration) error {
 	return withRetry(
 		func() error {
 			return c.Cancel(offerId)
-		}, retryCount, retryWait)
+		}, retryCount, retryDelay)
 }
 
-func (c *Client) AcceptWithRetry(offerId uint64, retryCount int, retryWait time.Duration) (uint64, error) {
+func (c *Client) AcceptWithRetry(offerId uint64, retryCount int, retryDelay time.Duration) (uint64, error) {
 	var res uint64
 	return res, withRetry(
 		func() (err error) {
 			res, err = c.Accept(offerId)
 			return err
-		}, retryCount, retryWait)
+		}, retryCount, retryDelay)
 }
 
-func (c *Client) CreateWithRetry(other steamid.SteamId, accessToken *string, myItems, theirItems []TradeItem, counteredOfferId *uint64, message string, retryCount int, retryWait time.Duration) (uint64, error) {
+func (c *Client) CreateWithRetry(other steamid.SteamId, accessToken *string, myItems, theirItems []TradeItem, counteredOfferId *uint64, message string, retryCount int, retryDelay time.Duration) (uint64, error) {
 	var res uint64
 	return res, withRetry(
 		func() (err error) {
 			res, err = c.Create(other, accessToken, myItems, theirItems, counteredOfferId, message)
 			return err
-		}, retryCount, retryWait)
+		}, retryCount, retryDelay)
 }
 
-func (c *Client) GetOwnInventoryWithRetry(contextId uint64, appId uint32, retryCount int, retryWait time.Duration) (*inventory.Inventory, error) {
+func (c *Client) GetOwnInventoryWithRetry(contextId uint64, appId uint32, retryCount int, retryDelay time.Duration) (*inventory.Inventory, error) {
 	var res *inventory.Inventory
 	return res, withRetry(
 		func() (err error) {
 			res, err = c.GetOwnInventory(contextId, appId)
 			return err
-		}, retryCount, retryWait)
+		}, retryCount, retryDelay)
 }
 
-func (c *Client) GetTheirInventoryWithRetry(other steamid.SteamId, contextId uint64, appId uint32, retryCount int, retryWait time.Duration) (*inventory.Inventory, error) {
+func (c *Client) GetPartnerInventoryWithRetry(other steamid.SteamId, contextId uint64, appId uint32, offerId *uint64, retryCount int, retryDelay time.Duration) (*inventory.Inventory, error) {
 	var res *inventory.Inventory
 	return res, withRetry(
 		func() (err error) {
-			res, err = c.GetTheirInventory(other, contextId, appId)
+			res, err = c.GetPartnerInventory(other, contextId, appId, offerId)
 			return err
-		}, retryCount, retryWait)
+		}, retryCount, retryDelay)
 }
 
-func withRetry(f func() error, retryCount int, retryWait time.Duration) error {
+func (c *Client) GetTradeReceiptWithRetry(tradeId uint64, retryCount int, retryDelay time.Duration) ([]*TradeReceiptItem, error) {
+	var res []*TradeReceiptItem
+	return res, withRetry(
+		func() (err error) {
+			res, err = c.GetTradeReceipt(tradeId)
+			return err
+		}, retryCount, retryDelay)
+}
+
+func withRetry(f func() error, retryCount int, retryDelay time.Duration) error {
 	if retryCount <= 0 {
 		panic("retry count must be more than 0")
 	}
@@ -377,7 +451,7 @@ func withRetry(f func() error, retryCount int, retryWait time.Duration) error {
 			if i == retryCount {
 				return err
 			}
-			time.Sleep(retryWait)
+			time.Sleep(retryDelay)
 			continue
 		}
 		break
