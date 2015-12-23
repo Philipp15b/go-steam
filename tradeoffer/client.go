@@ -146,13 +146,13 @@ func (c *Client) Accept(offerId uint64) error {
 	}
 	defer resp.Body.Close()
 	t := new(struct {
-		strError string `json:"strError"`
+		StrError string `json:"strError"`
 	})
 	if err = json.NewDecoder(resp.Body).Decode(t); err != nil {
 		return err
 	}
-	if t.strError != "" {
-		return newSteamErrorf("accept error: %v\n", t.strError)
+	if t.StrError != "" {
+		return newSteamErrorf("accept error: %v\n", t.StrError)
 	}
 	if resp.StatusCode != 200 {
 		return fmt.Errorf("accept error: status code %d", resp.StatusCode)
@@ -237,7 +237,7 @@ func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, the
 	}
 	defer resp.Body.Close()
 	t := new(struct {
-		strError     string `json:"strError"`
+		StrError     string `json:"strError"`
 		TradeOfferId uint64 `json:"tradeofferid,string"`
 	})
 	if err = json.NewDecoder(resp.Body).Decode(t); err != nil {
@@ -250,8 +250,8 @@ func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, the
 	// 25	can't send more offers until some is accepted/cancelled...
 	// 26	object is not in our inventory
 	// error code names are in internal/steamlang/enums.go EResult_name
-	if t.strError != "" {
-		return 0, newSteamErrorf("create error: %v\n", t.strError)
+	if t.StrError != "" {
+		return 0, newSteamErrorf("create error: %v\n", t.StrError)
 	}
 	if resp.StatusCode != 200 {
 		return 0, fmt.Errorf("create error: status code %d", resp.StatusCode)
