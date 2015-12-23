@@ -145,12 +145,14 @@ func (c *Client) Accept(offerId uint64) error {
 		return err
 	}
 	defer resp.Body.Close()
-	result := make(map[string]string)
-	if err = json.NewDecoder(resp.Body).Decode(&result); err != nil {
+	t := new(struct {
+		strError string `json:"strError"`
+	})
+	if err = json.NewDecoder(resp.Body).Decode(t); err != nil {
 		return err
 	}
-	if strError, ok := result["strError"]; ok {
-		return newSteamErrorf("accept error: %v\n", strError)
+	if t.strError != "" {
+		return newSteamErrorf("accept error: %v\n", t.strError)
 	}
 	if resp.StatusCode != 200 {
 		return fmt.Errorf("accept error: status code %d", resp.StatusCode)
@@ -234,8 +236,11 @@ func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, the
 		return 0, err
 	}
 	defer resp.Body.Close()
-	result := make(map[string]string)
-	if err = json.NewDecoder(resp.Body).Decode(&result); err != nil {
+	t := new(struct {
+		strError     string `json:"strError"`
+		TradeOfferId uint64 `json:"tradeofferid,string"`
+	})
+	if err = json.NewDecoder(resp.Body).Decode(t); err != nil {
 		return 0, err
 	}
 	// strError code descriptions:
@@ -245,21 +250,16 @@ func (c *Client) Create(other steamid.SteamId, accessToken *string, myItems, the
 	// 25	can't send more offers until some is accepted/cancelled...
 	// 26	object is not in our inventory
 	// error code names are in internal/steamlang/enums.go EResult_name
-	if strError, ok := result["strError"]; ok {
-		return 0, newSteamErrorf("create error: %v\n", strError)
+	if t.strError != "" {
+		return 0, newSteamErrorf("create error: %v\n", t.strError)
 	}
 	if resp.StatusCode != 200 {
 		return 0, fmt.Errorf("create error: status code %d", resp.StatusCode)
 	}
-	offerIdString, ok := result["tradeofferid"]
-	if !ok {
-		return 0, newSteamErrorf("create error: steam does not return trade offer id\n")
+	if t.TradeOfferId == 0 {
+		return 0, newSteamErrorf("create error: steam returned 0 for trade offer id")
 	}
-	offerId, err := strconv.ParseUint(offerIdString, 10, 64)
-	if err != nil || offerId == 0 {
-		return 0, newSteamErrorf("create error: steam returned %v for trade offer id", offerIdString)
-	}
-	return offerId, nil
+	return t.TradeOfferId, nil
 }
 
 func (c *Client) GetOwnInventory(contextId uint64, appId uint32) (*inventory.Inventory, error) {
