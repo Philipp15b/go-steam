@@ -1,10 +1,11 @@
 package internal
 
 import (
-	"github.com/golang/protobuf/proto"
-	. "github.com/Philipp15b/go-steam/internal/steamlang"
-	. "github.com/Philipp15b/go-steam/steamid"
 	"io"
+
+	. "github.com/Philipp15b/go-steam/internalpkg/steamlang"
+	. "github.com/Philipp15b/go-steam/steamid"
+	"github.com/golang/protobuf/proto"
 )
 
 // Interface for all messages, typically outgoing. They can also be created by
