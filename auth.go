@@ -2,13 +2,14 @@ package steam
 
 import (
 	"crypto/sha1"
-	. "github.com/Philipp15b/go-steam/internal"
-	. "github.com/Philipp15b/go-steam/internal/protobuf"
-	. "github.com/Philipp15b/go-steam/internal/steamlang"
-	. "github.com/Philipp15b/go-steam/steamid"
-	"github.com/golang/protobuf/proto"
 	"sync/atomic"
 	"time"
+
+	. "github.com/Philipp15b/go-steam/internalpkg"
+	. "github.com/Philipp15b/go-steam/internalpkg/protobuf"
+	. "github.com/Philipp15b/go-steam/internalpkg/steamlang"
+	. "github.com/Philipp15b/go-steam/steamid"
+	"github.com/golang/protobuf/proto"
 )
 
 type Auth struct {

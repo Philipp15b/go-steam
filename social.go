@@ -4,15 +4,16 @@ import (
 	"bytes"
 	"encoding/binary"
 	"encoding/hex"
-	. "github.com/Philipp15b/go-steam/internal"
-	. "github.com/Philipp15b/go-steam/internal/protobuf"
-	. "github.com/Philipp15b/go-steam/internal/steamlang"
+	"io"
+	"sync"
+
+	. "github.com/Philipp15b/go-steam/internalpkg"
+	. "github.com/Philipp15b/go-steam/internalpkg/protobuf"
+	. "github.com/Philipp15b/go-steam/internalpkg/steamlang"
 	. "github.com/Philipp15b/go-steam/rwu"
 	"github.com/Philipp15b/go-steam/socialcache"
 	. "github.com/Philipp15b/go-steam/steamid"
 	"github.com/golang/protobuf/proto"
-	"io"
-	"sync"
 )
 
 // Provides access to social aspects of Steam.
