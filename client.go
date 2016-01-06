@@ -63,9 +63,8 @@ type PacketHandler interface {
 
 func NewClient() *Client {
 	client := &Client{
-		events:    make(chan interface{}, 3),
-		writeChan: make(chan IMsg, 5),
-		writeBuf:  new(bytes.Buffer),
+		events:   make(chan interface{}, 3),
+		writeBuf: new(bytes.Buffer),
 	}
 	client.Auth = &Auth{client: client}
 	client.RegisterPacketHandler(client.Auth)
@@ -175,6 +174,7 @@ func (c *Client) ConnectTo(addr *netutil.PortAddr) {
 		log.Fatal(err)
 	}
 	c.conn = conn
+	c.writeChan = make(chan IMsg, 5)
 
 	go c.readLoop()
 	go c.writeLoop()
@@ -189,6 +189,7 @@ func (c *Client) ConnectToBind(addr *netutil.PortAddr, local *net.TCPAddr) {
 		log.Fatal(err)
 	}
 	c.conn = conn
+	c.writeChan = make(chan IMsg, 5)
 
 	go c.readLoop()
 	go c.writeLoop()
