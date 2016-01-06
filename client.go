@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"hash/crc32"
 	"io/ioutil"
-	"log"
 	"net"
 	"sync"
 	"sync/atomic"
@@ -171,7 +170,8 @@ func (c *Client) ConnectTo(addr *netutil.PortAddr) {
 
 	conn, err := dialTCP(addr.ToTCPAddr(), nil)
 	if err != nil {
-		log.Fatal(err)
+		c.Fatalf("Connect failed: %v", err)
+		return
 	}
 	c.conn = conn
 	c.writeChan = make(chan IMsg, 5)
@@ -186,7 +186,8 @@ func (c *Client) ConnectToBind(addr *netutil.PortAddr, local *net.TCPAddr) {
 
 	conn, err := dialTCP(addr.ToTCPAddr(), local)
 	if err != nil {
-		log.Fatal(err)
+		c.Fatalf("Connect failed: %v", err)
+		return
 	}
 	c.conn = conn
 	c.writeChan = make(chan IMsg, 5)
@@ -250,7 +251,6 @@ func (c *Client) readLoop() {
 }
 
 func (c *Client) writeLoop() {
-	defer c.Disconnect()
 	for {
 		c.mutex.RLock()
 		conn := c.conn
@@ -267,7 +267,7 @@ func (c *Client) writeLoop() {
 		err := msg.Serialize(c.writeBuf)
 		if err != nil {
 			c.writeBuf.Reset()
-			c.Errorf("Error serializing message %v: %v", msg, err)
+			c.Fatalf("Error serializing message %v: %v", msg, err)
 			return
 		}
 
@@ -276,7 +276,7 @@ func (c *Client) writeLoop() {
 		c.writeBuf.Reset()
 
 		if err != nil {
-			c.Errorf("Error writing message %v: %v", msg, err)
+			c.Fatalf("Error writing message %v: %v", msg, err)
 			return
 		}
 	}
