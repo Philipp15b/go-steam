@@ -85,7 +85,7 @@ func GetRandomNorthAmericaCM() *netutil.PortAddr {
 // GetRandomEuropeCM returns back a random server in europe
 func GetRandomEuropeCM() *netutil.PortAddr {
 	rng := rand.New(rand.NewSource(time.Now().UnixNano()))
-	addr := netutil.ParsePortAddr(CMServers[1][rng.Int31n(int32(len(CMServers[0])))])
+	addr := netutil.ParsePortAddr(CMServers[1][rng.Int31n(int32(len(CMServers[1])))])
 	if addr == nil {
 		panic("invalid address in CMServers slice")
 	}
