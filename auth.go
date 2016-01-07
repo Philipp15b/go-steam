@@ -22,6 +22,7 @@ type LogOnDetails struct {
 	Username       string
 	Password       string
 	AuthCode       string
+	TwoFactorCode  string
 	SentryFileHash SentryHash
 }
 
@@ -42,6 +43,9 @@ func (a *Auth) LogOn(details *LogOnDetails) {
 	logon.Password = &details.Password
 	if details.AuthCode != "" {
 		logon.AuthCode = proto.String(details.AuthCode)
+	}
+	if details.TwoFactorCode != "" {
+		logon.TwoFactorCode = proto.String(details.TwoFactorCode)
 	}
 	logon.ClientLanguage = proto.String("english")
 	logon.ProtocolVersion = proto.Uint32(MsgClientLogon_CurrentProtocol)
