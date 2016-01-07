@@ -258,7 +258,7 @@ const (
 	EMsg_ClientGetLegacyGameKey                                   EMsg = 730
 	EMsg_ClientContentServerLogOn_Deprecated                      EMsg = 731 // Deprecated
 	EMsg_ClientAckVACBan2                                         EMsg = 732
-	EMsg_ClientAckMessageByGID                                    EMsg = 735
+	EMsg_ClientAckMessageByGID                                    EMsg = 735 // Deprecated
 	EMsg_ClientGetPurchaseReceipts                                EMsg = 736
 	EMsg_ClientAckPurchaseReceipt                                 EMsg = 737
 	EMsg_ClientGamesPlayed3_obsolete                              EMsg = 738 // Deprecated
@@ -306,8 +306,8 @@ const (
 	EMsg_ClientInitPurchaseResponse                               EMsg = 789
 	EMsg_ClientAddFriend                                          EMsg = 791
 	EMsg_ClientAddFriendResponse                                  EMsg = 792
-	EMsg_ClientInviteFriend                                       EMsg = 793
-	EMsg_ClientInviteFriendResponse                               EMsg = 794
+	EMsg_ClientInviteFriend                                       EMsg = 793 // Deprecated
+	EMsg_ClientInviteFriendResponse                               EMsg = 794 // Deprecated
 	EMsg_ClientSendGuestPassResponse                              EMsg = 795 // Deprecated
 	EMsg_ClientAckGuestPassResponse                               EMsg = 796
 	EMsg_ClientRedeemGuestPassResponse                            EMsg = 797
@@ -1196,6 +1196,8 @@ const (
 	EMsg_ClientDisableTestLicenseResponse                         EMsg = 5446
 	EMsg_ClientRequestValidationMail                              EMsg = 5448
 	EMsg_ClientRequestValidationMailResponse                      EMsg = 5449
+	EMsg_ClientCheckAppBetaPassword                               EMsg = 5450
+	EMsg_ClientCheckAppBetaPasswordResponse                       EMsg = 5451
 	EMsg_ClientToGC                                               EMsg = 5452
 	EMsg_ClientFromGC                                             EMsg = 5453
 	EMsg_ClientRequestChangeMail                                  EMsg = 5454
@@ -1206,7 +1208,7 @@ const (
 	EMsg_ClientPersonalQAChange3                                  EMsg = 5459
 	EMsg_ClientResetForgottenPassword3                            EMsg = 5460
 	EMsg_ClientRequestForgottenPasswordEmail3                     EMsg = 5461
-	EMsg_ClientCreateAccount3                                     EMsg = 5462
+	EMsg_ClientCreateAccount3                                     EMsg = 5462 // Deprecated
 	EMsg_ClientNewLoginKey                                        EMsg = 5463
 	EMsg_ClientNewLoginKeyAccepted                                EMsg = 5464
 	EMsg_ClientLogOnWithHash_Deprecated                           EMsg = 5465 // Deprecated
@@ -1310,8 +1312,8 @@ const (
 	EMsg_ClientItemAnnouncements                                  EMsg = 5576
 	EMsg_ClientRequestItemAnnouncements                           EMsg = 5577
 	EMsg_ClientFriendMsgEchoToSender                              EMsg = 5578
-	EMsg_ClientChangeSteamGuardOptions                            EMsg = 5579
-	EMsg_ClientChangeSteamGuardOptionsResponse                    EMsg = 5580
+	EMsg_ClientChangeSteamGuardOptions                            EMsg = 5579 // Deprecated
+	EMsg_ClientChangeSteamGuardOptionsResponse                    EMsg = 5580 // Deprecated
 	EMsg_ClientOGSGameServerPingSample                            EMsg = 5581
 	EMsg_ClientCommentNotifications                               EMsg = 5582
 	EMsg_ClientRequestCommentNotifications                        EMsg = 5583
@@ -1489,12 +1491,12 @@ const (
 	EMsg_ClientUCMDeletePublishedFileResponse                     EMsg = 7316
 	EMsg_ClientUCMEnumerateUserPublishedFiles                     EMsg = 7317
 	EMsg_ClientUCMEnumerateUserPublishedFilesResponse             EMsg = 7318
-	EMsg_ClientUCMSubscribePublishedFile                          EMsg = 7319
-	EMsg_ClientUCMSubscribePublishedFileResponse                  EMsg = 7320
+	EMsg_ClientUCMSubscribePublishedFile                          EMsg = 7319 // Deprecated
+	EMsg_ClientUCMSubscribePublishedFileResponse                  EMsg = 7320 // Deprecated
 	EMsg_ClientUCMEnumerateUserSubscribedFiles                    EMsg = 7321
 	EMsg_ClientUCMEnumerateUserSubscribedFilesResponse            EMsg = 7322
-	EMsg_ClientUCMUnsubscribePublishedFile                        EMsg = 7323
-	EMsg_ClientUCMUnsubscribePublishedFileResponse                EMsg = 7324
+	EMsg_ClientUCMUnsubscribePublishedFile                        EMsg = 7323 // Deprecated
+	EMsg_ClientUCMUnsubscribePublishedFileResponse                EMsg = 7324 // Deprecated
 	EMsg_ClientUCMUpdatePublishedFile                             EMsg = 7325
 	EMsg_ClientUCMUpdatePublishedFileResponse                     EMsg = 7326
 	EMsg_UCMUpdatePublishedFile                                   EMsg = 7327
@@ -2914,6 +2916,8 @@ var EMsg_name = map[EMsg]string{
 	5446: "EMsg_ClientDisableTestLicenseResponse",
 	5448: "EMsg_ClientRequestValidationMail",
 	5449: "EMsg_ClientRequestValidationMailResponse",
+	5450: "EMsg_ClientCheckAppBetaPassword",
+	5451: "EMsg_ClientCheckAppBetaPasswordResponse",
 	5452: "EMsg_ClientToGC",
 	5453: "EMsg_ClientFromGC",
 	5454: "EMsg_ClientRequestChangeMail",
@@ -3556,115 +3560,126 @@ const (
 	EResult_AccountLoginDeniedThrottle              EResult = 87
 	EResult_TwoFactorCodeMismatch                   EResult = 88
 	EResult_TwoFactorActivationCodeMismatch         EResult = 89
-	EResult_AccountAssociatedToMultiplePlayers      EResult = 90
+	EResult_AccountAssociatedToMultiplePlayers      EResult = 90 // Deprecated: renamed to AccountAssociatedToMultiplePartners
+	EResult_AccountAssociatedToMultiplePartners     EResult = 90
 	EResult_NotModified                             EResult = 91
-	EResult_NoMobileDeviceAvailable                 EResult = 92
-	EResult_TimeIsOutOfSync                         EResult = 93
+	EResult_NoMobileDeviceAvailable                 EResult = 92 // Deprecated: renamed to NoMobileDevice
+	EResult_NoMobileDevice                          EResult = 92
+	EResult_TimeIsOutOfSync                         EResult = 93 // Deprecated: renamed to TimeNotSynced
+	EResult_TimeNotSynced                           EResult = 93
 	EResult_SMSCodeFailed                           EResult = 94
 	EResult_TooManyAccountsAccessThisResource       EResult = 95 // Deprecated: renamed to AccountLimitExceeded
 	EResult_AccountLimitExceeded                    EResult = 95
 	EResult_AccountActivityLimitExceeded            EResult = 96
 	EResult_PhoneActivityLimitExceeded              EResult = 97
+	EResult_RefundToWallet                          EResult = 98
+	EResult_EmailSendFailure                        EResult = 99
+	EResult_NotSettled                              EResult = 100
+	EResult_NeedCaptcha                             EResult = 101
 )
 
 var EResult_name = map[EResult]string{
-	0:  "EResult_Invalid",
-	1:  "EResult_OK",
-	2:  "EResult_Fail",
-	3:  "EResult_NoConnection",
-	5:  "EResult_InvalidPassword",
-	6:  "EResult_LoggedInElsewhere",
-	7:  "EResult_InvalidProtocolVer",
-	8:  "EResult_InvalidParam",
-	9:  "EResult_FileNotFound",
-	10: "EResult_Busy",
-	11: "EResult_InvalidState",
-	12: "EResult_InvalidName",
-	13: "EResult_InvalidEmail",
-	14: "EResult_DuplicateName",
-	15: "EResult_AccessDenied",
-	16: "EResult_Timeout",
-	17: "EResult_Banned",
-	18: "EResult_AccountNotFound",
-	19: "EResult_InvalidSteamID",
-	20: "EResult_ServiceUnavailable",
-	21: "EResult_NotLoggedOn",
-	22: "EResult_Pending",
-	23: "EResult_EncryptionFailure",
-	24: "EResult_InsufficientPrivilege",
-	25: "EResult_LimitExceeded",
-	26: "EResult_Revoked",
-	27: "EResult_Expired",
-	28: "EResult_AlreadyRedeemed",
-	29: "EResult_DuplicateRequest",
-	30: "EResult_AlreadyOwned",
-	31: "EResult_IPNotFound",
-	32: "EResult_PersistFailed",
-	33: "EResult_LockingFailed",
-	34: "EResult_LogonSessionReplaced",
-	35: "EResult_ConnectFailed",
-	36: "EResult_HandshakeFailed",
-	37: "EResult_IOFailure",
-	38: "EResult_RemoteDisconnect",
-	39: "EResult_ShoppingCartNotFound",
-	40: "EResult_Blocked",
-	41: "EResult_Ignored",
-	42: "EResult_NoMatch",
-	43: "EResult_AccountDisabled",
-	44: "EResult_ServiceReadOnly",
-	45: "EResult_AccountNotFeatured",
-	46: "EResult_AdministratorOK",
-	47: "EResult_ContentVersion",
-	48: "EResult_TryAnotherCM",
-	49: "EResult_PasswordRequiredToKickSession",
-	50: "EResult_AlreadyLoggedInElsewhere",
-	51: "EResult_Suspended",
-	52: "EResult_Cancelled",
-	53: "EResult_DataCorruption",
-	54: "EResult_DiskFull",
-	55: "EResult_RemoteCallFailed",
-	56: "EResult_PasswordNotSet",
-	57: "EResult_ExternalAccountUnlinked",
-	58: "EResult_PSNTicketInvalid",
-	59: "EResult_ExternalAccountAlreadyLinked",
-	60: "EResult_RemoteFileConflict",
-	61: "EResult_IllegalPassword",
-	62: "EResult_SameAsPreviousValue",
-	63: "EResult_AccountLogonDenied",
-	64: "EResult_CannotUseOldPassword",
-	65: "EResult_InvalidLoginAuthCode",
-	66: "EResult_AccountLogonDeniedNoMailSent",
-	67: "EResult_HardwareNotCapableOfIPT",
-	68: "EResult_IPTInitError",
-	69: "EResult_ParentalControlRestricted",
-	70: "EResult_FacebookQueryError",
-	71: "EResult_ExpiredLoginAuthCode",
-	72: "EResult_IPLoginRestrictionFailed",
-	73: "EResult_AccountLocked",
-	74: "EResult_AccountLogonDeniedVerifiedEmailRequired",
-	75: "EResult_NoMatchingURL",
-	76: "EResult_BadResponse",
-	77: "EResult_RequirePasswordReEntry",
-	78: "EResult_ValueOutOfRange",
-	79: "EResult_UnexpectedError",
-	80: "EResult_Disabled",
-	81: "EResult_InvalidCEGSubmission",
-	82: "EResult_RestrictedDevice",
-	83: "EResult_RegionLocked",
-	84: "EResult_RateLimitExceeded",
-	85: "EResult_AccountLogonDeniedNeedTwoFactorCode",
-	86: "EResult_ItemOrEntryHasBeenDeleted",
-	87: "EResult_AccountLoginDeniedThrottle",
-	88: "EResult_TwoFactorCodeMismatch",
-	89: "EResult_TwoFactorActivationCodeMismatch",
-	90: "EResult_AccountAssociatedToMultiplePlayers",
-	91: "EResult_NotModified",
-	92: "EResult_NoMobileDeviceAvailable",
-	93: "EResult_TimeIsOutOfSync",
-	94: "EResult_SMSCodeFailed",
-	95: "EResult_TooManyAccountsAccessThisResource",
-	96: "EResult_AccountActivityLimitExceeded",
-	97: "EResult_PhoneActivityLimitExceeded",
+	0:   "EResult_Invalid",
+	1:   "EResult_OK",
+	2:   "EResult_Fail",
+	3:   "EResult_NoConnection",
+	5:   "EResult_InvalidPassword",
+	6:   "EResult_LoggedInElsewhere",
+	7:   "EResult_InvalidProtocolVer",
+	8:   "EResult_InvalidParam",
+	9:   "EResult_FileNotFound",
+	10:  "EResult_Busy",
+	11:  "EResult_InvalidState",
+	12:  "EResult_InvalidName",
+	13:  "EResult_InvalidEmail",
+	14:  "EResult_DuplicateName",
+	15:  "EResult_AccessDenied",
+	16:  "EResult_Timeout",
+	17:  "EResult_Banned",
+	18:  "EResult_AccountNotFound",
+	19:  "EResult_InvalidSteamID",
+	20:  "EResult_ServiceUnavailable",
+	21:  "EResult_NotLoggedOn",
+	22:  "EResult_Pending",
+	23:  "EResult_EncryptionFailure",
+	24:  "EResult_InsufficientPrivilege",
+	25:  "EResult_LimitExceeded",
+	26:  "EResult_Revoked",
+	27:  "EResult_Expired",
+	28:  "EResult_AlreadyRedeemed",
+	29:  "EResult_DuplicateRequest",
+	30:  "EResult_AlreadyOwned",
+	31:  "EResult_IPNotFound",
+	32:  "EResult_PersistFailed",
+	33:  "EResult_LockingFailed",
+	34:  "EResult_LogonSessionReplaced",
+	35:  "EResult_ConnectFailed",
+	36:  "EResult_HandshakeFailed",
+	37:  "EResult_IOFailure",
+	38:  "EResult_RemoteDisconnect",
+	39:  "EResult_ShoppingCartNotFound",
+	40:  "EResult_Blocked",
+	41:  "EResult_Ignored",
+	42:  "EResult_NoMatch",
+	43:  "EResult_AccountDisabled",
+	44:  "EResult_ServiceReadOnly",
+	45:  "EResult_AccountNotFeatured",
+	46:  "EResult_AdministratorOK",
+	47:  "EResult_ContentVersion",
+	48:  "EResult_TryAnotherCM",
+	49:  "EResult_PasswordRequiredToKickSession",
+	50:  "EResult_AlreadyLoggedInElsewhere",
+	51:  "EResult_Suspended",
+	52:  "EResult_Cancelled",
+	53:  "EResult_DataCorruption",
+	54:  "EResult_DiskFull",
+	55:  "EResult_RemoteCallFailed",
+	56:  "EResult_PasswordNotSet",
+	57:  "EResult_ExternalAccountUnlinked",
+	58:  "EResult_PSNTicketInvalid",
+	59:  "EResult_ExternalAccountAlreadyLinked",
+	60:  "EResult_RemoteFileConflict",
+	61:  "EResult_IllegalPassword",
+	62:  "EResult_SameAsPreviousValue",
+	63:  "EResult_AccountLogonDenied",
+	64:  "EResult_CannotUseOldPassword",
+	65:  "EResult_InvalidLoginAuthCode",
+	66:  "EResult_AccountLogonDeniedNoMailSent",
+	67:  "EResult_HardwareNotCapableOfIPT",
+	68:  "EResult_IPTInitError",
+	69:  "EResult_ParentalControlRestricted",
+	70:  "EResult_FacebookQueryError",
+	71:  "EResult_ExpiredLoginAuthCode",
+	72:  "EResult_IPLoginRestrictionFailed",
+	73:  "EResult_AccountLocked",
+	74:  "EResult_AccountLogonDeniedVerifiedEmailRequired",
+	75:  "EResult_NoMatchingURL",
+	76:  "EResult_BadResponse",
+	77:  "EResult_RequirePasswordReEntry",
+	78:  "EResult_ValueOutOfRange",
+	79:  "EResult_UnexpectedError",
+	80:  "EResult_Disabled",
+	81:  "EResult_InvalidCEGSubmission",
+	82:  "EResult_RestrictedDevice",
+	83:  "EResult_RegionLocked",
+	84:  "EResult_RateLimitExceeded",
+	85:  "EResult_AccountLogonDeniedNeedTwoFactorCode",
+	86:  "EResult_ItemOrEntryHasBeenDeleted",
+	87:  "EResult_AccountLoginDeniedThrottle",
+	88:  "EResult_TwoFactorCodeMismatch",
+	89:  "EResult_TwoFactorActivationCodeMismatch",
+	90:  "EResult_AccountAssociatedToMultiplePlayers",
+	91:  "EResult_NotModified",
+	92:  "EResult_NoMobileDeviceAvailable",
+	93:  "EResult_TimeIsOutOfSync",
+	94:  "EResult_SMSCodeFailed",
+	95:  "EResult_TooManyAccountsAccessThisResource",
+	96:  "EResult_AccountActivityLimitExceeded",
+	97:  "EResult_PhoneActivityLimitExceeded",
+	98:  "EResult_RefundToWallet",
+	99:  "EResult_EmailSendFailure",
+	100: "EResult_NotSettled",
+	101: "EResult_NeedCaptcha",
 }
 
 func (e EResult) String() string {
@@ -4358,43 +4373,80 @@ func (e ELicenseType) String() string {
 type EPaymentMethod int32
 
 const (
-	EPaymentMethod_None                EPaymentMethod = 0
-	EPaymentMethod_ActivationCode      EPaymentMethod = 1
-	EPaymentMethod_CreditCard          EPaymentMethod = 2
-	EPaymentMethod_Giropay             EPaymentMethod = 3
-	EPaymentMethod_PayPal              EPaymentMethod = 4
-	EPaymentMethod_Ideal               EPaymentMethod = 5
-	EPaymentMethod_PaySafeCard         EPaymentMethod = 6
-	EPaymentMethod_Sofort              EPaymentMethod = 7
-	EPaymentMethod_GuestPass           EPaymentMethod = 8
-	EPaymentMethod_WebMoney            EPaymentMethod = 9
-	EPaymentMethod_MoneyBookers        EPaymentMethod = 10
-	EPaymentMethod_AliPay              EPaymentMethod = 11
-	EPaymentMethod_Yandex              EPaymentMethod = 12
-	EPaymentMethod_Kiosk               EPaymentMethod = 13
-	EPaymentMethod_Qiwi                EPaymentMethod = 14
-	EPaymentMethod_GameStop            EPaymentMethod = 15
-	EPaymentMethod_HardwarePromo       EPaymentMethod = 16
-	EPaymentMethod_MoPay               EPaymentMethod = 17
-	EPaymentMethod_BoletoBancario      EPaymentMethod = 18
-	EPaymentMethod_BoaCompraGold       EPaymentMethod = 19
-	EPaymentMethod_BancoDoBrasilOnline EPaymentMethod = 20
-	EPaymentMethod_ItauOnline          EPaymentMethod = 21
-	EPaymentMethod_BradescoOnline      EPaymentMethod = 22
-	EPaymentMethod_Pagseguro           EPaymentMethod = 23
-	EPaymentMethod_VisaBrazil          EPaymentMethod = 24
-	EPaymentMethod_AmexBrazil          EPaymentMethod = 25
-	EPaymentMethod_Aura                EPaymentMethod = 26
-	EPaymentMethod_Hipercard           EPaymentMethod = 27
-	EPaymentMethod_MastercardBrazil    EPaymentMethod = 28
-	EPaymentMethod_DinersCardBrazil    EPaymentMethod = 29
-	EPaymentMethod_ClickAndBuy         EPaymentMethod = 32
-	EPaymentMethod_AutoGrant           EPaymentMethod = 64
-	EPaymentMethod_Wallet              EPaymentMethod = 128
-	EPaymentMethod_Valve               EPaymentMethod = 129
-	EPaymentMethod_OEMTicket           EPaymentMethod = 256
-	EPaymentMethod_Split               EPaymentMethod = 512
-	EPaymentMethod_Complimentary       EPaymentMethod = 1024
+	EPaymentMethod_None                   EPaymentMethod = 0
+	EPaymentMethod_ActivationCode         EPaymentMethod = 1
+	EPaymentMethod_CreditCard             EPaymentMethod = 2
+	EPaymentMethod_Giropay                EPaymentMethod = 3
+	EPaymentMethod_PayPal                 EPaymentMethod = 4
+	EPaymentMethod_Ideal                  EPaymentMethod = 5
+	EPaymentMethod_PaySafeCard            EPaymentMethod = 6
+	EPaymentMethod_Sofort                 EPaymentMethod = 7
+	EPaymentMethod_GuestPass              EPaymentMethod = 8
+	EPaymentMethod_WebMoney               EPaymentMethod = 9
+	EPaymentMethod_MoneyBookers           EPaymentMethod = 10
+	EPaymentMethod_AliPay                 EPaymentMethod = 11
+	EPaymentMethod_Yandex                 EPaymentMethod = 12
+	EPaymentMethod_Kiosk                  EPaymentMethod = 13
+	EPaymentMethod_Qiwi                   EPaymentMethod = 14
+	EPaymentMethod_GameStop               EPaymentMethod = 15
+	EPaymentMethod_HardwarePromo          EPaymentMethod = 16
+	EPaymentMethod_MoPay                  EPaymentMethod = 17
+	EPaymentMethod_BoletoBancario         EPaymentMethod = 18
+	EPaymentMethod_BoaCompraGold          EPaymentMethod = 19
+	EPaymentMethod_BancoDoBrasilOnline    EPaymentMethod = 20
+	EPaymentMethod_ItauOnline             EPaymentMethod = 21
+	EPaymentMethod_BradescoOnline         EPaymentMethod = 22
+	EPaymentMethod_Pagseguro              EPaymentMethod = 23
+	EPaymentMethod_VisaBrazil             EPaymentMethod = 24
+	EPaymentMethod_AmexBrazil             EPaymentMethod = 25
+	EPaymentMethod_Aura                   EPaymentMethod = 26
+	EPaymentMethod_Hipercard              EPaymentMethod = 27
+	EPaymentMethod_MastercardBrazil       EPaymentMethod = 28
+	EPaymentMethod_DinersCardBrazil       EPaymentMethod = 29
+	EPaymentMethod_AuthorizedDevice       EPaymentMethod = 30
+	EPaymentMethod_MOLPoints              EPaymentMethod = 31
+	EPaymentMethod_ClickAndBuy            EPaymentMethod = 32
+	EPaymentMethod_Beeline                EPaymentMethod = 33
+	EPaymentMethod_Konbini                EPaymentMethod = 34
+	EPaymentMethod_EClubPoints            EPaymentMethod = 35
+	EPaymentMethod_CreditCardJapan        EPaymentMethod = 36
+	EPaymentMethod_BankTransferJapan      EPaymentMethod = 37
+	EPaymentMethod_PayEasyJapan           EPaymentMethod = 38
+	EPaymentMethod_Zong                   EPaymentMethod = 39
+	EPaymentMethod_CultureVoucher         EPaymentMethod = 40
+	EPaymentMethod_BookVoucher            EPaymentMethod = 41
+	EPaymentMethod_HappymoneyVoucher      EPaymentMethod = 42
+	EPaymentMethod_ConvenientStoreVoucher EPaymentMethod = 43
+	EPaymentMethod_GameVoucher            EPaymentMethod = 44
+	EPaymentMethod_Multibanco             EPaymentMethod = 45
+	EPaymentMethod_Payshop                EPaymentMethod = 46
+	EPaymentMethod_Maestro                EPaymentMethod = 47
+	EPaymentMethod_OXXO                   EPaymentMethod = 48
+	EPaymentMethod_ToditoCash             EPaymentMethod = 49
+	EPaymentMethod_Carnet                 EPaymentMethod = 50
+	EPaymentMethod_SPEI                   EPaymentMethod = 51
+	EPaymentMethod_ThreePay               EPaymentMethod = 52
+	EPaymentMethod_IsBank                 EPaymentMethod = 53
+	EPaymentMethod_Garanti                EPaymentMethod = 54
+	EPaymentMethod_Akbank                 EPaymentMethod = 55
+	EPaymentMethod_YapiKredi              EPaymentMethod = 56
+	EPaymentMethod_Halkbank               EPaymentMethod = 57
+	EPaymentMethod_BankAsya               EPaymentMethod = 58
+	EPaymentMethod_Finansbank             EPaymentMethod = 59
+	EPaymentMethod_DenizBank              EPaymentMethod = 60
+	EPaymentMethod_PTT                    EPaymentMethod = 61
+	EPaymentMethod_CashU                  EPaymentMethod = 62
+	EPaymentMethod_OneCard                EPaymentMethod = 63
+	EPaymentMethod_AutoGrant              EPaymentMethod = 64
+	EPaymentMethod_WebMoneyJapan          EPaymentMethod = 65
+	EPaymentMethod_Smart2PayTest          EPaymentMethod = 66
+	EPaymentMethod_Wallet                 EPaymentMethod = 128
+	EPaymentMethod_Valve                  EPaymentMethod = 129
+	EPaymentMethod_SteamPressMaster       EPaymentMethod = 130
+	EPaymentMethod_StorePromotion         EPaymentMethod = 131
+	EPaymentMethod_OEMTicket              EPaymentMethod = 256
+	EPaymentMethod_Split                  EPaymentMethod = 512
+	EPaymentMethod_Complimentary          EPaymentMethod = 1024
 )
 
 var EPaymentMethod_name = map[EPaymentMethod]string{
@@ -4428,10 +4480,47 @@ var EPaymentMethod_name = map[EPaymentMethod]string{
 	27:   "EPaymentMethod_Hipercard",
 	28:   "EPaymentMethod_MastercardBrazil",
 	29:   "EPaymentMethod_DinersCardBrazil",
+	30:   "EPaymentMethod_AuthorizedDevice",
+	31:   "EPaymentMethod_MOLPoints",
 	32:   "EPaymentMethod_ClickAndBuy",
+	33:   "EPaymentMethod_Beeline",
+	34:   "EPaymentMethod_Konbini",
+	35:   "EPaymentMethod_EClubPoints",
+	36:   "EPaymentMethod_CreditCardJapan",
+	37:   "EPaymentMethod_BankTransferJapan",
+	38:   "EPaymentMethod_PayEasyJapan",
+	39:   "EPaymentMethod_Zong",
+	40:   "EPaymentMethod_CultureVoucher",
+	41:   "EPaymentMethod_BookVoucher",
+	42:   "EPaymentMethod_HappymoneyVoucher",
+	43:   "EPaymentMethod_ConvenientStoreVoucher",
+	44:   "EPaymentMethod_GameVoucher",
+	45:   "EPaymentMethod_Multibanco",
+	46:   "EPaymentMethod_Payshop",
+	47:   "EPaymentMethod_Maestro",
+	48:   "EPaymentMethod_OXXO",
+	49:   "EPaymentMethod_ToditoCash",
+	50:   "EPaymentMethod_Carnet",
+	51:   "EPaymentMethod_SPEI",
+	52:   "EPaymentMethod_ThreePay",
+	53:   "EPaymentMethod_IsBank",
+	54:   "EPaymentMethod_Garanti",
+	55:   "EPaymentMethod_Akbank",
+	56:   "EPaymentMethod_YapiKredi",
+	57:   "EPaymentMethod_Halkbank",
+	58:   "EPaymentMethod_BankAsya",
+	59:   "EPaymentMethod_Finansbank",
+	60:   "EPaymentMethod_DenizBank",
+	61:   "EPaymentMethod_PTT",
+	62:   "EPaymentMethod_CashU",
+	63:   "EPaymentMethod_OneCard",
 	64:   "EPaymentMethod_AutoGrant",
+	65:   "EPaymentMethod_WebMoneyJapan",
+	66:   "EPaymentMethod_Smart2PayTest",
 	128:  "EPaymentMethod_Wallet",
 	129:  "EPaymentMethod_Valve",
+	130:  "EPaymentMethod_SteamPressMaster",
+	131:  "EPaymentMethod_StorePromotion",
 	256:  "EPaymentMethod_OEMTicket",
 	512:  "EPaymentMethod_Split",
 	1024: "EPaymentMethod_Complimentary",
@@ -4934,7 +5023,8 @@ const (
 	EAppInfoSection_Policies    EAppInfoSection = 13
 	EAppInfoSection_SysReqs     EAppInfoSection = 14
 	EAppInfoSection_Community   EAppInfoSection = 15
-	EAppInfoSection_Max         EAppInfoSection = 16
+	EAppInfoSection_Store       EAppInfoSection = 16
+	EAppInfoSection_Max         EAppInfoSection = 17
 )
 
 var EAppInfoSection_name = map[EAppInfoSection]string{
@@ -4954,7 +5044,8 @@ var EAppInfoSection_name = map[EAppInfoSection]string{
 	13: "EAppInfoSection_Policies",
 	14: "EAppInfoSection_SysReqs",
 	15: "EAppInfoSection_Community",
-	16: "EAppInfoSection_Max",
+	16: "EAppInfoSection_Store",
+	17: "EAppInfoSection_Max",
 }
 
 func (e EAppInfoSection) String() string {
@@ -5505,8 +5596,32 @@ const (
 	ECurrencyCode_RUB     ECurrencyCode = 5
 	ECurrencyCode_PLN     ECurrencyCode = 6
 	ECurrencyCode_BRL     ECurrencyCode = 7
+	ECurrencyCode_JPY     ECurrencyCode = 8
 	ECurrencyCode_NOK     ECurrencyCode = 9
-	ECurrencyCode_Max     ECurrencyCode = 10
+	ECurrencyCode_IDR     ECurrencyCode = 10
+	ECurrencyCode_MYR     ECurrencyCode = 11
+	ECurrencyCode_PHP     ECurrencyCode = 12
+	ECurrencyCode_SGD     ECurrencyCode = 13
+	ECurrencyCode_THB     ECurrencyCode = 14
+	ECurrencyCode_VND     ECurrencyCode = 15
+	ECurrencyCode_KRW     ECurrencyCode = 16
+	ECurrencyCode_TRY     ECurrencyCode = 17
+	ECurrencyCode_UAH     ECurrencyCode = 18
+	ECurrencyCode_MXN     ECurrencyCode = 19
+	ECurrencyCode_CAD     ECurrencyCode = 20
+	ECurrencyCode_AUD     ECurrencyCode = 21
+	ECurrencyCode_NZD     ECurrencyCode = 22
+	ECurrencyCode_CNY     ECurrencyCode = 23
+	ECurrencyCode_INR     ECurrencyCode = 24
+	ECurrencyCode_CLP     ECurrencyCode = 25
+	ECurrencyCode_PEN     ECurrencyCode = 26
+	ECurrencyCode_COP     ECurrencyCode = 27
+	ECurrencyCode_ZAR     ECurrencyCode = 28
+	ECurrencyCode_HKD     ECurrencyCode = 29
+	ECurrencyCode_TWD     ECurrencyCode = 30
+	ECurrencyCode_SAR     ECurrencyCode = 31
+	ECurrencyCode_AED     ECurrencyCode = 32
+	ECurrencyCode_Max     ECurrencyCode = 33
 )
 
 var ECurrencyCode_name = map[ECurrencyCode]string{
@@ -5518,8 +5633,32 @@ var ECurrencyCode_name = map[ECurrencyCode]string{
 	5:  "ECurrencyCode_RUB",
 	6:  "ECurrencyCode_PLN",
 	7:  "ECurrencyCode_BRL",
+	8:  "ECurrencyCode_JPY",
 	9:  "ECurrencyCode_NOK",
-	10: "ECurrencyCode_Max",
+	10: "ECurrencyCode_IDR",
+	11: "ECurrencyCode_MYR",
+	12: "ECurrencyCode_PHP",
+	13: "ECurrencyCode_SGD",
+	14: "ECurrencyCode_THB",
+	15: "ECurrencyCode_VND",
+	16: "ECurrencyCode_KRW",
+	17: "ECurrencyCode_TRY",
+	18: "ECurrencyCode_UAH",
+	19: "ECurrencyCode_MXN",
+	20: "ECurrencyCode_CAD",
+	21: "ECurrencyCode_AUD",
+	22: "ECurrencyCode_NZD",
+	23: "ECurrencyCode_CNY",
+	24: "ECurrencyCode_INR",
+	25: "ECurrencyCode_CLP",
+	26: "ECurrencyCode_PEN",
+	27: "ECurrencyCode_COP",
+	28: "ECurrencyCode_ZAR",
+	29: "ECurrencyCode_HKD",
+	30: "ECurrencyCode_TWD",
+	31: "ECurrencyCode_SAR",
+	32: "ECurrencyCode_AED",
+	33: "ECurrencyCode_Max",
 }
 
 func (e ECurrencyCode) String() string {
@@ -5671,7 +5810,8 @@ const (
 	EWorkshopFileType_ControllerBinding      EWorkshopFileType = 12
 	EWorkshopFileType_SteamworksAccessInvite EWorkshopFileType = 13
 	EWorkshopFileType_SteamVideo             EWorkshopFileType = 14
-	EWorkshopFileType_Max                    EWorkshopFileType = 15
+	EWorkshopFileType_GameManagedItem        EWorkshopFileType = 15
+	EWorkshopFileType_Max                    EWorkshopFileType = 16
 )
 
 var EWorkshopFileType_name = map[EWorkshopFileType]string{
@@ -5690,7 +5830,8 @@ var EWorkshopFileType_name = map[EWorkshopFileType]string{
 	12: "EWorkshopFileType_ControllerBinding",
 	13: "EWorkshopFileType_SteamworksAccessInvite",
 	14: "EWorkshopFileType_SteamVideo",
-	15: "EWorkshopFileType_Max",
+	15: "EWorkshopFileType_GameManagedItem",
+	16: "EWorkshopFileType_Max",
 }
 
 func (e EWorkshopFileType) String() string {
@@ -6244,6 +6385,39 @@ func (e ELeaderboardSortMethod) String() string {
 	}
 	var flags []string
 	for k, v := range ELeaderboardSortMethod_name {
+		if e&k != 0 {
+			flags = append(flags, v)
+		}
+	}
+	if len(flags) == 0 {
+		return fmt.Sprintf("%d", e)
+	}
+	sort.Strings(flags)
+	return strings.Join(flags, " | ")
+}
+
+type ELeaderboardDisplayType int32
+
+const (
+	ELeaderboardDisplayType_None             ELeaderboardDisplayType = 0
+	ELeaderboardDisplayType_Numeric          ELeaderboardDisplayType = 1
+	ELeaderboardDisplayType_TimeSeconds      ELeaderboardDisplayType = 2
+	ELeaderboardDisplayType_TimeMilliSeconds ELeaderboardDisplayType = 3
+)
+
+var ELeaderboardDisplayType_name = map[ELeaderboardDisplayType]string{
+	0: "ELeaderboardDisplayType_None",
+	1: "ELeaderboardDisplayType_Numeric",
+	2: "ELeaderboardDisplayType_TimeSeconds",
+	3: "ELeaderboardDisplayType_TimeMilliSeconds",
+}
+
+func (e ELeaderboardDisplayType) String() string {
+	if s, ok := ELeaderboardDisplayType_name[e]; ok {
+		return s
+	}
+	var flags []string
+	for k, v := range ELeaderboardDisplayType_name {
 		if e&k != 0 {
 			flags = append(flags, v)
 		}

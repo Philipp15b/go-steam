@@ -50,7 +50,7 @@ func (x *EProtoExecutionSite) UnmarshalJSON(data []byte) error {
 	*x = EProtoExecutionSite(value)
 	return nil
 }
-func (EProtoExecutionSite) EnumDescriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
+func (EProtoExecutionSite) EnumDescriptor() ([]byte, []int) { return base_fileDescriptor0, []int{0} }
 
 type NoResponse struct {
 	XXX_unrecognized []byte `json:"-"`
@@ -59,7 +59,7 @@ type NoResponse struct {
 func (m *NoResponse) Reset()                    { *m = NoResponse{} }
 func (m *NoResponse) String() string            { return proto.CompactTextString(m) }
 func (*NoResponse) ProtoMessage()               {}
-func (*NoResponse) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
+func (*NoResponse) Descriptor() ([]byte, []int) { return base_fileDescriptor0, []int{0} }
 
 var E_Description = &proto.ExtensionDesc{
 	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
@@ -120,7 +120,7 @@ func init() {
 	proto.RegisterExtension(E_EnumValueDescription)
 }
 
-var fileDescriptor0 = []byte{
+var base_fileDescriptor0 = []byte{
 	// 306 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0x84, 0x90, 0x4d, 0x4b, 0xc3, 0x40,
 	0x10, 0x86, 0x1b, 0xc5, 0x83, 0xa3, 0x48, 0x48, 0xa5, 0x88, 0x54, 0x8d, 0xe2, 0x41, 0x44, 0xb6,

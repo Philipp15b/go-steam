@@ -1676,6 +1676,7 @@ type MsgClientChatEnter struct {
 	SteamIdClan   steamid.SteamId
 	ChatFlags     uint8
 	EnterResponse EChatRoomEnterResponse
+	NumMembers    int32
 }
 
 func NewMsgClientChatEnter() *MsgClientChatEnter {
@@ -1713,6 +1714,10 @@ func (d *MsgClientChatEnter) Serialize(w io.Writer) error {
 		return err
 	}
 	err = binary.Write(w, binary.LittleEndian, d.EnterResponse)
+	if err != nil {
+		return err
+	}
+	err = binary.Write(w, binary.LittleEndian, d.NumMembers)
 	return err
 }
 
@@ -1748,7 +1753,11 @@ func (d *MsgClientChatEnter) Deserialize(r io.Reader) error {
 		return err
 	}
 	t5, err := rwu.ReadInt32(r)
+	if err != nil {
+		return err
+	}
 	d.EnterResponse = EChatRoomEnterResponse(t5)
+	d.NumMembers, err = rwu.ReadInt32(r)
 	return err
 }
 
@@ -1929,6 +1938,41 @@ func (d *MsgClientChatActionResult) Deserialize(r io.Reader) error {
 	d.ChatAction = EChatAction(t2)
 	t3, err := rwu.ReadInt32(r)
 	d.ActionResult = EChatActionResult(t3)
+	return err
+}
+
+type MsgClientChatRoomInfo struct {
+	SteamIdChat steamid.SteamId
+	Type        EChatInfoType
+}
+
+func NewMsgClientChatRoomInfo() *MsgClientChatRoomInfo {
+	return &MsgClientChatRoomInfo{}
+}
+
+func (d *MsgClientChatRoomInfo) GetEMsg() EMsg {
+	return EMsg_ClientChatRoomInfo
+}
+
+func (d *MsgClientChatRoomInfo) Serialize(w io.Writer) error {
+	var err error
+	err = binary.Write(w, binary.LittleEndian, d.SteamIdChat)
+	if err != nil {
+		return err
+	}
+	err = binary.Write(w, binary.LittleEndian, d.Type)
+	return err
+}
+
+func (d *MsgClientChatRoomInfo) Deserialize(r io.Reader) error {
+	var err error
+	t0, err := rwu.ReadUint64(r)
+	if err != nil {
+		return err
+	}
+	d.SteamIdChat = steamid.SteamId(t0)
+	t1, err := rwu.ReadInt32(r)
+	d.Type = EChatInfoType(t1)
 	return err
 }
 

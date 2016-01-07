@@ -283,7 +283,7 @@ func (x *EGCSystemMsg) UnmarshalJSON(data []byte) error {
 	*x = EGCSystemMsg(value)
 	return nil
 }
-func (EGCSystemMsg) EnumDescriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
+func (EGCSystemMsg) EnumDescriptor() ([]byte, []int) { return system_fileDescriptor0, []int{0} }
 
 type ESOMsg int32
 
@@ -338,7 +338,7 @@ func (x *ESOMsg) UnmarshalJSON(data []byte) error {
 	*x = ESOMsg(value)
 	return nil
 }
-func (ESOMsg) EnumDescriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
+func (ESOMsg) EnumDescriptor() ([]byte, []int) { return system_fileDescriptor0, []int{1} }
 
 type EGCBaseClientMsg int32
 
@@ -390,7 +390,7 @@ func (x *EGCBaseClientMsg) UnmarshalJSON(data []byte) error {
 	*x = EGCBaseClientMsg(value)
 	return nil
 }
-func (EGCBaseClientMsg) EnumDescriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
+func (EGCBaseClientMsg) EnumDescriptor() ([]byte, []int) { return system_fileDescriptor0, []int{2} }
 
 type EGCToGCMsg int32
 
@@ -448,7 +448,7 @@ func (x *EGCToGCMsg) UnmarshalJSON(data []byte) error {
 	*x = EGCToGCMsg(value)
 	return nil
 }
-func (EGCToGCMsg) EnumDescriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
+func (EGCToGCMsg) EnumDescriptor() ([]byte, []int) { return system_fileDescriptor0, []int{3} }
 
 func init() {
 	proto.RegisterEnum("EGCSystemMsg", EGCSystemMsg_name, EGCSystemMsg_value)
@@ -457,7 +457,7 @@ func init() {
 	proto.RegisterEnum("EGCToGCMsg", EGCToGCMsg_name, EGCToGCMsg_value)
 }
 
-var fileDescriptor0 = []byte{
+var system_fileDescriptor0 = []byte{
 	// 1379 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0x84, 0x57, 0x49, 0x73, 0x1b, 0x45,
 	0x14, 0xce, 0x44, 0x05, 0x87, 0x2e, 0x28, 0x5e, 0x3a, 0x89, 0xed, 0x24, 0x4e, 0x94, 0x84, 0x2c,
