@@ -22,7 +22,7 @@ namespace GoSteamLanguageGenerator
 
 			Environment.CurrentDirectory = languagePath;
 
-			var codeGen = new GoGen(args.Length > 2 && args[2] == "debug");
+			var codeGen = new GoGen();
 
 			Queue<Token> tokenList = LanguageParser.TokenizeString(File.ReadAllText("steammsg.steamd"));
 

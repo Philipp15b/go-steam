@@ -30,7 +30,7 @@ func main() {
 		found = true
 	}
 	if strings.Contains(args, "steamlang") {
-		buildSteamLanguage(!strings.Contains(args, "steamlang:nodebug"))
+		buildSteamLanguage()
 		found = true
 	}
 	if strings.Contains(args, "proto") {
@@ -63,17 +63,14 @@ func cleanGlob(pattern string) {
 	}
 }
 
-func buildSteamLanguage(debug bool) {
+func buildSteamLanguage() {
 	print("# Building Steam Language")
 	exePath := "./GoSteamLanguageGenerator/bin/Debug/GoSteamLanguageGenerator.exe"
-	d := ""
-	if debug {
-		d = "debug"
-	}
+
 	if runtime.GOOS != "windows" {
-		execute("mono", exePath, "./SteamKit", "../internal/steamlang", d)
+		execute("mono", exePath, "./SteamKit", "../internal/steamlang")
 	} else {
-		execute(exePath, "./SteamKit", "../internal/steamlang", d)
+		execute(exePath, "./SteamKit", "../internal/steamlang")
 	}
 	execute("gofmt", "-w", "../internal/steamlang/enums.go", "../internal/steamlang/messages.go")
 }

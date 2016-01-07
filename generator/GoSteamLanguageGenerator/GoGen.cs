@@ -22,12 +22,6 @@ namespace GoSteamLanguageGenerator
 			{"ulong", "uint64"},
 			{"char", "uint16"}
 		};
-		private bool debug;
-
-		public GoGen(bool debug)
-		{
-			this.debug = debug;
-		}
 
 		/// <summary>
 		/// Maps the enum names to their underlying Go types. In most cases, this is int32.
@@ -134,9 +128,8 @@ namespace GoSteamLanguageGenerator
 			}
 			sb.AppendLine(")");
 			sb.AppendLine();
-
-			if (debug)
-				EmitEnumStringer(enode, sb);
+            
+			EmitEnumStringer(enode, sb);
 		}
 
 		private void EmitEnumStringer(EnumNode enode, StringBuilder sb)

@@ -40,10 +40,7 @@ To update go-steam to a new version of SteamKit, do the following:
     cd generator
     go run generator.go clean proto steamlang
 
-Replace `steamlang` with `steamlang:nodebug` if you want to exclude the `String() string` methods
-for the generated SteamLanguage enums. They make debugging much easier, but do increase binary size a bit.
-
-Make sure that `$GOPATH/bin` / `protoc-gen-go` is in your `$PATH`. You'll also need [`protoc`](https://developers.google.com/protocol-buffers/docs/downloads), the protocol buffer compiler. At the moment, we use Protocol Buffers 2.6.1 with `proco-gen-go`-[16256d3](https://github.com/golang/protobuf/tree/16256d3ce6929458613798ee44b7914a3f59f5c6).
+Make sure that `$GOPATH/bin` / `protoc-gen-go` is in your `$PATH`. You'll also need [`protoc`](https://developers.google.com/protocol-buffers/docs/downloads), the protocol buffer compiler. At the moment, we use Protocol Buffers 2.6.1 with `proco-gen-go`-[2402d76](https://github.com/golang/protobuf/tree/2402d76f3d41f928c7902a765dfc872356dd3aad).
 
 To compile the Steam Language files, you also need the [.NET Framework](https://www.microsoft.com/net/downloads)
 on Windows or [mono](http://www.go-mono.com/mono-downloads/download.html) on other operating systems.
