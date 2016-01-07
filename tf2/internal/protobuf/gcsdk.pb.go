@@ -5,12 +5,17 @@
 package protobuf
 
 import proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
 import math "math"
-
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
+var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package protobuf is being compiled against.
+const _ = proto.ProtoPackageIsVersion1
 
 type PartnerAccountType int32
 
@@ -47,6 +52,7 @@ func (x *PartnerAccountType) UnmarshalJSON(data []byte) error {
 	*x = PartnerAccountType(value)
 	return nil
 }
+func (PartnerAccountType) EnumDescriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
 
 type GCConnectionStatus int32
 
@@ -92,6 +98,7 @@ func (x *GCConnectionStatus) UnmarshalJSON(data []byte) error {
 	*x = GCConnectionStatus(value)
 	return nil
 }
+func (GCConnectionStatus) EnumDescriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
 
 type CMsgSOIDOwner struct {
 	Type             *uint32 `protobuf:"varint,1,opt,name=type" json:"type,omitempty"`
@@ -99,9 +106,10 @@ type CMsgSOIDOwner struct {
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *CMsgSOIDOwner) Reset()         { *m = CMsgSOIDOwner{} }
-func (m *CMsgSOIDOwner) String() string { return proto.CompactTextString(m) }
-func (*CMsgSOIDOwner) ProtoMessage()    {}
+func (m *CMsgSOIDOwner) Reset()                    { *m = CMsgSOIDOwner{} }
+func (m *CMsgSOIDOwner) String() string            { return proto.CompactTextString(m) }
+func (*CMsgSOIDOwner) ProtoMessage()               {}
+func (*CMsgSOIDOwner) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
 
 func (m *CMsgSOIDOwner) GetType() uint32 {
 	if m != nil && m.Type != nil {
@@ -127,9 +135,10 @@ type CMsgSOSingleObject struct {
 	XXX_unrecognized []byte         `json:"-"`
 }
 
-func (m *CMsgSOSingleObject) Reset()         { *m = CMsgSOSingleObject{} }
-func (m *CMsgSOSingleObject) String() string { return proto.CompactTextString(m) }
-func (*CMsgSOSingleObject) ProtoMessage()    {}
+func (m *CMsgSOSingleObject) Reset()                    { *m = CMsgSOSingleObject{} }
+func (m *CMsgSOSingleObject) String() string            { return proto.CompactTextString(m) }
+func (*CMsgSOSingleObject) ProtoMessage()               {}
+func (*CMsgSOSingleObject) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
 
 func (m *CMsgSOSingleObject) GetOwner() uint64 {
 	if m != nil && m.Owner != nil {
@@ -182,9 +191,10 @@ type CMsgSOMultipleObjects struct {
 	XXX_unrecognized []byte                                `json:"-"`
 }
 
-func (m *CMsgSOMultipleObjects) Reset()         { *m = CMsgSOMultipleObjects{} }
-func (m *CMsgSOMultipleObjects) String() string { return proto.CompactTextString(m) }
-func (*CMsgSOMultipleObjects) ProtoMessage()    {}
+func (m *CMsgSOMultipleObjects) Reset()                    { *m = CMsgSOMultipleObjects{} }
+func (m *CMsgSOMultipleObjects) String() string            { return proto.CompactTextString(m) }
+func (*CMsgSOMultipleObjects) ProtoMessage()               {}
+func (*CMsgSOMultipleObjects) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
 
 func (m *CMsgSOMultipleObjects) GetOwner() uint64 {
 	if m != nil && m.Owner != nil {
@@ -230,6 +240,9 @@ type CMsgSOMultipleObjects_SingleObject struct {
 func (m *CMsgSOMultipleObjects_SingleObject) Reset()         { *m = CMsgSOMultipleObjects_SingleObject{} }
 func (m *CMsgSOMultipleObjects_SingleObject) String() string { return proto.CompactTextString(m) }
 func (*CMsgSOMultipleObjects_SingleObject) ProtoMessage()    {}
+func (*CMsgSOMultipleObjects_SingleObject) Descriptor() ([]byte, []int) {
+	return fileDescriptor0, []int{2, 0}
+}
 
 func (m *CMsgSOMultipleObjects_SingleObject) GetTypeId() int32 {
 	if m != nil && m.TypeId != nil {
@@ -256,9 +269,10 @@ type CMsgSOCacheSubscribed struct {
 	XXX_unrecognized []byte                                  `json:"-"`
 }
 
-func (m *CMsgSOCacheSubscribed) Reset()         { *m = CMsgSOCacheSubscribed{} }
-func (m *CMsgSOCacheSubscribed) String() string { return proto.CompactTextString(m) }
-func (*CMsgSOCacheSubscribed) ProtoMessage()    {}
+func (m *CMsgSOCacheSubscribed) Reset()                    { *m = CMsgSOCacheSubscribed{} }
+func (m *CMsgSOCacheSubscribed) String() string            { return proto.CompactTextString(m) }
+func (*CMsgSOCacheSubscribed) ProtoMessage()               {}
+func (*CMsgSOCacheSubscribed) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
 
 func (m *CMsgSOCacheSubscribed) GetOwner() uint64 {
 	if m != nil && m.Owner != nil {
@@ -318,6 +332,9 @@ type CMsgSOCacheSubscribed_SubscribedType struct {
 func (m *CMsgSOCacheSubscribed_SubscribedType) Reset()         { *m = CMsgSOCacheSubscribed_SubscribedType{} }
 func (m *CMsgSOCacheSubscribed_SubscribedType) String() string { return proto.CompactTextString(m) }
 func (*CMsgSOCacheSubscribed_SubscribedType) ProtoMessage()    {}
+func (*CMsgSOCacheSubscribed_SubscribedType) Descriptor() ([]byte, []int) {
+	return fileDescriptor0, []int{3, 0}
+}
 
 func (m *CMsgSOCacheSubscribed_SubscribedType) GetTypeId() int32 {
 	if m != nil && m.TypeId != nil {
@@ -342,9 +359,10 @@ type CMsgSOCacheSubscribedUpToDate struct {
 	XXX_unrecognized []byte         `json:"-"`
 }
 
-func (m *CMsgSOCacheSubscribedUpToDate) Reset()         { *m = CMsgSOCacheSubscribedUpToDate{} }
-func (m *CMsgSOCacheSubscribedUpToDate) String() string { return proto.CompactTextString(m) }
-func (*CMsgSOCacheSubscribedUpToDate) ProtoMessage()    {}
+func (m *CMsgSOCacheSubscribedUpToDate) Reset()                    { *m = CMsgSOCacheSubscribedUpToDate{} }
+func (m *CMsgSOCacheSubscribedUpToDate) String() string            { return proto.CompactTextString(m) }
+func (*CMsgSOCacheSubscribedUpToDate) ProtoMessage()               {}
+func (*CMsgSOCacheSubscribedUpToDate) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{4} }
 
 func (m *CMsgSOCacheSubscribedUpToDate) GetVersion() uint64 {
 	if m != nil && m.Version != nil {
@@ -386,9 +404,10 @@ type CMsgSOCacheUnsubscribed struct {
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *CMsgSOCacheUnsubscribed) Reset()         { *m = CMsgSOCacheUnsubscribed{} }
-func (m *CMsgSOCacheUnsubscribed) String() string { return proto.CompactTextString(m) }
-func (*CMsgSOCacheUnsubscribed) ProtoMessage()    {}
+func (m *CMsgSOCacheUnsubscribed) Reset()                    { *m = CMsgSOCacheUnsubscribed{} }
+func (m *CMsgSOCacheUnsubscribed) String() string            { return proto.CompactTextString(m) }
+func (*CMsgSOCacheUnsubscribed) ProtoMessage()               {}
+func (*CMsgSOCacheUnsubscribed) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{5} }
 
 func (m *CMsgSOCacheUnsubscribed) GetOwner() uint64 {
 	if m != nil && m.Owner != nil {
@@ -407,9 +426,10 @@ type CMsgSOCacheSubscriptionCheck struct {
 	XXX_unrecognized []byte         `json:"-"`
 }
 
-func (m *CMsgSOCacheSubscriptionCheck) Reset()         { *m = CMsgSOCacheSubscriptionCheck{} }
-func (m *CMsgSOCacheSubscriptionCheck) String() string { return proto.CompactTextString(m) }
-func (*CMsgSOCacheSubscriptionCheck) ProtoMessage()    {}
+func (m *CMsgSOCacheSubscriptionCheck) Reset()                    { *m = CMsgSOCacheSubscriptionCheck{} }
+func (m *CMsgSOCacheSubscriptionCheck) String() string            { return proto.CompactTextString(m) }
+func (*CMsgSOCacheSubscriptionCheck) ProtoMessage()               {}
+func (*CMsgSOCacheSubscriptionCheck) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{6} }
 
 func (m *CMsgSOCacheSubscriptionCheck) GetOwner() uint64 {
 	if m != nil && m.Owner != nil {
@@ -459,9 +479,10 @@ type CMsgSOCacheSubscriptionRefresh struct {
 	XXX_unrecognized []byte         `json:"-"`
 }
 
-func (m *CMsgSOCacheSubscriptionRefresh) Reset()         { *m = CMsgSOCacheSubscriptionRefresh{} }
-func (m *CMsgSOCacheSubscriptionRefresh) String() string { return proto.CompactTextString(m) }
-func (*CMsgSOCacheSubscriptionRefresh) ProtoMessage()    {}
+func (m *CMsgSOCacheSubscriptionRefresh) Reset()                    { *m = CMsgSOCacheSubscriptionRefresh{} }
+func (m *CMsgSOCacheSubscriptionRefresh) String() string            { return proto.CompactTextString(m) }
+func (*CMsgSOCacheSubscriptionRefresh) ProtoMessage()               {}
+func (*CMsgSOCacheSubscriptionRefresh) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{7} }
 
 func (m *CMsgSOCacheSubscriptionRefresh) GetOwner() uint64 {
 	if m != nil && m.Owner != nil {
@@ -482,9 +503,10 @@ type CMsgSOCacheVersion struct {
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *CMsgSOCacheVersion) Reset()         { *m = CMsgSOCacheVersion{} }
-func (m *CMsgSOCacheVersion) String() string { return proto.CompactTextString(m) }
-func (*CMsgSOCacheVersion) ProtoMessage()    {}
+func (m *CMsgSOCacheVersion) Reset()                    { *m = CMsgSOCacheVersion{} }
+func (m *CMsgSOCacheVersion) String() string            { return proto.CompactTextString(m) }
+func (*CMsgSOCacheVersion) ProtoMessage()               {}
+func (*CMsgSOCacheVersion) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{8} }
 
 func (m *CMsgSOCacheVersion) GetVersion() uint64 {
 	if m != nil && m.Version != nil {
@@ -500,9 +522,10 @@ type CMsgGCMultiplexMessage struct {
 	XXX_unrecognized []byte   `json:"-"`
 }
 
-func (m *CMsgGCMultiplexMessage) Reset()         { *m = CMsgGCMultiplexMessage{} }
-func (m *CMsgGCMultiplexMessage) String() string { return proto.CompactTextString(m) }
-func (*CMsgGCMultiplexMessage) ProtoMessage()    {}
+func (m *CMsgGCMultiplexMessage) Reset()                    { *m = CMsgGCMultiplexMessage{} }
+func (m *CMsgGCMultiplexMessage) String() string            { return proto.CompactTextString(m) }
+func (*CMsgGCMultiplexMessage) ProtoMessage()               {}
+func (*CMsgGCMultiplexMessage) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{9} }
 
 func (m *CMsgGCMultiplexMessage) GetMsgtype() uint32 {
 	if m != nil && m.Msgtype != nil {
@@ -533,9 +556,10 @@ type CGCToGCMsgMasterAck struct {
 	XXX_unrecognized []byte   `json:"-"`
 }
 
-func (m *CGCToGCMsgMasterAck) Reset()         { *m = CGCToGCMsgMasterAck{} }
-func (m *CGCToGCMsgMasterAck) String() string { return proto.CompactTextString(m) }
-func (*CGCToGCMsgMasterAck) ProtoMessage()    {}
+func (m *CGCToGCMsgMasterAck) Reset()                    { *m = CGCToGCMsgMasterAck{} }
+func (m *CGCToGCMsgMasterAck) String() string            { return proto.CompactTextString(m) }
+func (*CGCToGCMsgMasterAck) ProtoMessage()               {}
+func (*CGCToGCMsgMasterAck) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{10} }
 
 func (m *CGCToGCMsgMasterAck) GetDirIndex() uint32 {
 	if m != nil && m.DirIndex != nil {
@@ -570,9 +594,10 @@ type CGCToGCMsgMasterAck_Response struct {
 	XXX_unrecognized []byte `json:"-"`
 }
 
-func (m *CGCToGCMsgMasterAck_Response) Reset()         { *m = CGCToGCMsgMasterAck_Response{} }
-func (m *CGCToGCMsgMasterAck_Response) String() string { return proto.CompactTextString(m) }
-func (*CGCToGCMsgMasterAck_Response) ProtoMessage()    {}
+func (m *CGCToGCMsgMasterAck_Response) Reset()                    { *m = CGCToGCMsgMasterAck_Response{} }
+func (m *CGCToGCMsgMasterAck_Response) String() string            { return proto.CompactTextString(m) }
+func (*CGCToGCMsgMasterAck_Response) ProtoMessage()               {}
+func (*CGCToGCMsgMasterAck_Response) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{11} }
 
 const Default_CGCToGCMsgMasterAck_Response_Eresult int32 = 2
 
@@ -591,6 +616,9 @@ type CGCToGCMsgMasterStartupComplete struct {
 func (m *CGCToGCMsgMasterStartupComplete) Reset()         { *m = CGCToGCMsgMasterStartupComplete{} }
 func (m *CGCToGCMsgMasterStartupComplete) String() string { return proto.CompactTextString(m) }
 func (*CGCToGCMsgMasterStartupComplete) ProtoMessage()    {}
+func (*CGCToGCMsgMasterStartupComplete) Descriptor() ([]byte, []int) {
+	return fileDescriptor0, []int{12}
+}
 
 func (m *CGCToGCMsgMasterStartupComplete) GetGcInfo() []*CGCToGCMsgMasterStartupComplete_GCInfo {
 	if m != nil {
@@ -610,6 +638,9 @@ func (m *CGCToGCMsgMasterStartupComplete_GCInfo) Reset() {
 }
 func (m *CGCToGCMsgMasterStartupComplete_GCInfo) String() string { return proto.CompactTextString(m) }
 func (*CGCToGCMsgMasterStartupComplete_GCInfo) ProtoMessage()    {}
+func (*CGCToGCMsgMasterStartupComplete_GCInfo) Descriptor() ([]byte, []int) {
+	return fileDescriptor0, []int{12, 0}
+}
 
 func (m *CGCToGCMsgMasterStartupComplete_GCInfo) GetDirIndex() uint32 {
 	if m != nil && m.DirIndex != nil {
@@ -632,9 +663,10 @@ type CGCToGCMsgRouted struct {
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *CGCToGCMsgRouted) Reset()         { *m = CGCToGCMsgRouted{} }
-func (m *CGCToGCMsgRouted) String() string { return proto.CompactTextString(m) }
-func (*CGCToGCMsgRouted) ProtoMessage()    {}
+func (m *CGCToGCMsgRouted) Reset()                    { *m = CGCToGCMsgRouted{} }
+func (m *CGCToGCMsgRouted) String() string            { return proto.CompactTextString(m) }
+func (*CGCToGCMsgRouted) ProtoMessage()               {}
+func (*CGCToGCMsgRouted) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{13} }
 
 func (m *CGCToGCMsgRouted) GetMsgType() uint32 {
 	if m != nil && m.MsgType != nil {
@@ -663,9 +695,10 @@ type CGCToGCMsgRoutedReply struct {
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *CGCToGCMsgRoutedReply) Reset()         { *m = CGCToGCMsgRoutedReply{} }
-func (m *CGCToGCMsgRoutedReply) String() string { return proto.CompactTextString(m) }
-func (*CGCToGCMsgRoutedReply) ProtoMessage()    {}
+func (m *CGCToGCMsgRoutedReply) Reset()                    { *m = CGCToGCMsgRoutedReply{} }
+func (m *CGCToGCMsgRoutedReply) String() string            { return proto.CompactTextString(m) }
+func (*CGCToGCMsgRoutedReply) ProtoMessage()               {}
+func (*CGCToGCMsgRoutedReply) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{14} }
 
 func (m *CGCToGCMsgRoutedReply) GetMsgType() uint32 {
 	if m != nil && m.MsgType != nil {
@@ -686,9 +719,10 @@ type CMsgGCUpdateSubGCSessionInfo struct {
 	XXX_unrecognized []byte                                     `json:"-"`
 }
 
-func (m *CMsgGCUpdateSubGCSessionInfo) Reset()         { *m = CMsgGCUpdateSubGCSessionInfo{} }
-func (m *CMsgGCUpdateSubGCSessionInfo) String() string { return proto.CompactTextString(m) }
-func (*CMsgGCUpdateSubGCSessionInfo) ProtoMessage()    {}
+func (m *CMsgGCUpdateSubGCSessionInfo) Reset()                    { *m = CMsgGCUpdateSubGCSessionInfo{} }
+func (m *CMsgGCUpdateSubGCSessionInfo) String() string            { return proto.CompactTextString(m) }
+func (*CMsgGCUpdateSubGCSessionInfo) ProtoMessage()               {}
+func (*CMsgGCUpdateSubGCSessionInfo) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{15} }
 
 func (m *CMsgGCUpdateSubGCSessionInfo) GetUpdates() []*CMsgGCUpdateSubGCSessionInfo_CMsgUpdate {
 	if m != nil {
@@ -709,6 +743,9 @@ func (m *CMsgGCUpdateSubGCSessionInfo_CMsgUpdate) Reset() {
 }
 func (m *CMsgGCUpdateSubGCSessionInfo_CMsgUpdate) String() string { return proto.CompactTextString(m) }
 func (*CMsgGCUpdateSubGCSessionInfo_CMsgUpdate) ProtoMessage()    {}
+func (*CMsgGCUpdateSubGCSessionInfo_CMsgUpdate) Descriptor() ([]byte, []int) {
+	return fileDescriptor0, []int{15, 0}
+}
 
 func (m *CMsgGCUpdateSubGCSessionInfo_CMsgUpdate) GetSteamid() uint64 {
 	if m != nil && m.Steamid != nil {
@@ -736,9 +773,10 @@ type CMsgGCRequestSubGCSessionInfo struct {
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *CMsgGCRequestSubGCSessionInfo) Reset()         { *m = CMsgGCRequestSubGCSessionInfo{} }
-func (m *CMsgGCRequestSubGCSessionInfo) String() string { return proto.CompactTextString(m) }
-func (*CMsgGCRequestSubGCSessionInfo) ProtoMessage()    {}
+func (m *CMsgGCRequestSubGCSessionInfo) Reset()                    { *m = CMsgGCRequestSubGCSessionInfo{} }
+func (m *CMsgGCRequestSubGCSessionInfo) String() string            { return proto.CompactTextString(m) }
+func (*CMsgGCRequestSubGCSessionInfo) ProtoMessage()               {}
+func (*CMsgGCRequestSubGCSessionInfo) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{16} }
 
 func (m *CMsgGCRequestSubGCSessionInfo) GetSteamid() uint64 {
 	if m != nil && m.Steamid != nil {
@@ -756,6 +794,9 @@ type CMsgGCRequestSubGCSessionInfoResponse struct {
 func (m *CMsgGCRequestSubGCSessionInfoResponse) Reset()         { *m = CMsgGCRequestSubGCSessionInfoResponse{} }
 func (m *CMsgGCRequestSubGCSessionInfoResponse) String() string { return proto.CompactTextString(m) }
 func (*CMsgGCRequestSubGCSessionInfoResponse) ProtoMessage()    {}
+func (*CMsgGCRequestSubGCSessionInfoResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor0, []int{17}
+}
 
 func (m *CMsgGCRequestSubGCSessionInfoResponse) GetIp() uint32 {
 	if m != nil && m.Ip != nil {
@@ -779,6 +820,9 @@ type CMsgGCToGCIncrementRecruitmentLevel struct {
 func (m *CMsgGCToGCIncrementRecruitmentLevel) Reset()         { *m = CMsgGCToGCIncrementRecruitmentLevel{} }
 func (m *CMsgGCToGCIncrementRecruitmentLevel) String() string { return proto.CompactTextString(m) }
 func (*CMsgGCToGCIncrementRecruitmentLevel) ProtoMessage()    {}
+func (*CMsgGCToGCIncrementRecruitmentLevel) Descriptor() ([]byte, []int) {
+	return fileDescriptor0, []int{18}
+}
 
 func (m *CMsgGCToGCIncrementRecruitmentLevel) GetSteamid() uint64 {
 	if m != nil && m.Steamid != nil {
@@ -794,9 +838,10 @@ type CMsgSOCacheHaveVersion struct {
 	XXX_unrecognized []byte         `json:"-"`
 }
 
-func (m *CMsgSOCacheHaveVersion) Reset()         { *m = CMsgSOCacheHaveVersion{} }
-func (m *CMsgSOCacheHaveVersion) String() string { return proto.CompactTextString(m) }
-func (*CMsgSOCacheHaveVersion) ProtoMessage()    {}
+func (m *CMsgSOCacheHaveVersion) Reset()                    { *m = CMsgSOCacheHaveVersion{} }
+func (m *CMsgSOCacheHaveVersion) String() string            { return proto.CompactTextString(m) }
+func (*CMsgSOCacheHaveVersion) ProtoMessage()               {}
+func (*CMsgSOCacheHaveVersion) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{19} }
 
 func (m *CMsgSOCacheHaveVersion) GetSoid() *CMsgSOIDOwner {
 	if m != nil {
@@ -829,9 +874,10 @@ type CMsgConnectionStatus struct {
 	XXX_unrecognized              []byte              `json:"-"`
 }
 
-func (m *CMsgConnectionStatus) Reset()         { *m = CMsgConnectionStatus{} }
-func (m *CMsgConnectionStatus) String() string { return proto.CompactTextString(m) }
-func (*CMsgConnectionStatus) ProtoMessage()    {}
+func (m *CMsgConnectionStatus) Reset()                    { *m = CMsgConnectionStatus{} }
+func (m *CMsgConnectionStatus) String() string            { return proto.CompactTextString(m) }
+func (*CMsgConnectionStatus) ProtoMessage()               {}
+func (*CMsgConnectionStatus) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{20} }
 
 const Default_CMsgConnectionStatus_Status GCConnectionStatus = GCConnectionStatus_GCConnectionStatus_HAVE_SESSION
 
@@ -885,9 +931,10 @@ type CMsgGCToGCSOCacheSubscribe struct {
 	XXX_unrecognized []byte                                         `json:"-"`
 }
 
-func (m *CMsgGCToGCSOCacheSubscribe) Reset()         { *m = CMsgGCToGCSOCacheSubscribe{} }
-func (m *CMsgGCToGCSOCacheSubscribe) String() string { return proto.CompactTextString(m) }
-func (*CMsgGCToGCSOCacheSubscribe) ProtoMessage()    {}
+func (m *CMsgGCToGCSOCacheSubscribe) Reset()                    { *m = CMsgGCToGCSOCacheSubscribe{} }
+func (m *CMsgGCToGCSOCacheSubscribe) String() string            { return proto.CompactTextString(m) }
+func (*CMsgGCToGCSOCacheSubscribe) ProtoMessage()               {}
+func (*CMsgGCToGCSOCacheSubscribe) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{21} }
 
 func (m *CMsgGCToGCSOCacheSubscribe) GetSubscriber() uint64 {
 	if m != nil && m.Subscriber != nil {
@@ -930,6 +977,9 @@ func (m *CMsgGCToGCSOCacheSubscribe_CMsgHaveVersions) String() string {
 	return proto.CompactTextString(m)
 }
 func (*CMsgGCToGCSOCacheSubscribe_CMsgHaveVersions) ProtoMessage() {}
+func (*CMsgGCToGCSOCacheSubscribe_CMsgHaveVersions) Descriptor() ([]byte, []int) {
+	return fileDescriptor0, []int{21, 0}
+}
 
 func (m *CMsgGCToGCSOCacheSubscribe_CMsgHaveVersions) GetServiceId() uint32 {
 	if m != nil && m.ServiceId != nil {
@@ -951,9 +1001,10 @@ type CMsgGCToGCSOCacheUnsubscribe struct {
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *CMsgGCToGCSOCacheUnsubscribe) Reset()         { *m = CMsgGCToGCSOCacheUnsubscribe{} }
-func (m *CMsgGCToGCSOCacheUnsubscribe) String() string { return proto.CompactTextString(m) }
-func (*CMsgGCToGCSOCacheUnsubscribe) ProtoMessage()    {}
+func (m *CMsgGCToGCSOCacheUnsubscribe) Reset()                    { *m = CMsgGCToGCSOCacheUnsubscribe{} }
+func (m *CMsgGCToGCSOCacheUnsubscribe) String() string            { return proto.CompactTextString(m) }
+func (*CMsgGCToGCSOCacheUnsubscribe) ProtoMessage()               {}
+func (*CMsgGCToGCSOCacheUnsubscribe) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{22} }
 
 func (m *CMsgGCToGCSOCacheUnsubscribe) GetSubscriber() uint64 {
 	if m != nil && m.Subscriber != nil {
@@ -973,11 +1024,120 @@ type CMsgGCClientPing struct {
 	XXX_unrecognized []byte `json:"-"`
 }
 
-func (m *CMsgGCClientPing) Reset()         { *m = CMsgGCClientPing{} }
-func (m *CMsgGCClientPing) String() string { return proto.CompactTextString(m) }
-func (*CMsgGCClientPing) ProtoMessage()    {}
+func (m *CMsgGCClientPing) Reset()                    { *m = CMsgGCClientPing{} }
+func (m *CMsgGCClientPing) String() string            { return proto.CompactTextString(m) }
+func (*CMsgGCClientPing) ProtoMessage()               {}
+func (*CMsgGCClientPing) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{23} }
 
 func init() {
+	proto.RegisterType((*CMsgSOIDOwner)(nil), "CMsgSOIDOwner")
+	proto.RegisterType((*CMsgSOSingleObject)(nil), "CMsgSOSingleObject")
+	proto.RegisterType((*CMsgSOMultipleObjects)(nil), "CMsgSOMultipleObjects")
+	proto.RegisterType((*CMsgSOMultipleObjects_SingleObject)(nil), "CMsgSOMultipleObjects.SingleObject")
+	proto.RegisterType((*CMsgSOCacheSubscribed)(nil), "CMsgSOCacheSubscribed")
+	proto.RegisterType((*CMsgSOCacheSubscribed_SubscribedType)(nil), "CMsgSOCacheSubscribed.SubscribedType")
+	proto.RegisterType((*CMsgSOCacheSubscribedUpToDate)(nil), "CMsgSOCacheSubscribedUpToDate")
+	proto.RegisterType((*CMsgSOCacheUnsubscribed)(nil), "CMsgSOCacheUnsubscribed")
+	proto.RegisterType((*CMsgSOCacheSubscriptionCheck)(nil), "CMsgSOCacheSubscriptionCheck")
+	proto.RegisterType((*CMsgSOCacheSubscriptionRefresh)(nil), "CMsgSOCacheSubscriptionRefresh")
+	proto.RegisterType((*CMsgSOCacheVersion)(nil), "CMsgSOCacheVersion")
+	proto.RegisterType((*CMsgGCMultiplexMessage)(nil), "CMsgGCMultiplexMessage")
+	proto.RegisterType((*CGCToGCMsgMasterAck)(nil), "CGCToGCMsgMasterAck")
+	proto.RegisterType((*CGCToGCMsgMasterAck_Response)(nil), "CGCToGCMsgMasterAck_Response")
+	proto.RegisterType((*CGCToGCMsgMasterStartupComplete)(nil), "CGCToGCMsgMasterStartupComplete")
+	proto.RegisterType((*CGCToGCMsgMasterStartupComplete_GCInfo)(nil), "CGCToGCMsgMasterStartupComplete.GCInfo")
+	proto.RegisterType((*CGCToGCMsgRouted)(nil), "CGCToGCMsgRouted")
+	proto.RegisterType((*CGCToGCMsgRoutedReply)(nil), "CGCToGCMsgRoutedReply")
+	proto.RegisterType((*CMsgGCUpdateSubGCSessionInfo)(nil), "CMsgGCUpdateSubGCSessionInfo")
+	proto.RegisterType((*CMsgGCUpdateSubGCSessionInfo_CMsgUpdate)(nil), "CMsgGCUpdateSubGCSessionInfo.CMsgUpdate")
+	proto.RegisterType((*CMsgGCRequestSubGCSessionInfo)(nil), "CMsgGCRequestSubGCSessionInfo")
+	proto.RegisterType((*CMsgGCRequestSubGCSessionInfoResponse)(nil), "CMsgGCRequestSubGCSessionInfoResponse")
+	proto.RegisterType((*CMsgGCToGCIncrementRecruitmentLevel)(nil), "CMsgGCToGCIncrementRecruitmentLevel")
+	proto.RegisterType((*CMsgSOCacheHaveVersion)(nil), "CMsgSOCacheHaveVersion")
+	proto.RegisterType((*CMsgConnectionStatus)(nil), "CMsgConnectionStatus")
+	proto.RegisterType((*CMsgGCToGCSOCacheSubscribe)(nil), "CMsgGCToGCSOCacheSubscribe")
+	proto.RegisterType((*CMsgGCToGCSOCacheSubscribe_CMsgHaveVersions)(nil), "CMsgGCToGCSOCacheSubscribe.CMsgHaveVersions")
+	proto.RegisterType((*CMsgGCToGCSOCacheUnsubscribe)(nil), "CMsgGCToGCSOCacheUnsubscribe")
+	proto.RegisterType((*CMsgGCClientPing)(nil), "CMsgGCClientPing")
 	proto.RegisterEnum("PartnerAccountType", PartnerAccountType_name, PartnerAccountType_value)
 	proto.RegisterEnum("GCConnectionStatus", GCConnectionStatus_name, GCConnectionStatus_value)
+}
+
+var fileDescriptor0 = []byte{
+	// 1199 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0x8c, 0x56, 0x4f, 0x73, 0xdb, 0x44,
+	0x14, 0xaf, 0xfc, 0xb7, 0x7d, 0xb5, 0x83, 0x51, 0xda, 0x10, 0xdc, 0x94, 0x04, 0x85, 0x0c, 0xa1,
+	0xd3, 0xf1, 0x94, 0x4c, 0x27, 0x40, 0x0e, 0xcc, 0x04, 0x59, 0x38, 0x9e, 0x49, 0xac, 0x60, 0xd9,
+	0x2d, 0x33, 0x1c, 0x76, 0x14, 0x79, 0xe3, 0x88, 0xda, 0x92, 0xd0, 0x4a, 0x69, 0xc3, 0x89, 0x3b,
+	0x33, 0x1c, 0x18, 0xf8, 0x02, 0x7c, 0x2c, 0x38, 0xf3, 0x19, 0xb8, 0xf2, 0x76, 0x57, 0x4a, 0x1c,
+	0x59, 0x49, 0x7c, 0x93, 0xdf, 0xbe, 0x7f, 0xbf, 0xdf, 0xbe, 0xf7, 0x5b, 0xc3, 0xca, 0xd8, 0x61,
+	0xa3, 0x37, 0x64, 0xec, 0x4c, 0x29, 0x63, 0xf6, 0x98, 0xb2, 0x56, 0x10, 0xfa, 0x91, 0xdf, 0x5c,
+	0x66, 0x11, 0xb5, 0xa7, 0xd7, 0x8d, 0xda, 0x67, 0x50, 0xd7, 0x8f, 0xd8, 0xd8, 0x32, 0xbb, 0x6d,
+	0xf3, 0xad, 0x47, 0x43, 0xb5, 0x06, 0xa5, 0xe8, 0x22, 0xa0, 0xab, 0xca, 0x86, 0xb2, 0x5d, 0x57,
+	0x01, 0x0a, 0xee, 0x68, 0xb5, 0x80, 0xdf, 0x25, 0xed, 0x77, 0x05, 0x54, 0xe9, 0x6b, 0xb9, 0xde,
+	0x78, 0x42, 0xcd, 0x93, 0x1f, 0xa9, 0x13, 0xa9, 0x75, 0x28, 0xfb, 0x3c, 0x52, 0x44, 0x54, 0xd4,
+	0xf7, 0xa0, 0xca, 0xe3, 0x49, 0x12, 0x56, 0x56, 0x97, 0xe1, 0xa1, 0x2f, 0x3c, 0xc9, 0xc8, 0x8e,
+	0xec, 0xd5, 0x22, 0x1a, 0x6b, 0xdc, 0xeb, 0x9c, 0x86, 0xcc, 0xf5, 0xbd, 0xd5, 0x92, 0x08, 0xd3,
+	0x00, 0x44, 0x16, 0xc2, 0x7c, 0x8c, 0x2c, 0xa3, 0xed, 0xe1, 0xce, 0x52, 0xeb, 0x7a, 0x6b, 0xd8,
+	0x0d, 0xa3, 0xe1, 0xb9, 0xeb, 0x88, 0xec, 0x15, 0xde, 0xa0, 0xf6, 0x8f, 0x02, 0x8f, 0xa5, 0xd7,
+	0x51, 0x3c, 0x89, 0xdc, 0x20, 0x6d, 0x8b, 0x65, 0xfb, 0x7a, 0x09, 0x55, 0xd9, 0x06, 0xc3, 0xbe,
+	0x8a, 0x98, 0x7d, 0xb3, 0x95, 0x1b, 0xd7, 0xba, 0x06, 0x6e, 0xa6, 0xcf, 0x62, 0x4e, 0x9f, 0x95,
+	0x05, 0xfa, 0xac, 0xf2, 0x3e, 0x9b, 0x2f, 0xa1, 0x96, 0x4d, 0x9c, 0xd2, 0xa4, 0xe4, 0xd1, 0xc4,
+	0xb9, 0xab, 0x69, 0xbf, 0x16, 0x52, 0x74, 0xba, 0xed, 0x9c, 0x51, 0x2b, 0x3e, 0x61, 0x4e, 0xe8,
+	0x9e, 0xd0, 0x51, 0x16, 0xdd, 0x6e, 0x16, 0xdd, 0x56, 0x2b, 0x37, 0xae, 0x75, 0xf5, 0x39, 0xc0,
+	0xf2, 0x77, 0xe1, 0x2b, 0x2d, 0x80, 0xaf, 0x2c, 0x06, 0xe5, 0x11, 0xd4, 0x52, 0xdb, 0xc4, 0x65,
+	0x11, 0x32, 0x53, 0x4c, 0xac, 0x17, 0x9e, 0x43, 0xd2, 0x1a, 0x9c, 0x8b, 0x4a, 0x73, 0x17, 0x96,
+	0xe6, 0xdb, 0xb8, 0x83, 0x8d, 0x22, 0xb2, 0xf1, 0x87, 0x02, 0x4f, 0x73, 0x51, 0x0d, 0x83, 0x81,
+	0xdf, 0xb6, 0xa3, 0x6b, 0x70, 0x94, 0x1c, 0x38, 0x85, 0x05, 0xe0, 0x14, 0x73, 0xe1, 0x94, 0x72,
+	0xe1, 0x70, 0xe8, 0x15, 0x6d, 0x1b, 0x3e, 0x98, 0xe9, 0x6a, 0xe8, 0xb1, 0x9b, 0x6e, 0x49, 0xfb,
+	0x4b, 0x81, 0xb5, 0x79, 0x00, 0x41, 0x84, 0xb9, 0xf4, 0x33, 0xea, 0xbc, 0xc9, 0xd9, 0xa5, 0xb4,
+	0x54, 0x21, 0x07, 0x4e, 0x71, 0x01, 0x38, 0xa5, 0x5c, 0x38, 0xe5, 0x5c, 0x38, 0x15, 0xd1, 0xa4,
+	0x05, 0x1f, 0xdd, 0xd0, 0x63, 0x9f, 0x9e, 0x86, 0x94, 0x9d, 0x65, 0xbb, 0x5c, 0x80, 0x63, 0x6d,
+	0x2b, 0x95, 0x0e, 0x91, 0xf4, 0x95, 0x2c, 0x38, 0x77, 0x5d, 0xda, 0x21, 0xac, 0x70, 0xb7, 0x8e,
+	0x9e, 0x2e, 0xe5, 0xbb, 0x23, 0x29, 0x57, 0xdc, 0x75, 0xca, 0xc6, 0x33, 0xca, 0x84, 0x86, 0xc0,
+	0xbe, 0x98, 0xf8, 0xb6, 0x2c, 0x59, 0x53, 0x1b, 0x70, 0x5f, 0x08, 0x9c, 0x3b, 0x62, 0xc8, 0x4c,
+	0x11, 0xb3, 0x4d, 0x60, 0x59, 0xef, 0xe8, 0x03, 0xbf, 0xc3, 0x73, 0x1e, 0xd9, 0x78, 0x1a, 0xee,
+	0x23, 0xc9, 0xef, 0xc3, 0x83, 0x91, 0x1b, 0x12, 0xd7, 0x1b, 0xd1, 0x77, 0x49, 0x32, 0x64, 0x62,
+	0x8a, 0x8d, 0xb9, 0x1e, 0x25, 0x9e, 0x3d, 0xa5, 0x82, 0xd9, 0x07, 0xdc, 0x8a, 0x22, 0xe9, 0x60,
+	0x07, 0xd2, 0x5a, 0x12, 0xd6, 0x15, 0x58, 0x92, 0xb3, 0xea, 0xb1, 0xc8, 0xf6, 0xf0, 0x54, 0xb2,
+	0xa9, 0xed, 0xe0, 0xdd, 0xce, 0x57, 0x23, 0x7d, 0xca, 0x02, 0xdf, 0x63, 0x14, 0xef, 0xa5, 0x4a,
+	0x91, 0x3e, 0x04, 0x26, 0x67, 0x7c, 0x4f, 0xd9, 0xd1, 0x7e, 0x53, 0x60, 0x3d, 0x1b, 0x64, 0x45,
+	0x76, 0x18, 0xc5, 0x81, 0xee, 0x4f, 0x11, 0x3f, 0xce, 0xf4, 0x97, 0x50, 0x1d, 0x3b, 0x58, 0xed,
+	0xd4, 0xc7, 0x38, 0xbe, 0xda, 0x9f, 0xb6, 0xee, 0x08, 0x69, 0x75, 0xf4, 0x2e, 0xba, 0x37, 0x3f,
+	0x87, 0x8a, 0xfc, 0x5a, 0x04, 0x32, 0x27, 0xf1, 0x01, 0x5e, 0x40, 0xe3, 0x2a, 0x79, 0xdf, 0x8f,
+	0x23, 0x1c, 0x62, 0x24, 0x16, 0xa9, 0x27, 0x33, 0xdc, 0x63, 0x3a, 0x46, 0x31, 0x57, 0x98, 0xaa,
+	0x7c, 0x85, 0x2f, 0xac, 0x47, 0x23, 0x92, 0xbc, 0x2e, 0x52, 0xe5, 0xb5, 0xaf, 0x51, 0xbd, 0x32,
+	0xd9, 0xfa, 0x34, 0x98, 0x5c, 0xe4, 0xa4, 0xcc, 0xc4, 0x4b, 0xf9, 0xfb, 0x33, 0xd9, 0x97, 0x8e,
+	0x3e, 0x0c, 0x50, 0x07, 0xf8, 0x30, 0x76, 0x74, 0x0b, 0x5d, 0x70, 0x62, 0x04, 0xae, 0xaf, 0xa0,
+	0x1a, 0x8b, 0x13, 0x96, 0x70, 0xb3, 0xdd, 0xba, 0xcd, 0x5f, 0x1c, 0xca, 0xa3, 0xe6, 0x1e, 0xc0,
+	0xd5, 0x2f, 0x3e, 0x4d, 0xc9, 0xf0, 0x24, 0x43, 0xcd, 0x1f, 0xbe, 0x40, 0xb4, 0x51, 0x15, 0xea,
+	0x14, 0xc6, 0x78, 0x2e, 0x57, 0xee, 0xbe, 0xf6, 0x42, 0xea, 0x50, 0x47, 0xef, 0xd3, 0x9f, 0x62,
+	0xca, 0xa2, 0xb9, 0xbe, 0xb2, 0xe9, 0xb4, 0x36, 0x6c, 0xdd, 0x1a, 0x71, 0x39, 0x25, 0xb2, 0xae,
+	0x92, 0xad, 0x5b, 0x10, 0x75, 0x77, 0x61, 0x53, 0x66, 0xe1, 0x94, 0x76, 0x3d, 0x27, 0xa4, 0x53,
+	0xea, 0x45, 0x7d, 0xea, 0x84, 0xb1, 0x1b, 0xf1, 0xcf, 0x43, 0x7a, 0x4e, 0x27, 0xf3, 0xd5, 0x7f,
+	0x90, 0x6b, 0x95, 0x6c, 0xdf, 0x81, 0x7d, 0x7e, 0xb9, 0x81, 0x6b, 0x50, 0x12, 0x5b, 0xab, 0xe4,
+	0x4a, 0xc9, 0x9c, 0xfe, 0xe4, 0x48, 0xa5, 0xf6, 0xaf, 0x02, 0x8f, 0x78, 0x98, 0xee, 0x7b, 0x1e,
+	0x0a, 0x36, 0x3a, 0xe3, 0x38, 0x46, 0x31, 0x53, 0xdb, 0x50, 0x61, 0xe2, 0x4b, 0x64, 0x5f, 0xda,
+	0x59, 0xc6, 0xb9, 0xcc, 0x3a, 0xed, 0xad, 0xcf, 0xdb, 0xc8, 0xc1, 0xfe, 0x2b, 0x83, 0x58, 0x86,
+	0x65, 0x75, 0xcd, 0x9e, 0xfa, 0x04, 0x96, 0x9d, 0x89, 0x8b, 0xd8, 0x08, 0x93, 0x74, 0x11, 0x8f,
+	0x26, 0x84, 0xd4, 0xf9, 0x2e, 0x22, 0x9d, 0x31, 0x25, 0x81, 0xcf, 0xdc, 0x28, 0x7d, 0xc5, 0xca,
+	0xbc, 0x4f, 0x69, 0x67, 0xee, 0xcf, 0x72, 0x6f, 0xcb, 0x7c, 0xe0, 0xdf, 0xda, 0x2e, 0x4f, 0xe3,
+	0xf8, 0xde, 0x88, 0x09, 0xf1, 0x2e, 0xab, 0xdb, 0xb0, 0x81, 0xd7, 0xe1, 0x4e, 0x71, 0x08, 0x46,
+	0x64, 0xf6, 0x9c, 0x20, 0xb9, 0xb6, 0xeb, 0xe1, 0x9b, 0x2d, 0x74, 0xb1, 0xac, 0xfd, 0xad, 0x40,
+	0xf3, 0x8a, 0xfd, 0xec, 0x1b, 0x24, 0xa8, 0x49, 0x7f, 0xa4, 0xca, 0xc8, 0x05, 0x36, 0xb5, 0x91,
+	0xc8, 0x4f, 0x48, 0xcc, 0xca, 0xae, 0x7c, 0x78, 0x75, 0xa8, 0x9f, 0xe1, 0xc5, 0xa4, 0x56, 0x26,
+	0x9e, 0x9c, 0x87, 0x3b, 0xcf, 0x5b, 0x37, 0xd7, 0x14, 0x47, 0x33, 0xb7, 0xc9, 0x9a, 0x5f, 0xe0,
+	0xfa, 0x66, 0x6c, 0x99, 0x3b, 0xbb, 0x14, 0xcf, 0xd9, 0x8b, 0x2d, 0xe1, 0xde, 0xaf, 0xcd, 0xd5,
+	0x99, 0x79, 0xc9, 0x72, 0xd1, 0xad, 0x42, 0x23, 0xbe, 0x72, 0x21, 0xa7, 0xa1, 0x3f, 0x95, 0x08,
+	0x35, 0x55, 0xb6, 0x81, 0x57, 0x2b, 0x6e, 0xee, 0x18, 0x49, 0x7c, 0x36, 0x00, 0xf5, 0x18, 0x55,
+	0xca, 0xe3, 0xaa, 0xe8, 0xf8, 0xb1, 0x17, 0x89, 0x87, 0xbf, 0x01, 0xb5, 0xe3, 0xfd, 0xfe, 0xa0,
+	0x67, 0xf4, 0x49, 0xcf, 0xec, 0x19, 0x8d, 0x7b, 0xea, 0x87, 0xf0, 0x38, 0xb5, 0x1c, 0x1b, 0xfd,
+	0x6f, 0x0d, 0x7d, 0x40, 0x5e, 0x9b, 0xfd, 0xc3, 0x76, 0x43, 0x41, 0xd9, 0xa9, 0x5f, 0x3a, 0x1b,
+	0xdf, 0x9b, 0xbd, 0x46, 0xe1, 0xd9, 0x7f, 0xf8, 0x9f, 0x74, 0x7e, 0x82, 0xd4, 0x4d, 0xb8, 0x6b,
+	0xae, 0xb0, 0xd2, 0x27, 0xb0, 0x91, 0xe3, 0xd4, 0xd1, 0x49, 0xc7, 0xec, 0xf6, 0x3a, 0xa4, 0x6d,
+	0xbe, 0xee, 0x61, 0xd1, 0x8f, 0xe1, 0x69, 0x8e, 0x57, 0xcf, 0xbc, 0x4c, 0x54, 0x50, 0x5f, 0xc0,
+	0xf3, 0x5b, 0x5d, 0x48, 0xb7, 0x47, 0x0e, 0xcd, 0x0e, 0x7e, 0x7c, 0x37, 0x34, 0x86, 0x46, 0xa3,
+	0xa8, 0xae, 0xc3, 0x93, 0x1b, 0x22, 0x06, 0xc6, 0xfe, 0x51, 0xa3, 0xa4, 0x6e, 0xc0, 0x5a, 0x8e,
+	0x83, 0x35, 0xb4, 0x8e, 0x8d, 0x5e, 0xdb, 0x68, 0x37, 0xca, 0xdf, 0x94, 0x0f, 0x94, 0x5f, 0x94,
+	0x7b, 0xff, 0x07, 0x00, 0x00, 0xff, 0xff, 0xf9, 0x9a, 0x63, 0xdd, 0xed, 0x0b, 0x00, 0x00,
 }
