@@ -146,6 +146,7 @@ func forceRename(from, to string) error {
 var pkgRegex = regexp.MustCompile(`(package \w+)`)
 var pkgCommentRegex = regexp.MustCompile(`(?s)(\/\*.*?\*\/\n)package`)
 var unusedImportCommentRegex = regexp.MustCompile("// discarding unused import .*\n")
+var fileDescriptorVarRegex = regexp.MustCompile(`fileDescriptor\d+`)
 
 func fixProto(path string) {
 	// goprotobuf is really bad at dependencies, so we must fix them manually...
@@ -179,7 +180,7 @@ func fixProto(path string) {
 	}
 
 	// remove the package comment because it just includes a list of all messages and
-	// creates collisions between the others.
+	// collides not only with the other compiled protobuf files, but also our own documentation.
 	file = cutAllSubmatch(pkgCommentRegex, file, 1)
 
 	// remove warnings
@@ -191,6 +192,12 @@ func fixProto(path string) {
 	// fix the google dependency;
 	// we just reuse the one from protoc-gen-go
 	file = bytes.Replace(file, []byte("google/protobuf"), []byte("github.com/golang/protobuf/protoc-gen-go/descriptor"), -1)
+
+	// we need to prefix local variables created by protoc-gen-go so that they don't clash with others in the same package
+	filename := strings.Split(filepath.Base(path), ".")[0]
+	file = fileDescriptorVarRegex.ReplaceAllFunc(file, func(match []byte) []byte {
+		return []byte(filename + "_" + string(match))
+	})
 
 	err = ioutil.WriteFile(path, file, os.ModePerm)
 	if err != nil {
