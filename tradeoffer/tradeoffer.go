@@ -92,9 +92,9 @@ type TradeOfferResult struct {
 	Descriptions []*Description
 }
 type Description struct {
-	AppId      uint32 `json:",string"`
-	ClassId    uint64 `json:",string"`
-	InstanceId uint64 `json:",string"`
+	AppId      uint32 `json:"appid"`
+	ClassId    uint64 `json:"classid,string"`
+	InstanceId uint64 `json:"instanceid,string"`
 
 	IconUrl      string `json:"icon_url"`
 	IconUrlLarge string `json:"icon_url_large"`
@@ -109,10 +109,10 @@ type Description struct {
 
 	Type string
 
-	Tradable                  bool
-	Commodity                 bool
+	Tradable                  bool   `json:"tradable"`
+	Commodity                 bool   `json:"commodity"`
 	MarketTradableRestriction uint32 `json:"market_tradable_restriction"`
 
-	Descriptions inventory.DescriptionLines
-	Actions      []*inventory.Action
+	Descriptions inventory.DescriptionLines `json:"descriptions"`
+	Actions      []*inventory.Action        `json:"actions"`
 }
