@@ -15,4 +15,4 @@ Incoming messages are of the GCPacket type and are read like regular Packets.
 
 The actual messages and enums are in the sub-packages steamlang and protobuf, generated from the SteamKit data.
 */
-package internal
+package protocol

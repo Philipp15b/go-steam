@@ -2,7 +2,7 @@ package socialcache
 
 import (
 	"errors"
-	. "github.com/Philipp15b/go-steam/internal/steamlang"
+	. "github.com/Philipp15b/go-steam/protocol/steamlang"
 	. "github.com/Philipp15b/go-steam/steamid"
 	"sync"
 )

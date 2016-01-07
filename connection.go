@@ -6,7 +6,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"github.com/Philipp15b/go-steam/cryptoutil"
-	. "github.com/Philipp15b/go-steam/internal"
+	. "github.com/Philipp15b/go-steam/protocol"
 	"io"
 	"net"
 	"sync"

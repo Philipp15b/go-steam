@@ -1,11 +1,11 @@
-package internal
+package protocol
 
 import (
 	"bytes"
 	"github.com/golang/protobuf/proto"
 	"encoding/binary"
 	"fmt"
-	. "github.com/Philipp15b/go-steam/internal/steamlang"
+	. "github.com/Philipp15b/go-steam/protocol/steamlang"
 )
 
 // TODO: Headers are always deserialized twice.
