@@ -13,10 +13,6 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the proto package unified is being compiled against.
-const _ = proto.ProtoPackageIsVersion1
-
 type CDeviceAuth_GetOwnAuthorizedDevices_Request struct {
 	Steamid          *uint64 `protobuf:"fixed64,1,opt,name=steamid" json:"steamid,omitempty"`
 	IncludeCanceled  *bool   `protobuf:"varint,2,opt,name=include_canceled" json:"include_canceled,omitempty"`

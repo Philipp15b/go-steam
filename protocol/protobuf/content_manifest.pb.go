@@ -13,10 +13,6 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the proto package protobuf is being compiled against.
-const _ = proto.ProtoPackageIsVersion1
-
 type ContentManifestPayload struct {
 	Mappings         []*ContentManifestPayload_FileMapping `protobuf:"bytes,1,rep,name=mappings" json:"mappings,omitempty"`
 	XXX_unrecognized []byte                                `json:"-"`

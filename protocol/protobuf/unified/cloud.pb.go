@@ -13,10 +13,6 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the proto package unified is being compiled against.
-const _ = proto.ProtoPackageIsVersion1
-
 type CCloud_GetUploadServerInfo_Request struct {
 	Appid            *uint32 `protobuf:"varint,1,opt,name=appid" json:"appid,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`

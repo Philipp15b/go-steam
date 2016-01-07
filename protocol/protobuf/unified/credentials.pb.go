@@ -13,10 +13,6 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the proto package unified is being compiled against.
-const _ = proto.ProtoPackageIsVersion1
-
 type CCredentials_TestAvailablePassword_Request struct {
 	Password          *string `protobuf:"bytes,1,opt,name=password" json:"password,omitempty"`
 	ShaDigestPassword []byte  `protobuf:"bytes,2,opt,name=sha_digest_password" json:"sha_digest_password,omitempty"`
