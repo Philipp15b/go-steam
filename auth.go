@@ -170,10 +170,7 @@ func (a *Auth) handleAccountInfo(packet *Packet) {
 	a.client.Emit(&AccountInfoEvent{
 		PersonaName:          body.GetPersonaName(),
 		Country:              body.GetIpCountry(),
-		//PasswordSalt:         body.GetSaltPassword(),
-		//PasswordSHADisgest:   body.GetShaDigest_Password(),
 		CountAuthedComputers: body.GetCountAuthedComputers(),
-		//LockedWithIpt:        body.GetLockedWithIpt(),
 		AccountFlags:         EAccountFlags(body.GetAccountFlags()),
 		FacebookId:           body.GetFacebookId(),
 		FacebookName:         body.GetFacebookName(),

@@ -46,10 +46,7 @@ type MachineAuthUpdateEvent struct {
 type AccountInfoEvent struct {
 	PersonaName          string
 	Country              string
-	PasswordSalt         []byte
-	PasswordSHADisgest   []byte
 	CountAuthedComputers int32
-	LockedWithIpt        bool
 	AccountFlags         EAccountFlags
 	FacebookId           uint64 `json:",string"`
 	FacebookName         string
