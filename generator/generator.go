@@ -46,11 +46,11 @@ func main() {
 
 func clean() {
 	print("# Cleaning")
-	cleanGlob("../internal/**/*.pb.go")
-	cleanGlob("../tf2/internal/**/*.pb.go")
+	cleanGlob("../protocol/**/*.pb.go")
+	cleanGlob("../tf2/protocol/**/*.pb.go")
 
-	os.Remove("../internal/steamlang/enums.go")
-	os.Remove("../internal/steamlang/messages.go")
+	os.Remove("../protocol/steamlang/enums.go")
+	os.Remove("../protocol/steamlang/messages.go")
 }
 
 func cleanGlob(pattern string) {
@@ -68,18 +68,18 @@ func buildSteamLanguage() {
 	exePath := "./GoSteamLanguageGenerator/bin/Debug/GoSteamLanguageGenerator.exe"
 
 	if runtime.GOOS != "windows" {
-		execute("mono", exePath, "./SteamKit", "../internal/steamlang")
+		execute("mono", exePath, "./SteamKit", "../protocol/steamlang")
 	} else {
-		execute(exePath, "./SteamKit", "../internal/steamlang")
+		execute(exePath, "./SteamKit", "../protocol/steamlang")
 	}
-	execute("gofmt", "-w", "../internal/steamlang/enums.go", "../internal/steamlang/messages.go")
+	execute("gofmt", "-w", "../protocol/steamlang/enums.go", "../protocol/steamlang/messages.go")
 }
 
 func buildProto() {
 	print("# Building Protobufs")
 
-	buildProtoMap("steamclient", clientProtoFiles, "../internal/protobuf")
-	buildProtoMap("tf", tf2ProtoFiles, "../tf2/internal/protobuf")
+	buildProtoMap("steamclient", clientProtoFiles, "../protocol/protobuf")
+	buildProtoMap("tf", tf2ProtoFiles, "../tf2/protocol/protobuf")
 }
 
 func buildProtoMap(srcSubdir string, files map[string]string, outDir string) {

@@ -2,9 +2,9 @@ package steam
 
 import (
 	"crypto/sha1"
-	. "github.com/Philipp15b/go-steam/internal"
-	. "github.com/Philipp15b/go-steam/internal/protobuf"
-	. "github.com/Philipp15b/go-steam/internal/steamlang"
+	. "github.com/Philipp15b/go-steam/protocol"
+	. "github.com/Philipp15b/go-steam/protocol/protobuf"
+	. "github.com/Philipp15b/go-steam/protocol/steamlang"
 	. "github.com/Philipp15b/go-steam/steamid"
 	"github.com/golang/protobuf/proto"
 	"sync/atomic"
@@ -170,10 +170,7 @@ func (a *Auth) handleAccountInfo(packet *Packet) {
 	a.client.Emit(&AccountInfoEvent{
 		PersonaName:          body.GetPersonaName(),
 		Country:              body.GetIpCountry(),
-		PasswordSalt:         body.GetSaltPassword(),
-		PasswordSHADisgest:   body.GetShaDigest_Password(),
 		CountAuthedComputers: body.GetCountAuthedComputers(),
-		LockedWithIpt:        body.GetLockedWithIpt(),
 		AccountFlags:         EAccountFlags(body.GetAccountFlags()),
 		FacebookId:           body.GetFacebookId(),
 		FacebookName:         body.GetFacebookName(),
