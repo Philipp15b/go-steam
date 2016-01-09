@@ -471,9 +471,9 @@ func (s *Social) handleChatEnter(packet *Packet) {
 	body := new(MsgClientChatEnter)
 	payload := packet.ReadClientMsg(body).Payload
 	reader := bytes.NewBuffer(payload)
-	count, _ := ReadInt32(reader)
 	name, _ := ReadString(reader)
 	ReadByte(reader) //0
+	count := body.NumMembers
 	chatId := SteamId(body.SteamIdChat)
 	clanId := SteamId(body.SteamIdClan)
 	s.Chats.Add(socialcache.Chat{SteamId: chatId, GroupId: clanId})
