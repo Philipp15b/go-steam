@@ -153,6 +153,11 @@ func (s *Social) RequestProfileInfo(id SteamId) {
 	}))
 }
 
+// Requests all offline messages and marks them as read
+func (s *Social) RequestOfflineMessages() {
+	s.client.Write(NewClientMsgProtobuf(EMsg_ClientFSGetFriendMessageHistoryForOfflineMessages, &CMsgClientFSGetFriendMessageHistoryForOfflineMessages{}))
+}
+
 // Attempts to join a chat room
 func (s *Social) JoinChat(id SteamId) {
 	chatId := id.ClanToChat()
@@ -232,6 +237,8 @@ func (s *Social) HandlePacket(packet *Packet) {
 		s.handleIgnoreFriendResponse(packet)
 	case EMsg_ClientFriendProfileInfoResponse:
 		s.handleProfileInfoResponse(packet)
+	case EMsg_ClientFSGetFriendMessageHistoryResponse:
+		s.handleFriendMessageHistoryResponse(packet)
 	}
 }
 
@@ -594,4 +601,21 @@ func (s *Social) handleProfileInfoResponse(packet *Packet) {
 		Headline:    body.GetHeadline(),
 		Summary:     body.GetSummary(),
 	})
+}
+
+func (s *Social) handleFriendMessageHistoryResponse(packet *Packet) {
+	body := new(CMsgClientFSGetFriendMessageHistoryResponse)
+	packet.ReadProtoMsg(body)
+	steamid := SteamId(body.GetSteamid())
+	// Handles all unread offline messages as new
+	for _, message := range body.GetMessages() {
+		if !message.GetUnread() {
+			continue // Skip already read messages
+		}
+		s.client.Emit(&ChatMsgEvent{
+			ChatterId: steamid,
+			Message:   message.GetMessage(),
+			EntryType: EChatEntryType_ChatMsg,
+		})
+	}
 }
