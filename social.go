@@ -13,6 +13,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	"io"
 	"sync"
+	"time"
 )
 
 // Provides access to social aspects of Steam.
@@ -459,7 +460,7 @@ func (s *Social) handleFriendMsg(packet *Packet) {
 		ChatterId: SteamId(body.GetSteamidFrom()),
 		Message:   message,
 		EntryType: EChatEntryType(body.GetChatEntryType()),
-		Timestamp: body.GetRtime32ServerTimestamp(),
+		Timestamp: time.Unix(int64(body.GetRtime32ServerTimestamp()), 0),
 	})
 }
 
@@ -608,7 +609,6 @@ func (s *Social) handleFriendMessageHistoryResponse(packet *Packet) {
 	body := new(CMsgClientFSGetFriendMessageHistoryResponse)
 	packet.ReadProtoMsg(body)
 	steamid := SteamId(body.GetSteamid())
-	// Handles all unread offline messages as new
 	for _, message := range body.GetMessages() {
 		if !message.GetUnread() {
 			continue // Skip already read messages
@@ -617,7 +617,7 @@ func (s *Social) handleFriendMessageHistoryResponse(packet *Packet) {
 			ChatterId: steamid,
 			Message:   message.GetMessage(),
 			EntryType: EChatEntryType_ChatMsg,
-			Timestamp: message.GetTimestamp(),
+			Timestamp: time.Unix(int64(message.GetTimestamp()), 0),
 			Offline:   true, // GetUnread is true
 		})
 	}

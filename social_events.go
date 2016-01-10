@@ -3,6 +3,7 @@ package steam
 import (
 	. "github.com/Philipp15b/go-steam/protocol/steamlang"
 	. "github.com/Philipp15b/go-steam/steamid"
+	"time"
 )
 
 type FriendsListEvent struct{}
@@ -88,7 +89,7 @@ type ChatMsgEvent struct {
 	ChatterId  SteamId `json:",string"`
 	Message    string
 	EntryType  EChatEntryType
-	Timestamp  uint32
+	Timestamp  time.Time
 	Offline    bool
 }
 
