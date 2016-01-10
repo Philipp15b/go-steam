@@ -618,6 +618,7 @@ func (s *Social) handleFriendMessageHistoryResponse(packet *Packet) {
 			Message:   message.GetMessage(),
 			EntryType: EChatEntryType_ChatMsg,
 			Timestamp: message.GetTimestamp(),
+			Offline:   true, // GetUnread is true
 		})
 	}
 }

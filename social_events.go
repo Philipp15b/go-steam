@@ -89,6 +89,7 @@ type ChatMsgEvent struct {
 	Message    string
 	EntryType  EChatEntryType
 	Timestamp  uint32
+	Offline    bool
 }
 
 // Whether the type is ChatMsg
