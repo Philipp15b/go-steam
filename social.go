@@ -616,6 +616,7 @@ func (s *Social) handleFriendMessageHistoryResponse(packet *Packet) {
 			ChatterId: steamid,
 			Message:   message.GetMessage(),
 			EntryType: EChatEntryType_ChatMsg,
+			Timestamp: message.GetTimestamp(),
 		})
 	}
 }

@@ -88,6 +88,7 @@ type ChatMsgEvent struct {
 	ChatterId  SteamId `json:",string"`
 	Message    string
 	EntryType  EChatEntryType
+	Timestamp  uint32
 }
 
 // Whether the type is ChatMsg
