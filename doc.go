@@ -10,7 +10,7 @@ received the LoggedOnEvent, you should set your persona state to online to recei
 
 	import (
 		"github.com/Philipp15b/go-steam"
-		"github.com/Philipp15b/go-steam/internal/steamlang"
+		"github.com/Philipp15b/go-steam/protocol/steamlang"
 		"io/ioutil"
 		"log"
 	)
