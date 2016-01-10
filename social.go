@@ -459,6 +459,7 @@ func (s *Social) handleFriendMsg(packet *Packet) {
 		ChatterId: SteamId(body.GetSteamidFrom()),
 		Message:   message,
 		EntryType: EChatEntryType(body.GetChatEntryType()),
+		Timestamp: body.GetRtime32ServerTimestamp(),
 	})
 }
 
