@@ -2,9 +2,10 @@ package trade
 
 import (
 	"errors"
+	"time"
+
 	"github.com/Philipp15b/go-steam/steamid"
 	"github.com/Philipp15b/go-steam/trade/tradeapi"
-	"time"
 )
 
 const pollTimeout = time.Second
@@ -19,13 +20,13 @@ type Trade struct {
 	api          *tradeapi.Trade
 }
 
-func New(sessionId, steamLogin string, other steamid.SteamId) *Trade {
+func New(sessionId, steamLogin, steamLoginSecure string, other steamid.SteamId) *Trade {
 	return &Trade{
 		other,
 		false, false,
 		time.Unix(0, 0),
 		nil,
-		tradeapi.New(sessionId, steamLogin, other),
+		tradeapi.New(sessionId, steamLogin, steamLoginSecure, other),
 	}
 }
 
