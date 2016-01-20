@@ -5,11 +5,12 @@ import (
 	"crypto/cipher"
 	"encoding/binary"
 	"fmt"
-	"github.com/Philipp15b/go-steam/cryptoutil"
-	. "github.com/Philipp15b/go-steam/protocol"
 	"io"
 	"net"
 	"sync"
+
+	"github.com/Philipp15b/go-steam/cryptoutil"
+	. "github.com/Philipp15b/go-steam/protocol"
 )
 
 type connection interface {
@@ -28,8 +29,8 @@ type tcpConnection struct {
 	cipherMutex sync.RWMutex
 }
 
-func dialTCP(addr, local *net.TCPAddr) (*tcpConnection, error) {
-	conn, err := net.DialTCP("tcp", local, addr)
+func dialTCP(laddr, raddr *net.TCPAddr) (*tcpConnection, error) {
+	conn, err := net.DialTCP("tcp", laddr, raddr)
 	if err != nil {
 		return nil, err
 	}

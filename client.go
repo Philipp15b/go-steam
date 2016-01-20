@@ -14,10 +14,10 @@ import (
 	"time"
 
 	"github.com/Philipp15b/go-steam/cryptoutil"
+	"github.com/Philipp15b/go-steam/netutil"
 	. "github.com/Philipp15b/go-steam/protocol"
 	. "github.com/Philipp15b/go-steam/protocol/protobuf"
 	. "github.com/Philipp15b/go-steam/protocol/steamlang"
-	"github.com/Philipp15b/go-steam/netutil"
 	. "github.com/Philipp15b/go-steam/steamid"
 )
 
@@ -166,25 +166,15 @@ func (c *Client) ConnectSingapore() *netutil.PortAddr {
 // Connects to a specific server.
 // If this client is already connected, it is disconnected first.
 func (c *Client) ConnectTo(addr *netutil.PortAddr) {
-	c.Disconnect()
-
-	conn, err := dialTCP(addr.ToTCPAddr(), nil)
-	if err != nil {
-		c.Fatalf("Connect failed: %v", err)
-		return
-	}
-	c.conn = conn
-	c.writeChan = make(chan IMsg, 5)
-
-	go c.readLoop()
-	go c.writeLoop()
+	c.ConnectToBind(addr, nil)
 }
 
 // Connects to a specific server, and binds to a specified local IP
+// If this client is already connected, it is disconnected first.
 func (c *Client) ConnectToBind(addr *netutil.PortAddr, local *net.TCPAddr) {
 	c.Disconnect()
 
-	conn, err := dialTCP(addr.ToTCPAddr(), local)
+	conn, err := dialTCP(local, addr.ToTCPAddr())
 	if err != nil {
 		c.Fatalf("Connect failed: %v", err)
 		return
