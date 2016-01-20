@@ -126,11 +126,11 @@ func (c *Client) Connected() bool {
 	return c.conn != nil
 }
 
-// Connects to a random server of the included list of connection managers and returns the address.
+// Connects to a random Steam server and returns its address.
 // If this client is already connected, it is disconnected first.
-//
-// You will receive a ServerListEvent after logging in which contains a new list of servers of which you
-// should choose one yourself and connect with ConnectTo since the included list may not always be up to date.
+// This method tries to use an address from the Steam Directory and falls
+// back to the built-in server list if the Steam Directory can't be reached.
+// If you want to connect to a specific server, use `ConnectTo`.
 func (c *Client) Connect() *netutil.PortAddr {
 	var server *netutil.PortAddr
 	if steamDirectoryCache.IsInitialized() {
@@ -142,28 +142,8 @@ func (c *Client) Connect() *netutil.PortAddr {
 	return server
 }
 
-// ConnectNorthAmerica Connects to a random North American server on the Steam network
-func (c *Client) ConnectNorthAmerica() *netutil.PortAddr {
-	server := GetRandomNorthAmericaCM()
-	c.ConnectTo(server)
-	return server
-}
-
-// ConnectEurope Connects to a random Europe server on the Steam network
-func (c *Client) ConnectEurope() *netutil.PortAddr {
-	server := GetRandomEuropeCM()
-	c.ConnectTo(server)
-	return server
-}
-
-// ConnectSingapore Connects to a random SG server on the Steam network
-func (c *Client) ConnectSingapore() *netutil.PortAddr {
-	server := GetRandomSingaporeCM()
-	c.ConnectTo(server)
-	return server
-}
-
 // Connects to a specific server.
+// You may want to use one of the `GetRandom*CM()` functions in this package.
 // If this client is already connected, it is disconnected first.
 func (c *Client) ConnectTo(addr *netutil.PortAddr) {
 	c.ConnectToBind(addr, nil)
