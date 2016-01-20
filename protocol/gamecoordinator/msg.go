@@ -1,11 +1,11 @@
 package gamecoordinator
 
 import (
+	"io"
+
 	. "github.com/Philipp15b/go-steam/protocol"
-	. "github.com/Philipp15b/go-steam/protocol/protobuf"
 	. "github.com/Philipp15b/go-steam/protocol/steamlang"
 	"github.com/golang/protobuf/proto"
-	"io"
 )
 
 // An outgoing message to the Game Coordinator.
