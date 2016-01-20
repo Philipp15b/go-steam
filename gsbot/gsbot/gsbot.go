@@ -17,7 +17,7 @@ import (
 )
 
 func main() {
-	if len(os.Args) >= 3 {
+	if len(os.Args) < 3 {
 		fmt.Println("gsbot example\nusage: \n\tgsbot [username] [password] [authcode]")
 		return
 	}
