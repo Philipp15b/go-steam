@@ -1,11 +1,21 @@
 package protocol
 
 import (
-	. "github.com/Philipp15b/go-steam/protocol/steamlang"
 	"io"
+	"math"
+	"strconv"
+
+	. "github.com/Philipp15b/go-steam/protocol/steamlang"
 )
 
 type JobId uint64
+
+func (j JobId) String() string {
+	if j == math.MaxUint64 {
+		return "(none)"
+	}
+	return strconv.FormatUint(uint64(j), 10)
+}
 
 type Serializer interface {
 	Serialize(w io.Writer) error
