@@ -6,7 +6,7 @@ Usage
 Like go-steam, this package is event-based. Call Poll() until the trade has ended, that is until the TradeEndedEvent is emitted.
 
 	// After receiving the steam.TradeSessionStartEvent
-	t := trade.New(sessionIdCookie, steamLoginCookie, event.Other)
+	t := trade.New(sessionIdCookie, steamLoginCookie, steamLoginSecure, event.Other)
 	for {
 		eventList, err := t.Poll()
 		if err != nil {
