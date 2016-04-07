@@ -2,9 +2,8 @@ package steamid
 
 import (
 	"fmt"
-	"strconv"
-	"errors"
 	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -38,11 +37,10 @@ func NewId(id string) (SteamId, error) {
 	} else {
 		newid, err := strconv.ParseUint(id, 10, 64)
 		if err != nil {
-			return SteamId(0), err
+			return SteamId(0), fmt.Errorf("Invalid SteamId: %s\n", id)
 		}
 		return SteamId(newid), nil
 	}
-	return SteamId(0), errors.New(fmt.Sprintf("Invalid SteamId: %s\n", id))
 }
 
 func NewIdAdv(accountId, instance uint32, universe int32, accountType int32) SteamId {

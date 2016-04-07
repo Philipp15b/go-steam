@@ -5,8 +5,8 @@ package tf2
 
 import (
 	"github.com/Philipp15b/go-steam"
-	. "github.com/Philipp15b/go-steam/protocol/gamecoordinator"
-	. "github.com/Philipp15b/go-steam/tf2/protocol"
+	"github.com/Philipp15b/go-steam/protocol/gamecoordinator"
+	"github.com/Philipp15b/go-steam/tf2/protocol"
 	"github.com/Philipp15b/go-steam/tf2/protocol/protobuf"
 )
 
@@ -34,32 +34,35 @@ func (t *TF2) SetPlaying(playing bool) {
 }
 
 func (t *TF2) SetItemPosition(itemId, position uint64) {
-	t.client.GC.Write(NewGCMsg(AppId, uint32(protobuf.EGCItemMsg_k_EMsgGCSetSingleItemPosition), &MsgGCSetItemPosition{
-		itemId, position,
+	t.client.GC.Write(gamecoordinator.NewGCMsg(AppId, uint32(protobuf.EGCItemMsg_k_EMsgGCSetSingleItemPosition), &protocol.MsgGCSetItemPosition{
+		AssetId:  itemId,
+		Position: position,
 	}))
 }
 
 // recipe -2 = wildcard
 func (t *TF2) CraftItems(items []uint64, recipe int16) {
-	t.client.GC.Write(NewGCMsg(AppId, uint32(protobuf.EGCItemMsg_k_EMsgGCCraft), &MsgGCCraft{
+	t.client.GC.Write(gamecoordinator.NewGCMsg(AppId, uint32(protobuf.EGCItemMsg_k_EMsgGCCraft), &protocol.MsgGCCraft{
 		Recipe: recipe,
 		Items:  items,
 	}))
 }
 
 func (t *TF2) DeleteItem(itemId uint64) {
-	t.client.GC.Write(NewGCMsg(AppId, uint32(protobuf.EGCItemMsg_k_EMsgGCDelete), &MsgGCDeleteItem{itemId}))
+	t.client.GC.Write(gamecoordinator.NewGCMsg(AppId, uint32(protobuf.EGCItemMsg_k_EMsgGCDelete), &protocol.MsgGCDeleteItem{ItemId: itemId}))
 }
 
 func (t *TF2) NameItem(toolId, target uint64, name string) {
-	t.client.GC.Write(NewGCMsg(AppId, uint32(protobuf.EGCItemMsg_k_EMsgGCNameItem), &MsgGCNameItem{
-		toolId, target, name,
+	t.client.GC.Write(gamecoordinator.NewGCMsg(AppId, uint32(protobuf.EGCItemMsg_k_EMsgGCNameItem), &protocol.MsgGCNameItem{
+		Tool:   toolId,
+		Target: target,
+		Name:   name,
 	}))
 }
 
 type GCReadyEvent struct{}
 
-func (t *TF2) HandleGCPacket(packet *GCPacket) {
+func (t *TF2) HandleGCPacket(packet *gamecoordinator.GCPacket) {
 	if packet.AppId != AppId {
 		return
 	}
@@ -69,7 +72,7 @@ func (t *TF2) HandleGCPacket(packet *GCPacket) {
 	}
 }
 
-func (t *TF2) handleWelcome(packet *GCPacket) {
+func (t *TF2) handleWelcome(packet *gamecoordinator.GCPacket) {
 	// the packet's body is pretty useless
 	t.client.Emit(&GCReadyEvent{})
 }

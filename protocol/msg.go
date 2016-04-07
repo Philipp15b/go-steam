@@ -1,10 +1,12 @@
 package protocol
 
 import (
-	"github.com/golang/protobuf/proto"
-	. "github.com/Philipp15b/go-steam/protocol/steamlang"
-	. "github.com/Philipp15b/go-steam/steamid"
 	"io"
+
+	"github.com/golang/protobuf/proto"
+
+	"github.com/Philipp15b/go-steam/protocol/steamlang"
+	"github.com/Philipp15b/go-steam/steamid"
 )
 
 // Interface for all messages, typically outgoing. They can also be created by
@@ -12,7 +14,7 @@ import (
 type IMsg interface {
 	Serializer
 	IsProto() bool
-	GetMsgType() EMsg
+	GetMsgType() steamlang.EMsg
 	GetTargetJobId() JobId
 	SetTargetJobId(JobId)
 	GetSourceJobId() JobId
@@ -25,18 +27,18 @@ type IClientMsg interface {
 	IMsg
 	GetSessionId() int32
 	SetSessionId(int32)
-	GetSteamId() SteamId
-	SetSteamId(SteamId)
+	GetSteamId() steamid.SteamId
+	SetSteamId(steamid.SteamId)
 }
 
 // Represents a protobuf backed client message with session data.
 type ClientMsgProtobuf struct {
-	Header *MsgHdrProtoBuf
+	Header *steamlang.MsgHdrProtoBuf
 	Body   proto.Message
 }
 
-func NewClientMsgProtobuf(eMsg EMsg, body proto.Message) *ClientMsgProtobuf {
-	hdr := NewMsgHdrProtoBuf()
+func NewClientMsgProtobuf(eMsg steamlang.EMsg, body proto.Message) *ClientMsgProtobuf {
+	hdr := steamlang.NewMsgHdrProtoBuf()
 	hdr.Msg = eMsg
 	return &ClientMsgProtobuf{
 		Header: hdr,
@@ -48,8 +50,8 @@ func (c *ClientMsgProtobuf) IsProto() bool {
 	return true
 }
 
-func (c *ClientMsgProtobuf) GetMsgType() EMsg {
-	return NewEMsg(uint32(c.Header.Msg))
+func (c *ClientMsgProtobuf) GetMsgType() steamlang.EMsg {
+	return steamlang.NewEMsg(uint32(c.Header.Msg))
 }
 
 func (c *ClientMsgProtobuf) GetSessionId() int32 {
@@ -60,11 +62,11 @@ func (c *ClientMsgProtobuf) SetSessionId(session int32) {
 	c.Header.Proto.ClientSessionid = &session
 }
 
-func (c *ClientMsgProtobuf) GetSteamId() SteamId {
-	return SteamId(c.Header.Proto.GetSteamid())
+func (c *ClientMsgProtobuf) GetSteamId() steamid.SteamId {
+	return steamid.SteamId(c.Header.Proto.GetSteamid())
 }
 
-func (c *ClientMsgProtobuf) SetSteamId(s SteamId) {
+func (c *ClientMsgProtobuf) SetSteamId(s steamid.SteamId) {
 	c.Header.Proto.Steamid = proto.Uint64(uint64(s))
 }
 
@@ -99,13 +101,13 @@ func (c *ClientMsgProtobuf) Serialize(w io.Writer) error {
 
 // Represents a struct backed client message.
 type ClientMsg struct {
-	Header  *ExtendedClientMsgHdr
+	Header  *steamlang.ExtendedClientMsgHdr
 	Body    MessageBody
 	Payload []byte
 }
 
 func NewClientMsg(body MessageBody, payload []byte) *ClientMsg {
-	hdr := NewExtendedClientMsgHdr()
+	hdr := steamlang.NewExtendedClientMsgHdr()
 	hdr.Msg = body.GetEMsg()
 	return &ClientMsg{
 		Header:  hdr,
@@ -118,7 +120,7 @@ func (c *ClientMsg) IsProto() bool {
 	return true
 }
 
-func (c *ClientMsg) GetMsgType() EMsg {
+func (c *ClientMsg) GetMsgType() steamlang.EMsg {
 	return c.Header.Msg
 }
 
@@ -130,11 +132,11 @@ func (c *ClientMsg) SetSessionId(session int32) {
 	c.Header.SessionID = session
 }
 
-func (c *ClientMsg) GetSteamId() SteamId {
+func (c *ClientMsg) GetSteamId() steamid.SteamId {
 	return c.Header.SteamID
 }
 
-func (c *ClientMsg) SetSteamId(s SteamId) {
+func (c *ClientMsg) SetSteamId(s steamid.SteamId) {
 	c.Header.SteamID = s
 }
 
@@ -168,13 +170,13 @@ func (c *ClientMsg) Serialize(w io.Writer) error {
 }
 
 type Msg struct {
-	Header  *MsgHdr
+	Header  *steamlang.MsgHdr
 	Body    MessageBody
 	Payload []byte
 }
 
 func NewMsg(body MessageBody, payload []byte) *Msg {
-	hdr := NewMsgHdr()
+	hdr := steamlang.NewMsgHdr()
 	hdr.Msg = body.GetEMsg()
 	return &Msg{
 		Header:  hdr,
@@ -183,7 +185,7 @@ func NewMsg(body MessageBody, payload []byte) *Msg {
 	}
 }
 
-func (m *Msg) GetMsgType() EMsg {
+func (m *Msg) GetMsgType() steamlang.EMsg {
 	return m.Header.Msg
 }
 

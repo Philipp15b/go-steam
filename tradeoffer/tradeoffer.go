@@ -7,6 +7,7 @@ package tradeoffer
 
 import (
 	"encoding/json"
+
 	"github.com/Philipp15b/go-steam/economy/inventory"
 	"github.com/Philipp15b/go-steam/steamid"
 )

@@ -1,10 +1,10 @@
 package steam
 
 import (
-	. "github.com/Philipp15b/go-steam/protocol"
-	. "github.com/Philipp15b/go-steam/protocol/protobuf"
-	. "github.com/Philipp15b/go-steam/protocol/steamlang"
-	. "github.com/Philipp15b/go-steam/steamid"
+	"github.com/Philipp15b/go-steam/protocol"
+	"github.com/Philipp15b/go-steam/protocol/protobuf"
+	"github.com/Philipp15b/go-steam/protocol/steamlang"
+	"github.com/Philipp15b/go-steam/steamid"
 	"github.com/golang/protobuf/proto"
 )
 
@@ -21,41 +21,41 @@ type Trading struct {
 
 type TradeRequestId uint32
 
-func (t *Trading) HandlePacket(packet *Packet) {
+func (t *Trading) HandlePacket(packet *protocol.Packet) {
 	switch packet.EMsg {
-	case EMsg_EconTrading_InitiateTradeProposed:
-		msg := new(CMsgTrading_InitiateTradeRequest)
+	case steamlang.EMsg_EconTrading_InitiateTradeProposed:
+		msg := new(protobuf.CMsgTrading_InitiateTradeRequest)
 		packet.ReadProtoMsg(msg)
 		t.client.Emit(&TradeProposedEvent{
 			RequestId: TradeRequestId(msg.GetTradeRequestId()),
-			Other:     SteamId(msg.GetOtherSteamid()),
+			Other:     steamid.SteamId(msg.GetOtherSteamid()),
 		})
-	case EMsg_EconTrading_InitiateTradeResult:
-		msg := new(CMsgTrading_InitiateTradeResponse)
+	case steamlang.EMsg_EconTrading_InitiateTradeResult:
+		msg := new(protobuf.CMsgTrading_InitiateTradeResponse)
 		packet.ReadProtoMsg(msg)
 		t.client.Emit(&TradeResultEvent{
 			RequestId: TradeRequestId(msg.GetTradeRequestId()),
-			Response:  EEconTradeResponse(msg.GetResponse()),
-			Other:     SteamId(msg.GetOtherSteamid()),
+			Response:  steamlang.EEconTradeResponse(msg.GetResponse()),
+			Other:     steamid.SteamId(msg.GetOtherSteamid()),
 
 			NumDaysSteamGuardRequired:            msg.GetSteamguardRequiredDays(),
 			NumDaysNewDeviceCooldown:             msg.GetNewDeviceCooldownDays(),
 			DefaultNumDaysPasswordResetProbation: msg.GetDefaultPasswordResetProbationDays(),
 			NumDaysPasswordResetProbation:        msg.GetPasswordResetProbationDays(),
 		})
-	case EMsg_EconTrading_StartSession:
-		msg := new(CMsgTrading_StartSession)
+	case steamlang.EMsg_EconTrading_StartSession:
+		msg := new(protobuf.CMsgTrading_StartSession)
 		packet.ReadProtoMsg(msg)
 		t.client.Emit(&TradeSessionStartEvent{
-			Other: SteamId(msg.GetOtherSteamid()),
+			Other: steamid.SteamId(msg.GetOtherSteamid()),
 		})
 	}
 }
 
 // Requests a trade. You'll receive a TradeResultEvent if the request fails or
 // if the friend accepted the trade.
-func (t *Trading) RequestTrade(other SteamId) {
-	t.client.Write(NewClientMsgProtobuf(EMsg_EconTrading_InitiateTradeRequest, &CMsgTrading_InitiateTradeRequest{
+func (t *Trading) RequestTrade(other steamid.SteamId) {
+	t.client.Write(protocol.NewClientMsgProtobuf(steamlang.EMsg_EconTrading_InitiateTradeRequest, &protobuf.CMsgTrading_InitiateTradeRequest{
 		OtherSteamid: proto.Uint64(uint64(other)),
 	}))
 }
@@ -69,15 +69,15 @@ func (t *Trading) RespondRequest(requestId TradeRequestId, accept bool) {
 		resp = 1
 	}
 
-	t.client.Write(NewClientMsgProtobuf(EMsg_EconTrading_InitiateTradeResponse, &CMsgTrading_InitiateTradeResponse{
+	t.client.Write(protocol.NewClientMsgProtobuf(steamlang.EMsg_EconTrading_InitiateTradeResponse, &protobuf.CMsgTrading_InitiateTradeResponse{
 		TradeRequestId: proto.Uint32(uint32(requestId)),
 		Response:       proto.Uint32(resp),
 	}))
 }
 
 // This cancels a request made with RequestTrade.
-func (t *Trading) CancelRequest(other SteamId) {
-	t.client.Write(NewClientMsgProtobuf(EMsg_EconTrading_CancelTradeRequest, &CMsgTrading_CancelTradeRequest{
+func (t *Trading) CancelRequest(other steamid.SteamId) {
+	t.client.Write(protocol.NewClientMsgProtobuf(steamlang.EMsg_EconTrading_CancelTradeRequest, &protobuf.CMsgTrading_CancelTradeRequest{
 		OtherSteamid: proto.Uint64(uint64(other)),
 	}))
 }

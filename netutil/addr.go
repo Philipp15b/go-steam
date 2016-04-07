@@ -31,11 +31,18 @@ func ParsePortAddr(addr string) *PortAddr {
 }
 
 func (p *PortAddr) ToTCPAddr() *net.TCPAddr {
-	return &net.TCPAddr{p.IP, int(p.Port), ""}
+	return &net.TCPAddr{
+		IP:   p.IP,
+		Port: int(p.Port),
+		Zone: "",
+	}
 }
 
 func (p *PortAddr) ToUDPAddr() *net.UDPAddr {
-	return &net.UDPAddr{p.IP, int(p.Port), ""}
+	return &net.UDPAddr{IP: p.IP,
+		Port: int(p.Port),
+		Zone: "",
+	}
 }
 
 func (p *PortAddr) String() string {

@@ -2,9 +2,10 @@ package gamecoordinator
 
 import (
 	"bytes"
-	. "github.com/Philipp15b/go-steam/protocol"
-	. "github.com/Philipp15b/go-steam/protocol/protobuf"
-	. "github.com/Philipp15b/go-steam/protocol/steamlang"
+
+	"github.com/Philipp15b/go-steam/protocol"
+	"github.com/Philipp15b/go-steam/protocol/protobuf"
+	"github.com/Philipp15b/go-steam/protocol/steamlang"
 	"github.com/golang/protobuf/proto"
 )
 
@@ -15,10 +16,10 @@ type GCPacket struct {
 	IsProto     bool
 	GCName      string
 	Body        []byte
-	TargetJobId JobId
+	TargetJobId protocol.JobId
 }
 
-func NewGCPacket(wrapper *CMsgGCClient) (*GCPacket, error) {
+func NewGCPacket(wrapper *protobuf.CMsgGCClient) (*GCPacket, error) {
 	packet := &GCPacket{
 		AppId:   wrapper.GetAppid(),
 		MsgType: wrapper.GetMsgtype(),
@@ -26,23 +27,23 @@ func NewGCPacket(wrapper *CMsgGCClient) (*GCPacket, error) {
 	}
 
 	r := bytes.NewReader(wrapper.GetPayload())
-	if IsProto(wrapper.GetMsgtype()) {
-		packet.MsgType = packet.MsgType & EMsgMask
+	if steamlang.IsProto(wrapper.GetMsgtype()) {
+		packet.MsgType = packet.MsgType & steamlang.EMsgMask
 		packet.IsProto = true
 
-		header := NewMsgGCHdrProtoBuf()
+		header := steamlang.NewMsgGCHdrProtoBuf()
 		err := header.Deserialize(r)
 		if err != nil {
 			return nil, err
 		}
-		packet.TargetJobId = JobId(header.Proto.GetJobidTarget())
+		packet.TargetJobId = protocol.JobId(header.Proto.GetJobidTarget())
 	} else {
-		header := NewMsgGCHdr()
+		header := steamlang.NewMsgGCHdr()
 		err := header.Deserialize(r)
 		if err != nil {
 			return nil, err
 		}
-		packet.TargetJobId = JobId(header.TargetJobID)
+		packet.TargetJobId = protocol.JobId(header.TargetJobID)
 	}
 
 	body := make([]byte, r.Len())
@@ -56,6 +57,6 @@ func (g *GCPacket) ReadProtoMsg(body proto.Message) {
 	proto.Unmarshal(g.Body, body)
 }
 
-func (g *GCPacket) ReadMsg(body MessageBody) {
+func (g *GCPacket) ReadMsg(body protocol.MessageBody) {
 	body.Deserialize(bytes.NewReader(g.Body))
 }

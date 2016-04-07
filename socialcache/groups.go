@@ -2,9 +2,10 @@ package socialcache
 
 import (
 	"errors"
-	. "github.com/Philipp15b/go-steam/protocol/steamlang"
-	. "github.com/Philipp15b/go-steam/steamid"
 	"sync"
+
+	"github.com/Philipp15b/go-steam/protocol/steamlang"
+	"github.com/Philipp15b/go-steam/steamid"
 )
 
 // Groups list is a thread safe map
@@ -14,12 +15,12 @@ import (
 // 	}
 type GroupsList struct {
 	mutex sync.RWMutex
-	byId  map[SteamId]*Group
+	byId  map[steamid.SteamId]*Group
 }
 
 // Returns a new groups list
 func NewGroupsList() *GroupsList {
-	return &GroupsList{byId: make(map[SteamId]*Group)}
+	return &GroupsList{byId: make(map[steamid.SteamId]*Group)}
 }
 
 // Adds a group to the group list
@@ -33,17 +34,17 @@ func (list *GroupsList) Add(group Group) {
 }
 
 // Removes a group from the group list
-func (list *GroupsList) Remove(id SteamId) {
+func (list *GroupsList) Remove(id steamid.SteamId) {
 	list.mutex.Lock()
 	defer list.mutex.Unlock()
 	delete(list.byId, id)
 }
 
 // Returns a copy of the groups map
-func (list *GroupsList) GetCopy() map[SteamId]Group {
+func (list *GroupsList) GetCopy() map[steamid.SteamId]Group {
 	list.mutex.RLock()
 	defer list.mutex.RUnlock()
-	glist := make(map[SteamId]Group)
+	glist := make(map[steamid.SteamId]Group)
 	for key, group := range list.byId {
 		glist[key] = *group
 	}
@@ -51,7 +52,7 @@ func (list *GroupsList) GetCopy() map[SteamId]Group {
 }
 
 // Returns a copy of the group of a given SteamId
-func (list *GroupsList) ById(id SteamId) (Group, error) {
+func (list *GroupsList) ById(id steamid.SteamId) (Group, error) {
 	list.mutex.RLock()
 	defer list.mutex.RUnlock()
 	id = id.ChatToClan()
@@ -69,7 +70,7 @@ func (list *GroupsList) Count() int {
 }
 
 //Setter methods
-func (list *GroupsList) SetName(id SteamId, name string) {
+func (list *GroupsList) SetName(id steamid.SteamId, name string) {
 	list.mutex.Lock()
 	defer list.mutex.Unlock()
 	id = id.ChatToClan()
@@ -78,7 +79,7 @@ func (list *GroupsList) SetName(id SteamId, name string) {
 	}
 }
 
-func (list *GroupsList) SetAvatar(id SteamId, hash string) {
+func (list *GroupsList) SetAvatar(id steamid.SteamId, hash string) {
 	list.mutex.Lock()
 	defer list.mutex.Unlock()
 	id = id.ChatToClan()
@@ -87,7 +88,7 @@ func (list *GroupsList) SetAvatar(id SteamId, hash string) {
 	}
 }
 
-func (list *GroupsList) SetRelationship(id SteamId, relationship EClanRelationship) {
+func (list *GroupsList) SetRelationship(id steamid.SteamId, relationship steamlang.EClanRelationship) {
 	list.mutex.Lock()
 	defer list.mutex.Unlock()
 	id = id.ChatToClan()
@@ -96,7 +97,7 @@ func (list *GroupsList) SetRelationship(id SteamId, relationship EClanRelationsh
 	}
 }
 
-func (list *GroupsList) SetMemberTotalCount(id SteamId, count uint32) {
+func (list *GroupsList) SetMemberTotalCount(id steamid.SteamId, count uint32) {
 	list.mutex.Lock()
 	defer list.mutex.Unlock()
 	id = id.ChatToClan()
@@ -105,7 +106,7 @@ func (list *GroupsList) SetMemberTotalCount(id SteamId, count uint32) {
 	}
 }
 
-func (list *GroupsList) SetMemberOnlineCount(id SteamId, count uint32) {
+func (list *GroupsList) SetMemberOnlineCount(id steamid.SteamId, count uint32) {
 	list.mutex.Lock()
 	defer list.mutex.Unlock()
 	id = id.ChatToClan()
@@ -114,7 +115,7 @@ func (list *GroupsList) SetMemberOnlineCount(id SteamId, count uint32) {
 	}
 }
 
-func (list *GroupsList) SetMemberChattingCount(id SteamId, count uint32) {
+func (list *GroupsList) SetMemberChattingCount(id steamid.SteamId, count uint32) {
 	list.mutex.Lock()
 	defer list.mutex.Unlock()
 	id = id.ChatToClan()
@@ -123,7 +124,7 @@ func (list *GroupsList) SetMemberChattingCount(id SteamId, count uint32) {
 	}
 }
 
-func (list *GroupsList) SetMemberInGameCount(id SteamId, count uint32) {
+func (list *GroupsList) SetMemberInGameCount(id steamid.SteamId, count uint32) {
 	list.mutex.Lock()
 	defer list.mutex.Unlock()
 	id = id.ChatToClan()
@@ -134,10 +135,10 @@ func (list *GroupsList) SetMemberInGameCount(id SteamId, count uint32) {
 
 // A Group
 type Group struct {
-	SteamId             SteamId `json:",string"`
+	SteamId             steamid.SteamId `json:",string"`
 	Name                string
 	Avatar              string
-	Relationship        EClanRelationship
+	Relationship        steamlang.EClanRelationship
 	MemberTotalCount    uint32
 	MemberOnlineCount   uint32
 	MemberChattingCount uint32
