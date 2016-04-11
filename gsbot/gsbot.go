@@ -80,6 +80,7 @@ func (a *Auth) LogOn(details *LogOnDetails) {
 		Password:       details.Password,
 		SentryFileHash: sentry,
 		AuthCode:       details.AuthCode,
+		TwoFactorCode:  details.AuthCode,
 	})
 }
 
