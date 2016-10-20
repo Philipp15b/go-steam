@@ -62,9 +62,10 @@ func NewAuth(bot *GsBot, details *LogOnDetails, sentryPath string) *Auth {
 }
 
 type LogOnDetails struct {
-	Username string
-	Password string
-	AuthCode string
+	Username      string
+	Password      string
+	AuthCode      string
+	TwoFactorCode string
 }
 
 // This is called automatically after every ConnectedEvent, but must be called once again manually
@@ -80,6 +81,7 @@ func (a *Auth) LogOn(details *LogOnDetails) {
 		Password:       details.Password,
 		SentryFileHash: sentry,
 		AuthCode:       details.AuthCode,
+		TwoFactorCode:  details.TwoFactorCode,
 	})
 }
 
