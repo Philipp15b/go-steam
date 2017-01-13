@@ -27,7 +27,8 @@ type LoggedOnEvent struct {
 }
 
 type LogOnFailedEvent struct {
-	Result EResult
+	Result      EResult
+	EmailDomain string
 }
 
 type LoginKeyEvent struct {
