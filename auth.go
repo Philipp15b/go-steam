@@ -116,7 +116,8 @@ func (a *Auth) handleLogOnResponse(packet *Packet) {
 		// some error on Steam's side, we'll get an EOF later
 	} else {
 		a.client.Emit(&LogOnFailedEvent{
-			Result: EResult(body.GetEresult()),
+			Result:      EResult(body.GetEresult()),
+			EmailDomain: body.GetEmailDomain(),
 		})
 		a.client.Disconnect()
 	}
