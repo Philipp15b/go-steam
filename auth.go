@@ -11,6 +11,8 @@ import (
 	"time"
 )
 
+// test
+
 type Auth struct {
 	client  *Client
 	details *LogOnDetails
