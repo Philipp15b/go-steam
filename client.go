@@ -157,6 +157,7 @@ func (c *Client) ConnectToBind(addr *netutil.PortAddr, local *net.TCPAddr) {
 	conn, err := dialTCP(local, addr.ToTCPAddr())
 	if err != nil {
 		c.Fatalf("Connect failed: %v", err)
+		c.Connect()
 		return
 	}
 	c.conn = conn
