@@ -36,7 +36,7 @@ const (
 )
 
 type Asset struct {
-	AppId      uint32 `json:",string"`
+	AppId      uint32 `json:"-"`
 	ContextId  uint64 `json:",string"`
 	AssetId    uint64 `json:",string"`
 	CurrencyId uint64 `json:",string"`
