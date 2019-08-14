@@ -88,6 +88,7 @@ func buildProtoMap(srcSubdir string, files map[string]string, outDir string) {
 	os.MkdirAll(outDir, os.ModePerm)
 	for proto, out := range files {
 		full := filepath.Join(outDir, out)
+		print("# Building: " + full)
 		compileProto("SteamKit/Resources/Protobufs", srcSubdir, proto, full)
 		fixProto(full)
 	}
@@ -191,10 +192,6 @@ func fixProto(path string) {
 		file = bytes.Replace(file, []byte(fmt.Sprintf("import %v %v\n", itr.Name.Name, itr.Path.Value)), []byte{}, -1)
 	}
 
-	// remove the package comment because it just includes a list of all messages and
-	// collides not only with the other compiled protobuf files, but also our own documentation.
-	file = cutAllSubmatch(pkgCommentRegex, file, 1)
-
 	// remove warnings
 	file = unusedImportCommentRegex.ReplaceAllLiteral(file, []byte{})
 
@@ -220,19 +217,6 @@ func fixProto(path string) {
 func inferPackageName(path string) string {
 	pieces := strings.Split(path, string(filepath.Separator))
 	return pieces[len(pieces)-2]
-}
-
-func cutAllSubmatch(r *regexp.Regexp, b []byte, n int) []byte {
-	i := r.FindSubmatchIndex(b)
-	return bytesCut(b, i[2*n], i[2*n+1])
-}
-
-// Removes the given section from the byte array
-func bytesCut(b []byte, from, to int) []byte {
-	buf := new(bytes.Buffer)
-	buf.Write(b[:from])
-	buf.Write(b[to:])
-	return buf.Bytes()
 }
 
 func print(text string) { os.Stdout.WriteString(text + "\n") }
