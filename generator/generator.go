@@ -224,16 +224,16 @@ func print(text string) { os.Stdout.WriteString(text + "\n") }
 func printerr(text string) { os.Stderr.WriteString(text + "\n") }
 
 // This writer appends a "> " after every newline so that the outpout appears quoted.
-type QuotedWriter struct {
+type quotedWriter struct {
 	w       io.Writer
 	started bool
 }
 
-func NewQuotedWriter(w io.Writer) *QuotedWriter {
-	return &QuotedWriter{w, false}
+func newQuotedWriter(w io.Writer) *quotedWriter {
+	return &quotedWriter{w, false}
 }
 
-func (w *QuotedWriter) Write(p []byte) (n int, err error) {
+func (w *quotedWriter) Write(p []byte) (n int, err error) {
 	if !w.started {
 		_, err = w.w.Write([]byte("> "))
 		if err != nil {
@@ -269,8 +269,8 @@ func execute(command string, args ...string) {
 		print(command + " " + strings.Join(args, " "))
 	}
 	cmd := exec.Command(command, args...)
-	cmd.Stdout = NewQuotedWriter(os.Stdout)
-	cmd.Stderr = NewQuotedWriter(os.Stderr)
+	cmd.Stdout = newQuotedWriter(os.Stdout)
+	cmd.Stderr = newQuotedWriter(os.Stderr)
 	err := cmd.Run()
 	if err != nil {
 		printerr(err.Error())
