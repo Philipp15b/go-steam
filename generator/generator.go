@@ -15,7 +15,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"regexp"
-	"runtime"
 	"strings"
 )
 
@@ -66,13 +65,7 @@ func cleanGlob(pattern string) {
 
 func buildSteamLanguage() {
 	print("# Building Steam Language")
-	exePath := "./GoSteamLanguageGenerator/bin/Debug/netcoreapp2.0/GoSteamLanguageGenerator.dll"
-
-	if runtime.GOOS != "windows" {
-		execute("mono", exePath, "./SteamKit", "../protocol/steamlang")
-	} else {
-		execute("dotnet", exePath, "./SteamKit", "../protocol/steamlang")
-	}
+	execute("dotnet", "run", "-c", "release", "-p", "./GoSteamLanguageGenerator", "./SteamKit", "../protocol/steamlang")
 	execute("gofmt", "-w", "../protocol/steamlang/enums.go", "../protocol/steamlang/messages.go")
 }
 
@@ -89,7 +82,7 @@ func buildProtoMap(srcSubdir string, files map[string]string, outDir string) {
 	for proto, out := range files {
 		full := filepath.Join(outDir, out)
 		print("# Building: " + full)
-		compileProto("SteamKit/Resources/Protobufs", srcSubdir, proto, full)
+		compileProto("Protobufs", srcSubdir, proto, full)
 		fixProto(full)
 	}
 }
