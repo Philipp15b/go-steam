@@ -3623,6 +3623,7 @@ const (
 	EResult_CantRemoveItem                           EResult = 113
 	EResult_AccountHasBeenDeleted                    EResult = 114
 	EResult_AccountHasAnExistingUserCancelledLicense EResult = 115
+	EResult_DeniedDueToCommunityCooldown             EResult = 116
 )
 
 var EResult_name = map[EResult]string{
@@ -3741,6 +3742,7 @@ var EResult_name = map[EResult]string{
 	113: "EResult_CantRemoveItem",
 	114: "EResult_AccountHasBeenDeleted",
 	115: "EResult_AccountHasAnExistingUserCancelledLicense",
+	116: "EResult_DeniedDueToCommunityCooldown",
 }
 
 func (e EResult) String() string {
@@ -3768,7 +3770,6 @@ const (
 	EUniverse_Beta     EUniverse = 2
 	EUniverse_Internal EUniverse = 3
 	EUniverse_Dev      EUniverse = 4
-	EUniverse_Max      EUniverse = 5
 )
 
 var EUniverse_name = map[EUniverse]string{
@@ -3777,7 +3778,6 @@ var EUniverse_name = map[EUniverse]string{
 	2: "EUniverse_Beta",
 	3: "EUniverse_Internal",
 	4: "EUniverse_Dev",
-	5: "EUniverse_Max",
 }
 
 func (e EUniverse) String() string {
@@ -3861,7 +3861,6 @@ const (
 	EPersonaState_LookingToTrade EPersonaState = 5
 	EPersonaState_LookingToPlay  EPersonaState = 6
 	EPersonaState_Invisible      EPersonaState = 7
-	EPersonaState_Max            EPersonaState = 8
 )
 
 var EPersonaState_name = map[EPersonaState]string{
@@ -3873,7 +3872,6 @@ var EPersonaState_name = map[EPersonaState]string{
 	5: "EPersonaState_LookingToTrade",
 	6: "EPersonaState_LookingToPlay",
 	7: "EPersonaState_Invisible",
-	8: "EPersonaState_Max",
 }
 
 func (e EPersonaState) String() string {
@@ -3907,7 +3905,6 @@ const (
 	EAccountType_Chat           EAccountType = 8
 	EAccountType_ConsoleUser    EAccountType = 9
 	EAccountType_AnonUser       EAccountType = 10
-	EAccountType_Max            EAccountType = 11
 )
 
 var EAccountType_name = map[EAccountType]string{
@@ -3922,7 +3919,6 @@ var EAccountType_name = map[EAccountType]string{
 	8:  "EAccountType_Chat",
 	9:  "EAccountType_ConsoleUser",
 	10: "EAccountType_AnonUser",
-	11: "EAccountType_Max",
 }
 
 func (e EAccountType) String() string {
@@ -3952,7 +3948,6 @@ const (
 	EFriendRelationship_RequestInitiator EFriendRelationship = 4
 	EFriendRelationship_Ignored          EFriendRelationship = 5
 	EFriendRelationship_IgnoredFriend    EFriendRelationship = 6
-	EFriendRelationship_Max              EFriendRelationship = 8
 )
 
 var EFriendRelationship_name = map[EFriendRelationship]string{
@@ -3964,7 +3959,6 @@ var EFriendRelationship_name = map[EFriendRelationship]string{
 	5: "EFriendRelationship_Ignored",
 	6: "EFriendRelationship_IgnoredFriend",
 	7: "EFriendRelationship_SuggestedFriend",
-	8: "EFriendRelationship_Max",
 }
 
 func (e EFriendRelationship) String() string {
@@ -4551,6 +4545,7 @@ const (
 	EPaymentMethod_Valve                  EPaymentMethod = 129
 	EPaymentMethod_MasterComp             EPaymentMethod = 130
 	EPaymentMethod_Promotional            EPaymentMethod = 131
+	EPaymentMethod_MasterSubscription     EPaymentMethod = 134
 	EPaymentMethod_OEMTicket              EPaymentMethod = 256
 	EPaymentMethod_Split                  EPaymentMethod = 512
 	EPaymentMethod_Complimentary          EPaymentMethod = 1024
@@ -4640,6 +4635,7 @@ var EPaymentMethod_name = map[EPaymentMethod]string{
 	129:  "EPaymentMethod_Valve",
 	130:  "EPaymentMethod_SteamPressMaster",
 	131:  "EPaymentMethod_StorePromotion",
+	134:  "EPaymentMethod_MasterSubscription",
 	256:  "EPaymentMethod_OEMTicket",
 	512:  "EPaymentMethod_Split",
 	1024: "EPaymentMethod_Complimentary",
@@ -5336,7 +5332,6 @@ const (
 	EAppInfoSection_Broadcastgamedata EAppInfoSection = 18
 	EAppInfoSection_Computed          EAppInfoSection = 19
 	EAppInfoSection_Albummetadata     EAppInfoSection = 20
-	EAppInfoSection_Max               EAppInfoSection = 21
 )
 
 var EAppInfoSection_name = map[EAppInfoSection]string{
@@ -5361,7 +5356,6 @@ var EAppInfoSection_name = map[EAppInfoSection]string{
 	18: "EAppInfoSection_Broadcastgamedata",
 	19: "EAppInfoSection_Computed",
 	20: "EAppInfoSection_Albummetadata",
-	21: "EAppInfoSection_Max",
 }
 
 func (e EAppInfoSection) String() string {
@@ -5394,21 +5388,19 @@ const (
 	EContentDownloadSourceType_SteamCache EContentDownloadSourceType = 7
 	EContentDownloadSourceType_OpenCache  EContentDownloadSourceType = 8
 	EContentDownloadSourceType_LANCache   EContentDownloadSourceType = 9
-	EContentDownloadSourceType_Max        EContentDownloadSourceType = 10
 )
 
 var EContentDownloadSourceType_name = map[EContentDownloadSourceType]string{
-	0:  "EContentDownloadSourceType_Invalid",
-	1:  "EContentDownloadSourceType_CS",
-	2:  "EContentDownloadSourceType_CDN",
-	3:  "EContentDownloadSourceType_LCS",
-	4:  "EContentDownloadSourceType_ProxyCache",
-	5:  "EContentDownloadSourceType_LANPeer",
-	6:  "EContentDownloadSourceType_SLS",
-	7:  "EContentDownloadSourceType_SteamCache",
-	8:  "EContentDownloadSourceType_OpenCache",
-	9:  "EContentDownloadSourceType_LANCache",
-	10: "EContentDownloadSourceType_Max",
+	0: "EContentDownloadSourceType_Invalid",
+	1: "EContentDownloadSourceType_CS",
+	2: "EContentDownloadSourceType_CDN",
+	3: "EContentDownloadSourceType_LCS",
+	4: "EContentDownloadSourceType_ProxyCache",
+	5: "EContentDownloadSourceType_LANPeer",
+	6: "EContentDownloadSourceType_SLS",
+	7: "EContentDownloadSourceType_SteamCache",
+	8: "EContentDownloadSourceType_OpenCache",
+	9: "EContentDownloadSourceType_LANCache",
 }
 
 func (e EContentDownloadSourceType) String() string {
@@ -5438,7 +5430,6 @@ const (
 	EPlatformType_OSX     EPlatformType = 4
 	EPlatformType_PS3     EPlatformType = 5
 	EPlatformType_Linux32 EPlatformType = 6
-	EPlatformType_Max     EPlatformType = 7
 )
 
 var EPlatformType_name = map[EPlatformType]string{
@@ -5449,7 +5440,6 @@ var EPlatformType_name = map[EPlatformType]string{
 	4: "EPlatformType_OSX",
 	5: "EPlatformType_PS3",
 	6: "EPlatformType_Linux32",
-	7: "EPlatformType_Max",
 }
 
 func (e EPlatformType) String() string {
@@ -5567,7 +5557,6 @@ const (
 	EOSType_Windows10      EOSType = 16
 	EOSType_Win2016        EOSType = 17
 	EOSType_WinMAX         EOSType = 18
-	EOSType_Max            EOSType = 26
 )
 
 var EOSType_name = map[EOSType]string{
@@ -5664,7 +5653,6 @@ var EOSType_name = map[EOSType]string{
 	16:   "EOSType_Win10",
 	17:   "EOSType_Win2016",
 	18:   "EOSType_WinMAX",
-	26:   "EOSType_Max",
 }
 
 func (e EOSType) String() string {
@@ -5814,7 +5802,6 @@ const (
 	EServerType_SteamAR             EServerType = 124
 	EServerType_China               EServerType = 125
 	EServerType_CrashDump           EServerType = 126
-	EServerType_Max                 EServerType = 127
 )
 
 var EServerType_name = map[EServerType]string{
@@ -5949,7 +5936,6 @@ var EServerType_name = map[EServerType]string{
 	124: "EServerType_SteamAR",
 	125: "EServerType_China",
 	126: "EServerType_CrashDump",
-	127: "EServerType_Max",
 }
 
 func (e EServerType) String() string {
@@ -6195,7 +6181,6 @@ const (
 	ECurrencyCode_QAR     ECurrencyCode = 39
 	ECurrencyCode_CRC     ECurrencyCode = 40
 	ECurrencyCode_UYU     ECurrencyCode = 41
-	ECurrencyCode_Max     ECurrencyCode = 42
 )
 
 var ECurrencyCode_name = map[ECurrencyCode]string{
@@ -6240,7 +6225,6 @@ var ECurrencyCode_name = map[ECurrencyCode]string{
 	39: "ECurrencyCode_QAR",
 	40: "ECurrencyCode_CRC",
 	41: "ECurrencyCode_UYU",
-	42: "ECurrencyCode_Max",
 }
 
 func (e ECurrencyCode) String() string {
@@ -6395,7 +6379,6 @@ const (
 	EWorkshopFileType_SteamworksAccessInvite EWorkshopFileType = 13
 	EWorkshopFileType_SteamVideo             EWorkshopFileType = 14
 	EWorkshopFileType_GameManagedItem        EWorkshopFileType = 15
-	EWorkshopFileType_Max                    EWorkshopFileType = 16
 )
 
 var EWorkshopFileType_name = map[EWorkshopFileType]string{
@@ -6415,7 +6398,6 @@ var EWorkshopFileType_name = map[EWorkshopFileType]string{
 	13: "EWorkshopFileType_SteamworksAccessInvite",
 	14: "EWorkshopFileType_SteamVideo",
 	15: "EWorkshopFileType_GameManagedItem",
-	16: "EWorkshopFileType_Max",
 }
 
 func (e EWorkshopFileType) String() string {
@@ -6641,21 +6623,19 @@ const (
 	ESystemIMType_GiftRevoked              ESystemIMType = 7
 	ESystemIMType_SupportMessage           ESystemIMType = 8
 	ESystemIMType_SupportMessageClearAlert ESystemIMType = 9
-	ESystemIMType_Max                      ESystemIMType = 10
 )
 
 var ESystemIMType_name = map[ESystemIMType]string{
-	0:  "ESystemIMType_RawText",
-	1:  "ESystemIMType_InvalidCard",
-	2:  "ESystemIMType_RecurringPurchaseFailed",
-	3:  "ESystemIMType_CardWillExpire",
-	4:  "ESystemIMType_SubscriptionExpired",
-	5:  "ESystemIMType_GuestPassReceived",
-	6:  "ESystemIMType_GuestPassGranted",
-	7:  "ESystemIMType_GiftRevoked",
-	8:  "ESystemIMType_SupportMessage",
-	9:  "ESystemIMType_SupportMessageClearAlert",
-	10: "ESystemIMType_Max",
+	0: "ESystemIMType_RawText",
+	1: "ESystemIMType_InvalidCard",
+	2: "ESystemIMType_RecurringPurchaseFailed",
+	3: "ESystemIMType_CardWillExpire",
+	4: "ESystemIMType_SubscriptionExpired",
+	5: "ESystemIMType_GuestPassReceived",
+	6: "ESystemIMType_GuestPassGranted",
+	7: "ESystemIMType_GiftRevoked",
+	8: "ESystemIMType_SupportMessage",
+	9: "ESystemIMType_SupportMessageClearAlert",
 }
 
 func (e ESystemIMType) String() string {
@@ -6873,7 +6853,6 @@ const (
 	EClientStat_P2PGameConnections  EClientStat = 2
 	EClientStat_P2PVoiceConnections EClientStat = 3
 	EClientStat_BytesDownloaded     EClientStat = 4
-	EClientStat_Max                 EClientStat = 5
 )
 
 var EClientStat_name = map[EClientStat]string{
@@ -6882,7 +6861,6 @@ var EClientStat_name = map[EClientStat]string{
 	2: "EClientStat_P2PGameConnections",
 	3: "EClientStat_P2PVoiceConnections",
 	4: "EClientStat_BytesDownloaded",
-	5: "EClientStat_Max",
 }
 
 func (e EClientStat) String() string {
@@ -8040,6 +8018,49 @@ func (e ESteamRealm) String() string {
 	}
 	var flags []string
 	for k, v := range ESteamRealm_name {
+		if e&k != 0 {
+			flags = append(flags, v)
+		}
+	}
+	if len(flags) == 0 {
+		return fmt.Sprintf("%d", e)
+	}
+	sort.Strings(flags)
+	return strings.Join(flags, " | ")
+}
+
+type ELauncherType int32
+
+const (
+	ELauncherType_Default      ELauncherType = 0
+	ELauncherType_PerfectWorld ELauncherType = 1
+	ELauncherType_Nexon        ELauncherType = 2
+	ELauncherType_CmdLine      ELauncherType = 3
+	ELauncherType_CSGO         ELauncherType = 4
+	ELauncherType_ClientUI     ELauncherType = 5
+	ELauncherType_Headless     ELauncherType = 6
+	ELauncherType_SteamChina   ELauncherType = 7
+	ELauncherType_SingleApp    ELauncherType = 8
+)
+
+var ELauncherType_name = map[ELauncherType]string{
+	0: "ELauncherType_Default",
+	1: "ELauncherType_PerfectWorld",
+	2: "ELauncherType_Nexon",
+	3: "ELauncherType_CmdLine",
+	4: "ELauncherType_CSGO",
+	5: "ELauncherType_ClientUI",
+	6: "ELauncherType_Headless",
+	7: "ELauncherType_SteamChina",
+	8: "ELauncherType_SingleApp",
+}
+
+func (e ELauncherType) String() string {
+	if s, ok := ELauncherType_name[e]; ok {
+		return s
+	}
+	var flags []string
+	for k, v := range ELauncherType_name {
 		if e&k != 0 {
 			flags = append(flags, v)
 		}
