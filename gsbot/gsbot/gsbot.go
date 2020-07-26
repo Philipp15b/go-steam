@@ -29,9 +29,9 @@ func main() {
 	bot := gsbot.Default()
 	client := bot.Client
 	auth := gsbot.NewAuth(bot, &gsbot.LogOnDetails{
-		os.Args[1],
-		os.Args[2],
-		authcode,
+		Username: os.Args[1],
+		Password: os.Args[2],
+		AuthCode: authcode,
 	}, "sentry.bin")
 	debug, err := gsbot.NewDebug(bot, "debug")
 	if err != nil {
