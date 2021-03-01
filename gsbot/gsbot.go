@@ -136,8 +136,8 @@ func (s *ServerList) ConnectBind(laddr *net.TCPAddr) (bool, error) {
 	d, err := ioutil.ReadFile(s.listPath)
 	if err != nil {
 		s.bot.Log.Println("Connecting to random server.")
-		s.bot.Client.Connect()
-		return false, nil
+		_, err := s.bot.Client.Connect()
+		return err == nil, err
 	}
 	var addrs []*netutil.PortAddr
 	err = json.Unmarshal(d, &addrs)
@@ -146,8 +146,8 @@ func (s *ServerList) ConnectBind(laddr *net.TCPAddr) (bool, error) {
 	}
 	raddr := addrs[rand.Intn(len(addrs))]
 	s.bot.Log.Printf("Connecting to %v from server list\n", raddr)
-	s.bot.Client.ConnectToBind(raddr, laddr)
-	return true, nil
+	err = s.bot.Client.ConnectToBind(raddr, laddr)
+	return err == nil, err
 }
 
 // This module logs incoming packets and events to a directory.
