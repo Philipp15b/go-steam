@@ -131,7 +131,7 @@ func (c *Client) Connected() bool {
 // This method tries to use an address from the Steam Directory and falls
 // back to the built-in server list if the Steam Directory can't be reached.
 // If you want to connect to a specific server, use `ConnectTo`.
-func (c *Client) Connect() *netutil.PortAddr {
+func (c *Client) Connect() (*netutil.PortAddr, error) {
 	var server *netutil.PortAddr
 
 	// try to initialize the directory cache
@@ -144,32 +144,34 @@ func (c *Client) Connect() *netutil.PortAddr {
 		server = GetRandomCM()
 	}
 
-	c.ConnectTo(server)
-	return server
+	err := c.ConnectTo(server)
+	return server, err
 }
 
 // Connects to a specific server.
 // You may want to use one of the `GetRandom*CM()` functions in this package.
 // If this client is already connected, it is disconnected first.
-func (c *Client) ConnectTo(addr *netutil.PortAddr) {
-	c.ConnectToBind(addr, nil)
+func (c *Client) ConnectTo(addr *netutil.PortAddr) error {
+	return c.ConnectToBind(addr, nil)
 }
 
 // Connects to a specific server, and binds to a specified local IP
 // If this client is already connected, it is disconnected first.
-func (c *Client) ConnectToBind(addr *netutil.PortAddr, local *net.TCPAddr) {
+func (c *Client) ConnectToBind(addr *netutil.PortAddr, local *net.TCPAddr) error {
 	c.Disconnect()
 
 	conn, err := dialTCP(local, addr.ToTCPAddr())
 	if err != nil {
 		c.Fatalf("Connect failed: %v", err)
-		return
+		return err
 	}
 	c.conn = conn
 	c.writeChan = make(chan IMsg, 5)
 
 	go c.readLoop()
 	go c.writeLoop()
+
+	return nil
 }
 
 func (c *Client) Disconnect() {
