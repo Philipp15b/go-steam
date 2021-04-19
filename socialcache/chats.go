@@ -2,9 +2,10 @@ package socialcache
 
 import (
 	"errors"
-	. "github.com/Philipp15b/go-steam/protocol/steamlang"
-	. "github.com/Philipp15b/go-steam/steamid"
 	"sync"
+
+	. "github.com/Philipp15b/go-steam/v2/protocol/steamlang"
+	. "github.com/Philipp15b/go-steam/v2/steamid"
 )
 
 // Chats list is a thread safe map

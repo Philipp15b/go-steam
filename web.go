@@ -6,15 +6,16 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
-	"github.com/Philipp15b/go-steam/cryptoutil"
-	. "github.com/Philipp15b/go-steam/protocol"
-	. "github.com/Philipp15b/go-steam/protocol/protobuf"
-	. "github.com/Philipp15b/go-steam/protocol/steamlang"
-	"github.com/golang/protobuf/proto"
 	"net/http"
 	"net/url"
 	"strconv"
 	"sync/atomic"
+
+	"github.com/Philipp15b/go-steam/v2/cryptoutil"
+	. "github.com/Philipp15b/go-steam/v2/protocol"
+	. "github.com/Philipp15b/go-steam/v2/protocol/protobuf"
+	. "github.com/Philipp15b/go-steam/v2/protocol/steamlang"
+	"github.com/golang/protobuf/proto"
 )
 
 type Web struct {

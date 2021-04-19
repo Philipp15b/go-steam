@@ -1,10 +1,11 @@
 package protocol
 
 import (
-	"github.com/golang/protobuf/proto"
-	. "github.com/Philipp15b/go-steam/protocol/steamlang"
-	. "github.com/Philipp15b/go-steam/steamid"
 	"io"
+
+	. "github.com/Philipp15b/go-steam/v2/protocol/steamlang"
+	. "github.com/Philipp15b/go-steam/v2/steamid"
+	"github.com/golang/protobuf/proto"
 )
 
 // Interface for all messages, typically outgoing. They can also be created by

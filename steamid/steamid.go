@@ -1,10 +1,10 @@
 package steamid
 
 import (
-	"fmt"
-	"strconv"
 	"errors"
+	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 )
 

@@ -2,9 +2,10 @@ package tradeapi
 
 import (
 	"encoding/json"
-	"github.com/Philipp15b/go-steam/jsont"
-	"github.com/Philipp15b/go-steam/steamid"
 	"strconv"
+
+	"github.com/Philipp15b/go-steam/v2/jsont"
+	"github.com/Philipp15b/go-steam/v2/steamid"
 )
 
 type Status struct {
