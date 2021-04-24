@@ -5,7 +5,7 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	. "github.com/Philipp15b/go-steam/v2/protocol/steamlang"
+	"github.com/Philipp15b/go-steam/v2/protocol/steamlang"
 	"github.com/golang/protobuf/proto"
 )
 
@@ -13,7 +13,7 @@ import (
 
 // Represents an incoming, partially unread message.
 type Packet struct {
-	EMsg        EMsg
+	EMsg        steamlang.EMsg
 	IsProto     bool
 	TargetJobId JobId
 	SourceJobId JobId
@@ -26,10 +26,10 @@ func NewPacket(data []byte) (*Packet, error) {
 	if err != nil {
 		return nil, err
 	}
-	eMsg := NewEMsg(rawEMsg)
+	eMsg := steamlang.NewEMsg(rawEMsg)
 	buf := bytes.NewReader(data)
-	if eMsg == EMsg_ChannelEncryptRequest || eMsg == EMsg_ChannelEncryptResult {
-		header := NewMsgHdr()
+	if eMsg == steamlang.EMsg_ChannelEncryptRequest || eMsg == steamlang.EMsg_ChannelEncryptResult {
+		header := steamlang.NewMsgHdr()
 		header.Msg = eMsg
 		err = header.Deserialize(buf)
 		if err != nil {
@@ -42,8 +42,8 @@ func NewPacket(data []byte) (*Packet, error) {
 			SourceJobId: JobId(header.SourceJobID),
 			Data:        data,
 		}, nil
-	} else if IsProto(rawEMsg) {
-		header := NewMsgHdrProtoBuf()
+	} else if steamlang.IsProto(rawEMsg) {
+		header := steamlang.NewMsgHdrProtoBuf()
 		header.Msg = eMsg
 		err = header.Deserialize(buf)
 		if err != nil {
@@ -57,7 +57,7 @@ func NewPacket(data []byte) (*Packet, error) {
 			Data:        data,
 		}, nil
 	} else {
-		header := NewExtendedClientMsgHdr()
+		header := steamlang.NewExtendedClientMsgHdr()
 		header.Msg = eMsg
 		err = header.Deserialize(buf)
 		if err != nil {
@@ -78,7 +78,7 @@ func (p *Packet) String() string {
 }
 
 func (p *Packet) ReadProtoMsg(body proto.Message) *ClientMsgProtobuf {
-	header := NewMsgHdrProtoBuf()
+	header := steamlang.NewMsgHdrProtoBuf()
 	buf := bytes.NewBuffer(p.Data)
 	header.Deserialize(buf)
 	proto.Unmarshal(buf.Bytes(), body)
@@ -89,7 +89,7 @@ func (p *Packet) ReadProtoMsg(body proto.Message) *ClientMsgProtobuf {
 }
 
 func (p *Packet) ReadClientMsg(body MessageBody) *ClientMsg {
-	header := NewExtendedClientMsgHdr()
+	header := steamlang.NewExtendedClientMsgHdr()
 	buf := bytes.NewReader(p.Data)
 	header.Deserialize(buf)
 	body.Deserialize(buf)
@@ -103,7 +103,7 @@ func (p *Packet) ReadClientMsg(body MessageBody) *ClientMsg {
 }
 
 func (p *Packet) ReadMsg(body MessageBody) *Msg {
-	header := NewMsgHdr()
+	header := steamlang.NewMsgHdr()
 	buf := bytes.NewReader(p.Data)
 	header.Deserialize(buf)
 	body.Deserialize(buf)
