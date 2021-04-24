@@ -7,8 +7,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/Philipp15b/go-steam/jsont"
 	"strconv"
+
+	"github.com/Philipp15b/go-steam/v2/jsont"
 )
 
 type GenericInventory map[uint32]map[uint64]*Inventory

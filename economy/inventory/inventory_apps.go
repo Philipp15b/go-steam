@@ -3,11 +3,12 @@ package inventory
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/Philipp15b/go-steam/steamid"
 	"io/ioutil"
 	"net/http"
 	"regexp"
 	"strconv"
+
+	"github.com/Philipp15b/go-steam/v2/steamid"
 )
 
 type InventoryApps map[string]*InventoryApp

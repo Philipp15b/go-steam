@@ -58,9 +58,9 @@ namespace GoSteamLanguageGenerator
             sb.AppendLine("    \"io\"");
             sb.AppendLine("    \"encoding/binary\"");
             sb.AppendLine("    \"github.com/golang/protobuf/proto\"");
-            sb.AppendLine("    \"github.com/Philipp15b/go-steam/steamid\"");
-            sb.AppendLine("    \"github.com/Philipp15b/go-steam/rwu\"");
-            sb.AppendLine("   . \"github.com/Philipp15b/go-steam/protocol/protobuf\"");
+            sb.AppendLine("    \"github.com/Philipp15b/go-steam/v2/steamid\"");
+            sb.AppendLine("    \"github.com/Philipp15b/go-steam/v2/rwu\"");
+            sb.AppendLine("   . \"github.com/Philipp15b/go-steam/v2/protocol/protobuf\"");
             sb.AppendLine(")");
             sb.AppendLine();
 

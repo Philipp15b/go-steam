@@ -1,4 +1,4 @@
-module github.com/Philipp15b/go-steam
+module github.com/Philipp15b/go-steam/v2
 
 go 1.14
 
