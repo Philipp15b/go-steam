@@ -60,7 +60,7 @@ namespace GoSteamLanguageGenerator
             sb.AppendLine("    \"github.com/golang/protobuf/proto\"");
             sb.AppendLine("    \"github.com/Philipp15b/go-steam/v2/steamid\"");
             sb.AppendLine("    \"github.com/Philipp15b/go-steam/v2/rwu\"");
-            sb.AppendLine("   . \"github.com/Philipp15b/go-steam/v2/protocol/protobuf\"");
+            sb.AppendLine("    \"github.com/Philipp15b/go-steam/v2/protocol/protobuf\"");
             sb.AppendLine(")");
             sb.AppendLine();
 
@@ -283,7 +283,7 @@ namespace GoSteamLanguageGenerator
                 }
                 else if (node.Flags == "proto")
                 {
-                    sb.AppendLine("    " + GetUpperName(node.Name) + " *" + EmitType(node.Type));
+                    sb.AppendLine("    " + GetUpperName(node.Name) + " *protobuf." + EmitType(node.Type));
                 }
                 else
                 {
@@ -315,7 +315,7 @@ namespace GoSteamLanguageGenerator
                 }
                 else if (node.Flags == "proto")
                 {
-                    ctor = "new(" + GetUpperName(EmitType(node.Type)) + ")";
+                    ctor = "new(protobuf." + GetUpperName(EmitType(node.Type)) + ")";
                 }
                 else if (firstDefault == null)
                 {
