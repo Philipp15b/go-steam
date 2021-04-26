@@ -5,12 +5,11 @@ package steamlang
 
 import (
 	"encoding/binary"
-	"io"
-
 	"github.com/Philipp15b/go-steam/v2/protocol/protobuf"
 	"github.com/Philipp15b/go-steam/v2/rwu"
 	"github.com/Philipp15b/go-steam/v2/steamid"
 	"github.com/golang/protobuf/proto"
+	"io"
 )
 
 const UdpHeader_MAGIC uint32 = 0x31305356
