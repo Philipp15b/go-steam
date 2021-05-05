@@ -1,19 +1,19 @@
 package steam
 
 import (
-	. "github.com/Philipp15b/go-steam/v2/protocol/steamlang"
-	. "github.com/Philipp15b/go-steam/v2/steamid"
+	"github.com/Philipp15b/go-steam/v2/protocol/steamlang"
+	"github.com/Philipp15b/go-steam/v2/steamid"
 )
 
 type TradeProposedEvent struct {
 	RequestId TradeRequestId
-	Other     SteamId `json:",string"`
+	Other     steamid.SteamId `json:",string"`
 }
 
 type TradeResultEvent struct {
 	RequestId TradeRequestId
-	Response  EEconTradeResponse
-	Other     SteamId `json:",string"`
+	Response  steamlang.EEconTradeResponse
+	Other     steamid.SteamId `json:",string"`
 	// Number of days Steam Guard is required to have been active
 	NumDaysSteamGuardRequired uint32
 	// Number of days a new device cannot trade for.
@@ -25,5 +25,5 @@ type TradeResultEvent struct {
 }
 
 type TradeSessionStartEvent struct {
-	Other SteamId `json:",string"`
+	Other steamid.SteamId `json:",string"`
 }

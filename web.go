@@ -12,9 +12,9 @@ import (
 	"sync/atomic"
 
 	"github.com/Philipp15b/go-steam/v2/cryptoutil"
-	. "github.com/Philipp15b/go-steam/v2/protocol"
-	. "github.com/Philipp15b/go-steam/v2/protocol/protobuf"
-	. "github.com/Philipp15b/go-steam/v2/protocol/steamlang"
+	"github.com/Philipp15b/go-steam/v2/protocol"
+	"github.com/Philipp15b/go-steam/v2/protocol/protobuf"
+	"github.com/Philipp15b/go-steam/v2/protocol/steamlang"
 	"github.com/golang/protobuf/proto"
 )
 
@@ -39,11 +39,11 @@ type Web struct {
 	client *Client
 }
 
-func (w *Web) HandlePacket(packet *Packet) {
+func (w *Web) HandlePacket(packet *protocol.Packet) {
 	switch packet.EMsg {
-	case EMsg_ClientNewLoginKey:
+	case steamlang.EMsg_ClientNewLoginKey:
 		w.handleNewLoginKey(packet)
-	case EMsg_ClientRequestWebAPIAuthenticateUserNonceResponse:
+	case steamlang.EMsg_ClientRequestWebAPIAuthenticateUserNonceResponse:
 		w.handleAuthNonceResponse(packet)
 	}
 }
@@ -75,7 +75,7 @@ func (w *Web) apiLogOn() error {
 	sessionKey := make([]byte, 32)
 	rand.Read(sessionKey)
 
-	cryptedSessionKey := cryptoutil.RSAEncrypt(GetPublicKey(EUniverse_Public), sessionKey)
+	cryptedSessionKey := cryptoutil.RSAEncrypt(GetPublicKey(steamlang.EUniverse_Public), sessionKey)
 	ciph, _ := aes.NewCipher(sessionKey)
 	cryptedLoginKey := cryptoutil.SymmetricEncrypt(ciph, []byte(w.webLoginKey))
 	data := make(url.Values)
@@ -92,7 +92,7 @@ func (w *Web) apiLogOn() error {
 	if resp.StatusCode == 401 {
 		// our web login key has expired, request a new one
 		atomic.StoreUint32(&w.relogOnNonce, 1)
-		w.client.Write(NewClientMsgProtobuf(EMsg_ClientRequestWebAPIAuthenticateUserNonce, new(CMsgClientRequestWebAPIAuthenticateUserNonce)))
+		w.client.Write(protocol.NewClientMsgProtobuf(steamlang.EMsg_ClientRequestWebAPIAuthenticateUserNonce, new(protobuf.CMsgClientRequestWebAPIAuthenticateUserNonce)))
 		return nil
 	} else if resp.StatusCode != 200 {
 		return errors.New("steam.Web.apiLogOn: request failed with status " + resp.Status)
@@ -116,11 +116,11 @@ func (w *Web) apiLogOn() error {
 	return nil
 }
 
-func (w *Web) handleNewLoginKey(packet *Packet) {
-	msg := new(CMsgClientNewLoginKey)
+func (w *Web) handleNewLoginKey(packet *protocol.Packet) {
+	msg := new(protobuf.CMsgClientNewLoginKey)
 	packet.ReadProtoMsg(msg)
 
-	w.client.Write(NewClientMsgProtobuf(EMsg_ClientNewLoginKeyAccepted, &CMsgClientNewLoginKeyAccepted{
+	w.client.Write(protocol.NewClientMsgProtobuf(steamlang.EMsg_ClientNewLoginKeyAccepted, &protobuf.CMsgClientNewLoginKeyAccepted{
 		UniqueId: proto.Uint32(msg.GetUniqueId()),
 	}))
 
@@ -130,9 +130,9 @@ func (w *Web) handleNewLoginKey(packet *Packet) {
 	w.client.Emit(new(WebSessionIdEvent))
 }
 
-func (w *Web) handleAuthNonceResponse(packet *Packet) {
+func (w *Web) handleAuthNonceResponse(packet *protocol.Packet) {
 	// this has to be the best name for a message yet.
-	msg := new(CMsgClientRequestWebAPIAuthenticateUserNonceResponse)
+	msg := new(protobuf.CMsgClientRequestWebAPIAuthenticateUserNonceResponse)
 	packet.ReadProtoMsg(msg)
 	w.webLoginKey = msg.GetWebapiAuthenticateUserNonce()
 

@@ -1,9 +1,9 @@
 package steam
 
 import (
-	. "github.com/Philipp15b/go-steam/v2/protocol"
-	. "github.com/Philipp15b/go-steam/v2/protocol/protobuf"
-	. "github.com/Philipp15b/go-steam/v2/protocol/steamlang"
+	"github.com/Philipp15b/go-steam/v2/protocol"
+	"github.com/Philipp15b/go-steam/v2/protocol/protobuf"
+	"github.com/Philipp15b/go-steam/v2/protocol/steamlang"
 )
 
 type Notifications struct {
@@ -20,9 +20,9 @@ func newNotifications(client *Client) *Notifications {
 	}
 }
 
-func (n *Notifications) HandlePacket(packet *Packet) {
+func (n *Notifications) HandlePacket(packet *protocol.Packet) {
 	switch packet.EMsg {
-	case EMsg_ClientUserNotifications:
+	case steamlang.EMsg_ClientUserNotifications:
 		n.handleClientUserNotifications(packet)
 	}
 }
@@ -33,8 +33,8 @@ const (
 	TradeOffer NotificationType = 1
 )
 
-func (n *Notifications) handleClientUserNotifications(packet *Packet) {
-	msg := new(CMsgClientUserNotifications)
+func (n *Notifications) handleClientUserNotifications(packet *protocol.Packet) {
+	msg := new(protobuf.CMsgClientUserNotifications)
 	packet.ReadProtoMsg(msg)
 
 	for _, notification := range msg.GetNotifications() {

@@ -1,19 +1,19 @@
 package steam
 
 import (
-	. "github.com/Philipp15b/go-steam/v2/protocol/steamlang"
-	. "github.com/Philipp15b/go-steam/v2/steamid"
+	"github.com/Philipp15b/go-steam/v2/protocol/steamlang"
+	"github.com/Philipp15b/go-steam/v2/steamid"
 )
 
 type LoggedOnEvent struct {
-	Result                    EResult
-	ExtendedResult            EResult
+	Result                    steamlang.EResult
+	ExtendedResult            steamlang.EResult
 	OutOfGameSecsPerHeartbeat int32
 	InGameSecsPerHeartbeat    int32
 	PublicIp                  uint32
 	ServerTime                uint32
-	AccountFlags              EAccountFlags
-	ClientSteamId             SteamId `json:",string"`
+	AccountFlags              steamlang.EAccountFlags
+	ClientSteamId             steamid.SteamId `json:",string"`
 	EmailDomain               string
 	CellId                    uint32
 	CellIdPingThreshold       uint32
@@ -27,7 +27,7 @@ type LoggedOnEvent struct {
 }
 
 type LogOnFailedEvent struct {
-	Result EResult
+	Result steamlang.EResult
 }
 
 type LoginKeyEvent struct {
@@ -36,7 +36,7 @@ type LoginKeyEvent struct {
 }
 
 type LoggedOffEvent struct {
-	Result EResult
+	Result steamlang.EResult
 }
 
 type MachineAuthUpdateEvent struct {
@@ -47,7 +47,7 @@ type AccountInfoEvent struct {
 	PersonaName          string
 	Country              string
 	CountAuthedComputers int32
-	AccountFlags         EAccountFlags
+	AccountFlags         steamlang.EAccountFlags
 	FacebookId           uint64 `json:",string"`
 	FacebookName         string
 }

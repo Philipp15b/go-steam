@@ -5,12 +5,11 @@ package steamlang
 
 import (
 	"encoding/binary"
-	"io"
-
-	. "github.com/Philipp15b/go-steam/v2/protocol/protobuf"
+	"github.com/Philipp15b/go-steam/v2/protocol/protobuf"
 	"github.com/Philipp15b/go-steam/v2/rwu"
 	"github.com/Philipp15b/go-steam/v2/steamid"
 	"github.com/golang/protobuf/proto"
+	"io"
 )
 
 const UdpHeader_MAGIC uint32 = 0x31305356
@@ -372,13 +371,13 @@ func (d *ExtendedClientMsgHdr) Deserialize(r io.Reader) error {
 type MsgHdrProtoBuf struct {
 	Msg          EMsg
 	HeaderLength int32
-	Proto        *CMsgProtoBufHeader
+	Proto        *protobuf.CMsgProtoBufHeader
 }
 
 func NewMsgHdrProtoBuf() *MsgHdrProtoBuf {
 	return &MsgHdrProtoBuf{
 		Msg:   EMsg_Invalid,
-		Proto: new(CMsgProtoBufHeader),
+		Proto: new(protobuf.CMsgProtoBufHeader),
 	}
 }
 
@@ -424,13 +423,13 @@ func (d *MsgHdrProtoBuf) Deserialize(r io.Reader) error {
 type MsgGCHdrProtoBuf struct {
 	Msg          uint32
 	HeaderLength int32
-	Proto        *CMsgProtoBufHeader
+	Proto        *protobuf.CMsgProtoBufHeader
 }
 
 func NewMsgGCHdrProtoBuf() *MsgGCHdrProtoBuf {
 	return &MsgGCHdrProtoBuf{
 		Msg:   0,
-		Proto: new(CMsgProtoBufHeader),
+		Proto: new(protobuf.CMsgProtoBufHeader),
 	}
 }
 

@@ -3,43 +3,43 @@ package steam
 import (
 	"time"
 
-	. "github.com/Philipp15b/go-steam/v2/protocol/steamlang"
-	. "github.com/Philipp15b/go-steam/v2/steamid"
+	"github.com/Philipp15b/go-steam/v2/protocol/steamlang"
+	"github.com/Philipp15b/go-steam/v2/steamid"
 )
 
 type FriendsListEvent struct{}
 
 type FriendStateEvent struct {
-	SteamId      SteamId `json:",string"`
-	Relationship EFriendRelationship
+	SteamId      steamid.SteamId `json:",string"`
+	Relationship steamlang.EFriendRelationship
 }
 
 func (f *FriendStateEvent) IsFriend() bool {
-	return f.Relationship == EFriendRelationship_Friend
+	return f.Relationship == steamlang.EFriendRelationship_Friend
 }
 
 type GroupStateEvent struct {
-	SteamId      SteamId `json:",string"`
-	Relationship EClanRelationship
+	SteamId      steamid.SteamId `json:",string"`
+	Relationship steamlang.EClanRelationship
 }
 
 func (g *GroupStateEvent) IsMember() bool {
-	return g.Relationship == EClanRelationship_Member
+	return g.Relationship == steamlang.EClanRelationship_Member
 }
 
 // Fired when someone changing their friend details
 type PersonaStateEvent struct {
-	StatusFlags            EClientPersonaStateFlag
-	FriendId               SteamId `json:",string"`
-	State                  EPersonaState
-	StateFlags             EPersonaStateFlag
+	StatusFlags            steamlang.EClientPersonaStateFlag
+	FriendId               steamid.SteamId `json:",string"`
+	State                  steamlang.EPersonaState
+	StateFlags             steamlang.EPersonaStateFlag
 	GameAppId              uint32
 	GameId                 uint64 `json:",string"`
 	GameName               string
 	GameServerIp           uint32
 	GameServerPort         uint32
 	QueryPort              uint32
-	SourceSteamId          SteamId `json:",string"`
+	SourceSteamId          steamid.SteamId `json:",string"`
 	GameDataBlob           []byte
 	Name                   string
 	Avatar                 []byte
@@ -53,8 +53,8 @@ type PersonaStateEvent struct {
 
 // Fired when a clan's state has been changed
 type ClanStateEvent struct {
-	ClanId              SteamId `json:",string"`
-	AccountFlags        EAccountFlags
+	ClanId              steamid.SteamId `json:",string"`
+	AccountFlags        steamlang.EAccountFlags
 	ClanName            string
 	Avatar              []byte
 	MemberTotalCount    uint32
@@ -75,79 +75,79 @@ type ClanEventDetails struct {
 
 // Fired in response to adding a friend to your friends list
 type FriendAddedEvent struct {
-	Result      EResult
-	SteamId     SteamId `json:",string"`
+	Result      steamlang.EResult
+	SteamId     steamid.SteamId `json:",string"`
 	PersonaName string
 }
 
 // Fired when the client receives a message from either a friend or a chat room
 type ChatMsgEvent struct {
-	ChatRoomId SteamId `json:",string"` // not set for friend messages
-	ChatterId  SteamId `json:",string"`
+	ChatRoomId steamid.SteamId `json:",string"` // not set for friend messages
+	ChatterId  steamid.SteamId `json:",string"`
 	Message    string
-	EntryType  EChatEntryType
+	EntryType  steamlang.EChatEntryType
 	Timestamp  time.Time
 	Offline    bool
 }
 
 // Whether the type is ChatMsg
 func (c *ChatMsgEvent) IsMessage() bool {
-	return c.EntryType == EChatEntryType_ChatMsg
+	return c.EntryType == steamlang.EChatEntryType_ChatMsg
 }
 
 // Fired in response to joining a chat
 type ChatEnterEvent struct {
-	ChatRoomId    SteamId `json:",string"`
-	FriendId      SteamId `json:",string"`
-	ChatRoomType  EChatRoomType
-	OwnerId       SteamId `json:",string"`
-	ClanId        SteamId `json:",string"`
+	ChatRoomId    steamid.SteamId `json:",string"`
+	FriendId      steamid.SteamId `json:",string"`
+	ChatRoomType  steamlang.EChatRoomType
+	OwnerId       steamid.SteamId `json:",string"`
+	ClanId        steamid.SteamId `json:",string"`
 	ChatFlags     byte
-	EnterResponse EChatRoomEnterResponse
+	EnterResponse steamlang.EChatRoomEnterResponse
 	Name          string
 }
 
 // Fired in response to a chat member's info being received
 type ChatMemberInfoEvent struct {
-	ChatRoomId      SteamId `json:",string"`
-	Type            EChatInfoType
+	ChatRoomId      steamid.SteamId `json:",string"`
+	Type            steamlang.EChatInfoType
 	StateChangeInfo StateChangeDetails
 }
 
 type StateChangeDetails struct {
-	ChatterActedOn SteamId `json:",string"`
-	StateChange    EChatMemberStateChange
-	ChatterActedBy SteamId `json:",string"`
+	ChatterActedOn steamid.SteamId `json:",string"`
+	StateChange    steamlang.EChatMemberStateChange
+	ChatterActedBy steamid.SteamId `json:",string"`
 }
 
 // Fired when a chat action has completed
 type ChatActionResultEvent struct {
-	ChatRoomId SteamId `json:",string"`
-	ChatterId  SteamId `json:",string"`
-	Action     EChatAction
-	Result     EChatActionResult
+	ChatRoomId steamid.SteamId `json:",string"`
+	ChatterId  steamid.SteamId `json:",string"`
+	Action     steamlang.EChatAction
+	Result     steamlang.EChatActionResult
 }
 
 // Fired when a chat invite is received
 type ChatInviteEvent struct {
-	InvitedId    SteamId `json:",string"`
-	ChatRoomId   SteamId `json:",string"`
-	PatronId     SteamId `json:",string"`
-	ChatRoomType EChatRoomType
-	FriendChatId SteamId `json:",string"`
+	InvitedId    steamid.SteamId `json:",string"`
+	ChatRoomId   steamid.SteamId `json:",string"`
+	PatronId     steamid.SteamId `json:",string"`
+	ChatRoomType steamlang.EChatRoomType
+	FriendChatId steamid.SteamId `json:",string"`
 	ChatRoomName string
 	GameId       uint64 `json:",string"`
 }
 
 // Fired in response to ignoring a friend
 type IgnoreFriendEvent struct {
-	Result EResult
+	Result steamlang.EResult
 }
 
 // Fired in response to requesting profile info for a user
 type ProfileInfoEvent struct {
-	Result      EResult
-	SteamId     SteamId `json:",string"`
+	Result      steamlang.EResult
+	SteamId     steamid.SteamId `json:",string"`
 	TimeCreated uint32
 	RealName    string
 	CityName    string

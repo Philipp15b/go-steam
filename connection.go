@@ -10,11 +10,11 @@ import (
 	"sync"
 
 	"github.com/Philipp15b/go-steam/v2/cryptoutil"
-	. "github.com/Philipp15b/go-steam/v2/protocol"
+	"github.com/Philipp15b/go-steam/v2/protocol"
 )
 
 type connection interface {
-	Read() (*Packet, error)
+	Read() (*protocol.Packet, error)
 	Write([]byte) error
 	Close() error
 	SetEncryptionKey([]byte)
@@ -40,7 +40,7 @@ func dialTCP(laddr, raddr *net.TCPAddr) (*tcpConnection, error) {
 	}, nil
 }
 
-func (c *tcpConnection) Read() (*Packet, error) {
+func (c *tcpConnection) Read() (*protocol.Packet, error) {
 	// All packets begin with a packet length
 	var packetLen uint32
 	err := binary.Read(c.conn, binary.LittleEndian, &packetLen)
@@ -74,7 +74,7 @@ func (c *tcpConnection) Read() (*Packet, error) {
 	}
 	c.cipherMutex.RUnlock()
 
-	return NewPacket(buf)
+	return protocol.NewPacket(buf)
 }
 
 // Writes a message. This may only be used by one goroutine at a time.

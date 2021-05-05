@@ -15,10 +15,10 @@ import (
 
 	"github.com/Philipp15b/go-steam/v2/cryptoutil"
 	"github.com/Philipp15b/go-steam/v2/netutil"
-	. "github.com/Philipp15b/go-steam/v2/protocol"
-	. "github.com/Philipp15b/go-steam/v2/protocol/protobuf"
-	. "github.com/Philipp15b/go-steam/v2/protocol/steamlang"
-	. "github.com/Philipp15b/go-steam/v2/steamid"
+	"github.com/Philipp15b/go-steam/v2/protocol"
+	"github.com/Philipp15b/go-steam/v2/protocol/protobuf"
+	"github.com/Philipp15b/go-steam/v2/protocol/steamlang"
+	"github.com/Philipp15b/go-steam/v2/steamid"
 )
 
 // Represents a client to the Steam network.
@@ -51,13 +51,13 @@ type Client struct {
 
 	mutex     sync.RWMutex // guarding conn and writeChan
 	conn      connection
-	writeChan chan IMsg
+	writeChan chan protocol.IMsg
 	writeBuf  *bytes.Buffer
 	heartbeat *time.Ticker
 }
 
 type PacketHandler interface {
-	HandlePacket(*Packet)
+	HandlePacket(*protocol.Packet)
 }
 
 func NewClient() *Client {
@@ -108,12 +108,12 @@ func (c *Client) RegisterPacketHandler(handler PacketHandler) {
 	c.handlers = append(c.handlers, handler)
 }
 
-func (c *Client) GetNextJobId() JobId {
-	return JobId(atomic.AddUint64(&c.currentJobId, 1))
+func (c *Client) GetNextJobId() protocol.JobId {
+	return protocol.JobId(atomic.AddUint64(&c.currentJobId, 1))
 }
 
-func (c *Client) SteamId() SteamId {
-	return SteamId(atomic.LoadUint64(&c.steamId))
+func (c *Client) SteamId() steamid.SteamId {
+	return steamid.SteamId(atomic.LoadUint64(&c.steamId))
 }
 
 func (c *Client) SessionId() int32 {
@@ -166,7 +166,7 @@ func (c *Client) ConnectToBind(addr *netutil.PortAddr, local *net.TCPAddr) error
 		return err
 	}
 	c.conn = conn
-	c.writeChan = make(chan IMsg, 5)
+	c.writeChan = make(chan protocol.IMsg, 5)
 
 	go c.readLoop()
 	go c.writeLoop()
@@ -196,8 +196,8 @@ func (c *Client) Disconnect() {
 // writing are not allowed (possible race conditions).
 //
 // Writes to this client when not connected are ignored.
-func (c *Client) Write(msg IMsg) {
-	if cm, ok := msg.(IClientMsg); ok {
+func (c *Client) Write(msg protocol.IMsg) {
+	if cm, ok := msg.(protocol.IClientMsg); ok {
 		cm.SetSessionId(c.SessionId())
 		cm.SetSteamId(c.SteamId())
 	}
@@ -270,20 +270,20 @@ func (c *Client) heartbeatLoop(seconds time.Duration) {
 		if !ok {
 			break
 		}
-		c.Write(NewClientMsgProtobuf(EMsg_ClientHeartBeat, new(CMsgClientHeartBeat)))
+		c.Write(protocol.NewClientMsgProtobuf(steamlang.EMsg_ClientHeartBeat, new(protobuf.CMsgClientHeartBeat)))
 	}
 	c.heartbeat = nil
 }
 
-func (c *Client) handlePacket(packet *Packet) {
+func (c *Client) handlePacket(packet *protocol.Packet) {
 	switch packet.EMsg {
-	case EMsg_ChannelEncryptRequest:
+	case steamlang.EMsg_ChannelEncryptRequest:
 		c.handleChannelEncryptRequest(packet)
-	case EMsg_ChannelEncryptResult:
+	case steamlang.EMsg_ChannelEncryptResult:
 		c.handleChannelEncryptResult(packet)
-	case EMsg_Multi:
+	case steamlang.EMsg_Multi:
 		c.handleMulti(packet)
-	case EMsg_ClientCMList:
+	case steamlang.EMsg_ClientCMList:
 		c.handleClientCMList(packet)
 	}
 
@@ -294,17 +294,17 @@ func (c *Client) handlePacket(packet *Packet) {
 	}
 }
 
-func (c *Client) handleChannelEncryptRequest(packet *Packet) {
-	body := NewMsgChannelEncryptRequest()
+func (c *Client) handleChannelEncryptRequest(packet *protocol.Packet) {
+	body := steamlang.NewMsgChannelEncryptRequest()
 	packet.ReadMsg(body)
 
-	if body.Universe != EUniverse_Public {
+	if body.Universe != steamlang.EUniverse_Public {
 		c.Fatalf("Invalid univserse %v!", body.Universe)
 	}
 
 	c.tempSessionKey = make([]byte, 32)
 	rand.Read(c.tempSessionKey)
-	encryptedKey := cryptoutil.RSAEncrypt(GetPublicKey(EUniverse_Public), c.tempSessionKey)
+	encryptedKey := cryptoutil.RSAEncrypt(GetPublicKey(steamlang.EUniverse_Public), c.tempSessionKey)
 
 	payload := new(bytes.Buffer)
 	payload.Write(encryptedKey)
@@ -314,14 +314,14 @@ func (c *Client) handleChannelEncryptRequest(packet *Packet) {
 	payload.WriteByte(0)
 	payload.WriteByte(0)
 
-	c.Write(NewMsg(NewMsgChannelEncryptResponse(), payload.Bytes()))
+	c.Write(protocol.NewMsg(steamlang.NewMsgChannelEncryptResponse(), payload.Bytes()))
 }
 
-func (c *Client) handleChannelEncryptResult(packet *Packet) {
-	body := NewMsgChannelEncryptResult()
+func (c *Client) handleChannelEncryptResult(packet *protocol.Packet) {
+	body := steamlang.NewMsgChannelEncryptResult()
 	packet.ReadMsg(body)
 
-	if body.Result != EResult_OK {
+	if body.Result != steamlang.EResult_OK {
 		c.Fatalf("Encryption failed: %v", body.Result)
 		return
 	}
@@ -331,8 +331,8 @@ func (c *Client) handleChannelEncryptResult(packet *Packet) {
 	c.Emit(&ConnectedEvent{})
 }
 
-func (c *Client) handleMulti(packet *Packet) {
-	body := new(CMsgMulti)
+func (c *Client) handleMulti(packet *protocol.Packet) {
+	body := new(protobuf.CMsgMulti)
 	packet.ReadProtoMsg(body)
 
 	payload := body.GetMessageBody()
@@ -357,7 +357,7 @@ func (c *Client) handleMulti(packet *Packet) {
 		binary.Read(pr, binary.LittleEndian, &length)
 		packetData := make([]byte, length)
 		pr.Read(packetData)
-		p, err := NewPacket(packetData)
+		p, err := protocol.NewPacket(packetData)
 		if err != nil {
 			c.Errorf("Error reading packet in Multi msg %v: %v", packet, err)
 			continue
@@ -366,8 +366,8 @@ func (c *Client) handleMulti(packet *Packet) {
 	}
 }
 
-func (c *Client) handleClientCMList(packet *Packet) {
-	body := new(CMsgClientCMList)
+func (c *Client) handleClientCMList(packet *protocol.Packet) {
+	body := new(protobuf.CMsgClientCMList)
 	packet.ReadProtoMsg(body)
 
 	l := make([]*netutil.PortAddr, 0)
