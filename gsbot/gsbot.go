@@ -41,19 +41,18 @@ func Default() *GsBot {
 		log.New(os.Stdout, "", 0),
 	}
 }
-
 // This module handles authentication. It logs on automatically after a ConnectedEvent
 // and saves the sentry data to a file which is also used for logon if available.
 // If you're logging on for the first time Steam may require an authcode. You can then
 // connect again with the new logon details.
 type Auth struct {
 	bot             *GsBot
-	details         *LogOnDetails
+	details         *steam.LogOnDetails
 	sentryPath      string
 	machineAuthHash []byte
 }
 
-func NewAuth(bot *GsBot, details *LogOnDetails, sentryPath string) *Auth {
+func NewAuth(bot *GsBot, details *steam.LogOnDetails, sentryPath string) *Auth {
 	return &Auth{
 		bot:        bot,
 		details:    details,
@@ -61,34 +60,21 @@ func NewAuth(bot *GsBot, details *LogOnDetails, sentryPath string) *Auth {
 	}
 }
 
-type LogOnDetails struct {
-	Username      string
-	Password      string
-	AuthCode      string
-	TwoFactorCode string
-}
-
 // This is called automatically after every ConnectedEvent, but must be called once again manually
 // with an authcode if Steam requires it when logging on for the first time.
-func (a *Auth) LogOn(details *LogOnDetails) {
-	a.details = details
+func (a *Auth) LogOn() {
 	sentry, err := ioutil.ReadFile(a.sentryPath)
 	if err != nil {
 		a.bot.Log.Printf("Error loading sentry file from path %v - This is normal if you're logging in for the first time.\n", a.sentryPath)
 	}
-	a.bot.Client.Auth.LogOn(&steam.LogOnDetails{
-		Username:       details.Username,
-		Password:       details.Password,
-		SentryFileHash: sentry,
-		AuthCode:       details.AuthCode,
-		TwoFactorCode:  details.TwoFactorCode,
-	})
+	a.details.SentryFileHash = sentry
+	a.bot.Client.Auth.LogOn(a.details)
 }
 
 func (a *Auth) HandleEvent(event interface{}) {
 	switch e := event.(type) {
 	case *steam.ConnectedEvent:
-		a.LogOn(a.details)
+		a.LogOn()
 	case *steam.LoggedOnEvent:
 		a.bot.Log.Printf("Logged on (%v) with SteamId %v and account flags %v", e.Result, e.ClientSteamId, e.AccountFlags)
 	case *steam.MachineAuthUpdateEvent:
@@ -97,6 +83,10 @@ func (a *Auth) HandleEvent(event interface{}) {
 		if err != nil {
 			panic(err)
 		}
+	case *steam.LoginKeyEvent:
+		a.bot.Log.Printf("New LoginKey: %v\n", e.LoginKey)
+	case *steam.LogOnFailedEvent:
+		a.bot.Log.Printf("Failed to log on (%v)", e.Result)
 	}
 }
 
