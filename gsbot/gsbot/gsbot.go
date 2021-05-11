@@ -1,10 +1,17 @@
 // A simple example that uses the modules from the gsbot package and go-steam to log on
 // to the Steam network.
 //
-// The command expects log on data, optionally with an auth code:
+// Use the right options for your account settings:
+// Normal login: username + password
 //
-//     gsbot [username] [password]
-//     gsbot [username] [password] [authcode]
+// Email code:   username + password
+//               username + password + authcode
+//
+// Mobile code:  username + password + twofactorcode
+//               username + loginkey
+//
+//     gsbot [username] [-p password] [-a authcode] [-t twofactorcode] [-l loginkey]
+
 package main
 
 import (
@@ -16,23 +23,38 @@ import (
 	"github.com/Philipp15b/go-steam/v2/protocol/steamlang"
 )
 
+const usage string = "usage: gsbot [username] [-p password] [-a authcode] [-t twofactorcode] [-l loginkey]"
+
 func main() {
-	if len(os.Args) < 3 {
-		fmt.Println("gsbot example\nusage: \n\tgsbot [username] [password] [authcode]")
+	if len(os.Args) < 3 || len(os.Args) % 2 != 0 {
+		fmt.Println(usage)
 		return
 	}
-	authcode := ""
-	if len(os.Args) > 3 {
-		authcode = os.Args[3]
+
+	details := &steam.LogOnDetails{
+		Username: os.Args[1],
+		ShouldRememberPassword: true,
+	}
+
+	for i := 2; i < len(os.Args) - 1; i += 2 {
+		switch os.Args[i] {
+		case "-p":
+			details.Password = os.Args[i+1]
+		case "-a":
+			details.AuthCode = os.Args[i+1]
+		case "-t":
+			details.TwoFactorCode = os.Args[i+1]
+		case "-l":
+			details.LoginKey = os.Args[i+1]
+		default:
+			fmt.Println(usage)
+			return
+		}
 	}
 
 	bot := gsbot.Default()
 	client := bot.Client
-	auth := gsbot.NewAuth(bot, &gsbot.LogOnDetails{
-		Username: os.Args[1],
-		Password: os.Args[2],
-		AuthCode: authcode,
-	}, "sentry.bin")
+	auth := gsbot.NewAuth(bot, details, "sentry.bin")
 	debug, err := gsbot.NewDebug(bot, "debug")
 	if err != nil {
 		panic(err)
