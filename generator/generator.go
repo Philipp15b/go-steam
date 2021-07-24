@@ -199,7 +199,6 @@ func forceRename(from, to string) error {
 }
 
 var pkgRegex = regexp.MustCompile(`(package \w+)`)
-var pkgCommentRegex = regexp.MustCompile(`(?s)(\/\*.*?\*\/\n)package`)
 var unusedImportCommentRegex = regexp.MustCompile("// discarding unused import .*\n")
 var fileDescriptorVarRegex = regexp.MustCompile(`fileDescriptor\d+`)
 
@@ -222,7 +221,7 @@ func fixProto(outDir, path string) {
 	importsToRemove := make([]*ast.ImportSpec, 0)
 	for _, i := range f.Imports {
 		// We remove all local imports
-		if i.Path.Value == "\".\"" {
+		if strings.Contains(i.Path.Value, ".proto") {
 			importsToRemove = append(importsToRemove, i)
 		}
 	}
@@ -231,7 +230,7 @@ func fixProto(outDir, path string) {
 		// remove the package name from all types
 		file = bytes.Replace(file, []byte(itr.Name.Name+"."), []byte{}, -1)
 		// and remove the import itself
-		file = bytes.Replace(file, []byte(fmt.Sprintf("import %v %v\n", itr.Name.Name, itr.Path.Value)), []byte{}, -1)
+		file = bytes.Replace(file, []byte(fmt.Sprintf("%v %v", itr.Name.Name, itr.Path.Value)), []byte{}, -1)
 	}
 
 	// remove warnings
@@ -242,7 +241,9 @@ func fixProto(outDir, path string) {
 
 	// fix the google dependency;
 	// we just reuse the one from protoc-gen-go
-	file = bytes.Replace(file, []byte("google/protobuf"), []byte("google.golang.org/protobuf/types/known/descriptorpb"), -1)
+	file = bytes.Replace(file, []byte("google/protobuf"), []byte("google.golang.org/protobuf"), -1)
+
+	file = bytes.Replace(file, []byte("google.golang.org/protobuf/descriptor.proto"), []byte("google.golang.org/protobuf/types/descriptorpb"), -1)
 
 	// we need to prefix local variables created by protoc-gen-go so that they don't clash with others in the same package
 	filename := strings.Split(filepath.Base(path), ".")[0]
@@ -312,11 +313,12 @@ func execute(command string, args []string) {
 	}
 
 	cmd := exec.Command(command, args...)
+	cmd.Stdout = newQuotedWriter(os.Stdout)
+	cmd.Stderr = newQuotedWriter(os.Stderr)
 
-	_, err := cmd.CombinedOutput()
+	err := cmd.Run()
 	if err != nil {
 		printerr(err.Error())
 		os.Exit(1)
 	}
-
 }

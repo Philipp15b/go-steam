@@ -1,4 +1,4 @@
-module github.com/Philipp15b/go-steam/v2
+module github.com/Philipp15b/go-steam/v3
 
 go 1.16
 
@@ -7,4 +7,4 @@ require (
 	google.golang.org/protobuf v1.27.1
 )
 
-retract v2.0.0
+retract v3.0.0
