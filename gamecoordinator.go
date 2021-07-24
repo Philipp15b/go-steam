@@ -7,7 +7,7 @@ import (
 	"github.com/Philipp15b/go-steam/v2/protocol/gamecoordinator"
 	"github.com/Philipp15b/go-steam/v2/protocol/protobuf"
 	"github.com/Philipp15b/go-steam/v2/protocol/steamlang"
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 )
 
 type GameCoordinator struct {

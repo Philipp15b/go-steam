@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/Philipp15b/go-steam/v2/protocol/steamlang"
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 )
 
 // TODO: Headers are always deserialized twice.

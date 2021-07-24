@@ -5,7 +5,7 @@ import (
 
 	"github.com/Philipp15b/go-steam/v2/protocol"
 	"github.com/Philipp15b/go-steam/v2/protocol/steamlang"
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 )
 
 // An outgoing message to the Game Coordinator.

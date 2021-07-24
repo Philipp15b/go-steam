@@ -8,7 +8,7 @@ import (
 	"github.com/Philipp15b/go-steam/v2/protocol/protobuf"
 	"github.com/Philipp15b/go-steam/v2/rwu"
 	"github.com/Philipp15b/go-steam/v2/steamid"
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 	"io"
 )
 
