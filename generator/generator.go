@@ -82,17 +82,17 @@ func buildProto() {
 func buildProtoMap(srcSubdir string, files map[string]string, outDir string) {
 	_ = os.MkdirAll(outDir, os.ModePerm)
 
-	opt := []string{
-		"--go_opt=Mgoogle/protobuf/descriptor.proto=google/protobuf/descriptor.proto",
-		"--go_opt=Msteammessages.proto=Protobufs/" + srcSubdir + "/steammessages.proto",
+	var opt []string
+
+	opt = append(opt, "--go_opt=Mgoogle/protobuf/descriptor.proto=google/protobuf/descriptor.proto")
+
+	for proto := range files {
+		opt = append(opt, "--go_opt=Msteammessages.proto=Protobufs/"+srcSubdir+"/steammessages.proto")
+		opt = append(opt, "--go_opt=M"+proto+"=Protobufs/"+srcSubdir+"/"+proto)
 	}
 
 	if srcSubdir == "dota2" {
 		opt = append(opt, "--go_opt=Mecon_shared_enums.proto=Protobufs/"+srcSubdir+"/econ_shared_enums.proto")
-	}
-
-	for proto := range files {
-		opt = append(opt, "--go_opt=M"+proto+"=Protobufs/"+srcSubdir+"/"+proto)
 	}
 
 	for proto, out := range files {
@@ -138,10 +138,12 @@ var tf2ProtoFiles = map[string]string{
 }
 
 var dotaProtoFiles = map[string]string{
-	"base_gcmessages.proto":  "base.pb.go",
-	"econ_gcmessages.proto":  "econ.pb.go",
-	"gcsdk_gcmessages.proto": "gcsdk.pb.go",
-	"gcsystemmsgs.proto":     "system.pb.go",
+	"base_gcmessages.proto":   "base.pb.go",
+	"econ_shared_enums.proto": "econ_shared_enum.pb.go",
+	"econ_gcmessages.proto":   "econ.pb.go",
+	"gcsdk_gcmessages.proto":  "gcsdk.pb.go",
+	"gcsystemmsgs.proto":      "system.pb.go",
+	"steammessages.proto":     "steam.pb.go",
 }
 
 var csgoProtoFiles = map[string]string{
@@ -220,6 +222,9 @@ func fixProto(outDir, path string) {
 
 	importsToRemove := make([]*ast.ImportSpec, 0)
 	for _, i := range f.Imports {
+		if strings.Contains(i.Path.Value, "google/protobuf/descriptor.proto") {
+			continue
+		}
 		// We remove all local imports
 		if strings.Contains(i.Path.Value, ".proto") {
 			importsToRemove = append(importsToRemove, i)
@@ -241,9 +246,7 @@ func fixProto(outDir, path string) {
 
 	// fix the google dependency;
 	// we just reuse the one from protoc-gen-go
-	file = bytes.Replace(file, []byte("google/protobuf"), []byte("google.golang.org/protobuf"), -1)
-
-	file = bytes.Replace(file, []byte("google.golang.org/protobuf/descriptor.proto"), []byte("google.golang.org/protobuf/types/descriptorpb"), -1)
+	file = bytes.Replace(file, []byte("google/protobuf/descriptor.proto"), []byte("google.golang.org/protobuf/types/descriptorpb"), -1)
 
 	// we need to prefix local variables created by protoc-gen-go so that they don't clash with others in the same package
 	filename := strings.Split(filepath.Base(path), ".")[0]
