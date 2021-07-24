@@ -7,7 +7,7 @@
 package unified
 
 import (
-	_ "Protobufs/steam/steammessages_unified_base.steamclient.proto"
+	
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"

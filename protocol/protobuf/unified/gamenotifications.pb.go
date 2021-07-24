@@ -7,7 +7,7 @@
 package unified
 
 import (
-	steammessages_unified_base_steamclient_proto "Protobufs/steam/steammessages_unified_base.steamclient.proto"
+	
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -1748,7 +1748,7 @@ var file_steammessages_gamenotifications_steamclient_proto_goTypes = []interface
 	(*CGameNotifications_OnNotificationsRequested_Notification)(nil),      // 17: CGameNotifications_OnNotificationsRequested_Notification
 	(*CGameNotifications_OnUserStatusChanged_Notification)(nil),           // 18: CGameNotifications_OnUserStatusChanged_Notification
 	(*CGameNotifications_GetSessionDetails_Request_RequestedSession)(nil), // 19: CGameNotifications_GetSessionDetails_Request.RequestedSession
-	(*steammessages_unified_base_steamclient_proto.NoResponse)(nil),       // 20: NoResponse
+	(*NoResponse)(nil),       // 20: NoResponse
 }
 var file_steammessages_gamenotifications_steamclient_proto_depIdxs = []int32{
 	0,  // 0: CGameNotifications_LocalizedText.variables:type_name -> CGameNotifications_Variable

@@ -9,7 +9,7 @@ package protobuf
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	descriptor_proto "google.golang.org/protobuf/types/known/descriptorpb/descriptor.proto"
+	
 	reflect "reflect"
 	sync "sync"
 )
@@ -5801,7 +5801,7 @@ func (x *CMsgDPPartnerMicroTxns_PartnerInfo) GetCurrencyName() string {
 
 var file_steammessages_proto_extTypes = []protoimpl.ExtensionInfo{
 	{
-		ExtendedType:  (*descriptor_proto.FieldOptions)(nil),
+		ExtendedType:  (*FieldOptions)(nil),
 		ExtensionType: (*bool)(nil),
 		Field:         60000,
 		Name:          "key_field",
@@ -5809,7 +5809,7 @@ var file_steammessages_proto_extTypes = []protoimpl.ExtensionInfo{
 		Filename:      "steammessages.proto",
 	},
 	{
-		ExtendedType:  (*descriptor_proto.MessageOptions)(nil),
+		ExtendedType:  (*MessageOptions)(nil),
 		ExtensionType: (*int32)(nil),
 		Field:         60000,
 		Name:          "msgpool_soft_limit",
@@ -5817,7 +5817,7 @@ var file_steammessages_proto_extTypes = []protoimpl.ExtensionInfo{
 		Filename:      "steammessages.proto",
 	},
 	{
-		ExtendedType:  (*descriptor_proto.MessageOptions)(nil),
+		ExtendedType:  (*MessageOptions)(nil),
 		ExtensionType: (*int32)(nil),
 		Field:         60001,
 		Name:          "msgpool_hard_limit",
@@ -5826,13 +5826,13 @@ var file_steammessages_proto_extTypes = []protoimpl.ExtensionInfo{
 	},
 }
 
-// Extension fields to descriptor_proto.FieldOptions.
+// Extension fields to FieldOptions.
 var (
 	// optional bool key_field = 60000;
 	E_KeyField = &file_steammessages_proto_extTypes[0]
 )
 
-// Extension fields to descriptor_proto.MessageOptions.
+// Extension fields to MessageOptions.
 var (
 	// optional int32 msgpool_soft_limit = 60000;
 	E_MsgpoolSoftLimit = &file_steammessages_proto_extTypes[1]
@@ -6811,8 +6811,8 @@ var file_steammessages_proto_goTypes = []interface{}{
 	(*CMsgNotificationOfSuspiciousActivity_MultipleGameInstances)(nil), // 80: CMsgNotificationOfSuspiciousActivity.MultipleGameInstances
 	(*CMsgDPPartnerMicroTxns_PartnerMicroTxn)(nil),                     // 81: CMsgDPPartnerMicroTxns.PartnerMicroTxn
 	(*CMsgDPPartnerMicroTxns_PartnerInfo)(nil),                         // 82: CMsgDPPartnerMicroTxns.PartnerInfo
-	(*descriptor_proto.FieldOptions)(nil),                              // 83: google.protobuf.FieldOptions
-	(*descriptor_proto.MessageOptions)(nil),                            // 84: google.protobuf.MessageOptions
+	(*FieldOptions)(nil),                              // 83: google.protobuf.FieldOptions
+	(*MessageOptions)(nil),                            // 84: google.protobuf.MessageOptions
 }
 var file_steammessages_proto_depIdxs = []int32{
 	0,  // 0: CMsgProtoBufHeader.gc_msg_src:type_name -> GCProtoBufMsgSrc

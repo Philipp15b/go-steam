@@ -7,8 +7,8 @@
 package protobuf
 
 import (
-	econ_shared_enums_proto "Protobufs/dota2/econ_shared_enums.proto"
-	_ "Protobufs/dota2/steammessages.proto"
+	
+	
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -3596,13 +3596,13 @@ type CMsgGCPartnerBalanceResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Result  *econ_shared_enums_proto.EGCPartnerRequestResponse `protobuf:"varint,1,opt,name=result,enum=EGCPartnerRequestResponse,def=1" json:"result,omitempty"`
+	Result  *EGCPartnerRequestResponse `protobuf:"varint,1,opt,name=result,enum=EGCPartnerRequestResponse,def=1" json:"result,omitempty"`
 	Balance *uint32                                            `protobuf:"varint,2,opt,name=balance" json:"balance,omitempty"`
 }
 
 // Default values for CMsgGCPartnerBalanceResponse fields.
 const (
-	Default_CMsgGCPartnerBalanceResponse_Result = econ_shared_enums_proto.EGCPartnerRequestResponse(1) // econ_shared_enums_proto.EGCPartnerRequestResponse_k_EPartnerRequestOK
+	Default_CMsgGCPartnerBalanceResponse_Result = EGCPartnerRequestResponse(1) // EGCPartnerRequestResponse_k_EPartnerRequestOK
 )
 
 func (x *CMsgGCPartnerBalanceResponse) Reset() {
@@ -3637,7 +3637,7 @@ func (*CMsgGCPartnerBalanceResponse) Descriptor() ([]byte, []int) {
 	return file_econ_gcmessages_proto_rawDescGZIP(), []int{36}
 }
 
-func (x *CMsgGCPartnerBalanceResponse) GetResult() econ_shared_enums_proto.EGCPartnerRequestResponse {
+func (x *CMsgGCPartnerBalanceResponse) GetResult() EGCPartnerRequestResponse {
 	if x != nil && x.Result != nil {
 		return *x.Result
 	}
@@ -3758,13 +3758,13 @@ type CMsgGCPartnerRechargeRedirectURLResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Result *econ_shared_enums_proto.EGCPartnerRequestResponse `protobuf:"varint,1,opt,name=result,enum=EGCPartnerRequestResponse,def=1" json:"result,omitempty"`
+	Result *EGCPartnerRequestResponse `protobuf:"varint,1,opt,name=result,enum=EGCPartnerRequestResponse,def=1" json:"result,omitempty"`
 	Url    *string                                            `protobuf:"bytes,2,opt,name=url" json:"url,omitempty"`
 }
 
 // Default values for CMsgGCPartnerRechargeRedirectURLResponse fields.
 const (
-	Default_CMsgGCPartnerRechargeRedirectURLResponse_Result = econ_shared_enums_proto.EGCPartnerRequestResponse(1) // econ_shared_enums_proto.EGCPartnerRequestResponse_k_EPartnerRequestOK
+	Default_CMsgGCPartnerRechargeRedirectURLResponse_Result = EGCPartnerRequestResponse(1) // EGCPartnerRequestResponse_k_EPartnerRequestOK
 )
 
 func (x *CMsgGCPartnerRechargeRedirectURLResponse) Reset() {
@@ -3799,7 +3799,7 @@ func (*CMsgGCPartnerRechargeRedirectURLResponse) Descriptor() ([]byte, []int) {
 	return file_econ_gcmessages_proto_rawDescGZIP(), []int{39}
 }
 
-func (x *CMsgGCPartnerRechargeRedirectURLResponse) GetResult() econ_shared_enums_proto.EGCPartnerRequestResponse {
+func (x *CMsgGCPartnerRechargeRedirectURLResponse) GetResult() EGCPartnerRequestResponse {
 	if x != nil && x.Result != nil {
 		return *x.Result
 	}
@@ -4510,7 +4510,7 @@ type CMsgClientToGCWrapAndDeliverGiftResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Response           *econ_shared_enums_proto.EGCMsgResponse `protobuf:"varint,1,opt,name=response,enum=EGCMsgResponse,def=0" json:"response,omitempty"`
+	Response           *EGCMsgResponse `protobuf:"varint,1,opt,name=response,enum=EGCMsgResponse,def=0" json:"response,omitempty"`
 	GiftingChargeUses  *uint32                                 `protobuf:"varint,2,opt,name=gifting_charge_uses,json=giftingChargeUses" json:"gifting_charge_uses,omitempty"`
 	GiftingChargeMax   *int32                                  `protobuf:"varint,3,opt,name=gifting_charge_max,json=giftingChargeMax" json:"gifting_charge_max,omitempty"`
 	GiftingUses        *uint32                                 `protobuf:"varint,4,opt,name=gifting_uses,json=giftingUses" json:"gifting_uses,omitempty"`
@@ -4521,7 +4521,7 @@ type CMsgClientToGCWrapAndDeliverGiftResponse struct {
 
 // Default values for CMsgClientToGCWrapAndDeliverGiftResponse fields.
 const (
-	Default_CMsgClientToGCWrapAndDeliverGiftResponse_Response         = econ_shared_enums_proto.EGCMsgResponse(0) // econ_shared_enums_proto.EGCMsgResponse_k_EGCMsgResponseOK
+	Default_CMsgClientToGCWrapAndDeliverGiftResponse_Response         = EGCMsgResponse(0) // EGCMsgResponse_k_EGCMsgResponseOK
 	Default_CMsgClientToGCWrapAndDeliverGiftResponse_TradeRestriction = EGCMsgInitiateTradeResponse_k_EGCMsgInitiateTradeResponse_Accepted
 )
 
@@ -4557,7 +4557,7 @@ func (*CMsgClientToGCWrapAndDeliverGiftResponse) Descriptor() ([]byte, []int) {
 	return file_econ_gcmessages_proto_rawDescGZIP(), []int{52}
 }
 
-func (x *CMsgClientToGCWrapAndDeliverGiftResponse) GetResponse() econ_shared_enums_proto.EGCMsgResponse {
+func (x *CMsgClientToGCWrapAndDeliverGiftResponse) GetResponse() EGCMsgResponse {
 	if x != nil && x.Response != nil {
 		return *x.Response
 	}
@@ -5424,13 +5424,13 @@ type CMsgClientToGCUnlockCrateResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Result       *econ_shared_enums_proto.EGCMsgResponse   `protobuf:"varint,1,opt,name=result,enum=EGCMsgResponse,def=0" json:"result,omitempty"`
+	Result       *EGCMsgResponse   `protobuf:"varint,1,opt,name=result,enum=EGCMsgResponse,def=0" json:"result,omitempty"`
 	GrantedItems []*CMsgClientToGCUnlockCrateResponse_Item `protobuf:"bytes,2,rep,name=granted_items,json=grantedItems" json:"granted_items,omitempty"`
 }
 
 // Default values for CMsgClientToGCUnlockCrateResponse fields.
 const (
-	Default_CMsgClientToGCUnlockCrateResponse_Result = econ_shared_enums_proto.EGCMsgResponse(0) // econ_shared_enums_proto.EGCMsgResponse_k_EGCMsgResponseOK
+	Default_CMsgClientToGCUnlockCrateResponse_Result = EGCMsgResponse(0) // EGCMsgResponse_k_EGCMsgResponseOK
 )
 
 func (x *CMsgClientToGCUnlockCrateResponse) Reset() {
@@ -5465,7 +5465,7 @@ func (*CMsgClientToGCUnlockCrateResponse) Descriptor() ([]byte, []int) {
 	return file_econ_gcmessages_proto_rawDescGZIP(), []int{67}
 }
 
-func (x *CMsgClientToGCUnlockCrateResponse) GetResult() econ_shared_enums_proto.EGCMsgResponse {
+func (x *CMsgClientToGCUnlockCrateResponse) GetResult() EGCMsgResponse {
 	if x != nil && x.Result != nil {
 		return *x.Result
 	}
@@ -11785,8 +11785,8 @@ var file_econ_gcmessages_proto_goTypes = []interface{}{
 	(*CMsgItemAges_MaxItemIDTimestamp)(nil),                               // 148: CMsgItemAges.MaxItemIDTimestamp
 	(*CMsgGCToClientCurrencyPricePoints_Currency)(nil),                    // 149: CMsgGCToClientCurrencyPricePoints.Currency
 	(*CMsgGCToGCFlushSteamInventoryCache_Key)(nil),                        // 150: CMsgGCToGCFlushSteamInventoryCache.Key
-	(econ_shared_enums_proto.EGCPartnerRequestResponse)(0),                // 151: EGCPartnerRequestResponse
-	(econ_shared_enums_proto.EGCMsgResponse)(0),                           // 152: EGCMsgResponse
+	(EGCPartnerRequestResponse)(0),                // 151: EGCPartnerRequestResponse
+	(EGCMsgResponse)(0),                           // 152: EGCMsgResponse
 }
 var file_econ_gcmessages_proto_depIdxs = []int32{
 	132, // 0: CMsgEconPlayerStrangeCountAdjustment.strange_count_adjustments:type_name -> CMsgEconPlayerStrangeCountAdjustment.CStrangeCountAdjustment

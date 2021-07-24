@@ -7,7 +7,7 @@
 package unified
 
 import (
-	steammessages_unified_base_steamclient_proto "Protobufs/steam/steammessages_unified_base.steamclient.proto"
+	
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -7430,7 +7430,7 @@ var file_steammessages_publishedfile_steamclient_proto_goTypes = []interface{}{
 	(*CPublishedFile_SetPlaytimeForControllerConfigs_Request_ControllerConfigUsage)(nil), // 70: CPublishedFile_SetPlaytimeForControllerConfigs_Request.ControllerConfigUsage
 	(*CPublishedFile_GetUserVoteSummary_Response_VoteSummary)(nil),                       // 71: CPublishedFile_GetUserVoteSummary_Response.VoteSummary
 	(*CPublishedFile_FileSubscribed_Notification_RevisionData)(nil),                      // 72: CPublishedFile_FileSubscribed_Notification.RevisionData
-	(*steammessages_unified_base_steamclient_proto.NoResponse)(nil),                      // 73: NoResponse
+	(*NoResponse)(nil),                      // 73: NoResponse
 }
 var file_steammessages_publishedfile_steamclient_proto_depIdxs = []int32{
 	0,  // 0: CPublishedFile_GetDetails_Request.desired_revision:type_name -> EPublishedFileRevision

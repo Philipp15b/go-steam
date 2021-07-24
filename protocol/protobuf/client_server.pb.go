@@ -7,8 +7,8 @@
 package protobuf
 
 import (
-	encrypted_app_ticket_proto "Protobufs/steam/encrypted_app_ticket.proto"
-	steammessages_base_proto "Protobufs/steam/steammessages_base.proto"
+	
+	
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -1308,7 +1308,7 @@ type CMsgGSUserPlaying struct {
 	SteamId            *uint64                                 `protobuf:"fixed64,1,opt,name=steam_id,json=steamId" json:"steam_id,omitempty"`
 	DeprecatedPublicIp *uint32                                 `protobuf:"varint,2,opt,name=deprecated_public_ip,json=deprecatedPublicIp" json:"deprecated_public_ip,omitempty"`
 	Token              []byte                                  `protobuf:"bytes,3,opt,name=token" json:"token,omitempty"`
-	PublicIp           *steammessages_base_proto.CMsgIPAddress `protobuf:"bytes,4,opt,name=public_ip,json=publicIp" json:"public_ip,omitempty"`
+	PublicIp           *CMsgIPAddress `protobuf:"bytes,4,opt,name=public_ip,json=publicIp" json:"public_ip,omitempty"`
 }
 
 func (x *CMsgGSUserPlaying) Reset() {
@@ -1364,7 +1364,7 @@ func (x *CMsgGSUserPlaying) GetToken() []byte {
 	return nil
 }
 
-func (x *CMsgGSUserPlaying) GetPublicIp() *steammessages_base_proto.CMsgIPAddress {
+func (x *CMsgGSUserPlaying) GetPublicIp() *CMsgIPAddress {
 	if x != nil {
 		return x.PublicIp
 	}
@@ -1662,7 +1662,7 @@ type CMsgClientAuthList struct {
 	TokensLeft               *uint32                                    `protobuf:"varint,1,opt,name=tokens_left,json=tokensLeft" json:"tokens_left,omitempty"`
 	LastRequestSeq           *uint32                                    `protobuf:"varint,2,opt,name=last_request_seq,json=lastRequestSeq" json:"last_request_seq,omitempty"`
 	LastRequestSeqFromServer *uint32                                    `protobuf:"varint,3,opt,name=last_request_seq_from_server,json=lastRequestSeqFromServer" json:"last_request_seq_from_server,omitempty"`
-	Tickets                  []*steammessages_base_proto.CMsgAuthTicket `protobuf:"bytes,4,rep,name=tickets" json:"tickets,omitempty"`
+	Tickets                  []*CMsgAuthTicket `protobuf:"bytes,4,rep,name=tickets" json:"tickets,omitempty"`
 	AppIds                   []uint32                                   `protobuf:"varint,5,rep,name=app_ids,json=appIds" json:"app_ids,omitempty"`
 	MessageSequence          *uint32                                    `protobuf:"varint,6,opt,name=message_sequence,json=messageSequence" json:"message_sequence,omitempty"`
 }
@@ -1720,7 +1720,7 @@ func (x *CMsgClientAuthList) GetLastRequestSeqFromServer() uint32 {
 	return 0
 }
 
-func (x *CMsgClientAuthList) GetTickets() []*steammessages_base_proto.CMsgAuthTicket {
+func (x *CMsgClientAuthList) GetTickets() []*CMsgAuthTicket {
 	if x != nil {
 		return x.Tickets
 	}
@@ -2766,7 +2766,7 @@ type CMsgClientMMSCreateLobby struct {
 	DeprecatedPublicIp *uint32                                 `protobuf:"varint,6,opt,name=deprecated_public_ip,json=deprecatedPublicIp" json:"deprecated_public_ip,omitempty"`
 	Metadata           []byte                                  `protobuf:"bytes,7,opt,name=metadata" json:"metadata,omitempty"`
 	PersonaNameOwner   *string                                 `protobuf:"bytes,8,opt,name=persona_name_owner,json=personaNameOwner" json:"persona_name_owner,omitempty"`
-	PublicIp           *steammessages_base_proto.CMsgIPAddress `protobuf:"bytes,9,opt,name=public_ip,json=publicIp" json:"public_ip,omitempty"`
+	PublicIp           *CMsgIPAddress `protobuf:"bytes,9,opt,name=public_ip,json=publicIp" json:"public_ip,omitempty"`
 }
 
 func (x *CMsgClientMMSCreateLobby) Reset() {
@@ -2857,7 +2857,7 @@ func (x *CMsgClientMMSCreateLobby) GetPersonaNameOwner() string {
 	return ""
 }
 
-func (x *CMsgClientMMSCreateLobby) GetPublicIp() *steammessages_base_proto.CMsgIPAddress {
+func (x *CMsgClientMMSCreateLobby) GetPublicIp() *CMsgIPAddress {
 	if x != nil {
 		return x.PublicIp
 	}
@@ -3239,7 +3239,7 @@ type CMsgClientMMSGetLobbyList struct {
 	CellId              *uint32                                 `protobuf:"varint,4,opt,name=cell_id,json=cellId" json:"cell_id,omitempty"`
 	DeprecatedPublicIp  *uint32                                 `protobuf:"varint,5,opt,name=deprecated_public_ip,json=deprecatedPublicIp" json:"deprecated_public_ip,omitempty"`
 	Filters             []*CMsgClientMMSGetLobbyList_Filter     `protobuf:"bytes,6,rep,name=filters" json:"filters,omitempty"`
-	PublicIp            *steammessages_base_proto.CMsgIPAddress `protobuf:"bytes,7,opt,name=public_ip,json=publicIp" json:"public_ip,omitempty"`
+	PublicIp            *CMsgIPAddress `protobuf:"bytes,7,opt,name=public_ip,json=publicIp" json:"public_ip,omitempty"`
 }
 
 func (x *CMsgClientMMSGetLobbyList) Reset() {
@@ -3309,7 +3309,7 @@ func (x *CMsgClientMMSGetLobbyList) GetFilters() []*CMsgClientMMSGetLobbyList_Fi
 	return nil
 }
 
-func (x *CMsgClientMMSGetLobbyList) GetPublicIp() *steammessages_base_proto.CMsgIPAddress {
+func (x *CMsgClientMMSGetLobbyList) GetPublicIp() *CMsgIPAddress {
 	if x != nil {
 		return x.PublicIp
 	}
@@ -4075,7 +4075,7 @@ type CMsgClientMMSSetLobbyGameServer struct {
 	DeprecatedGameServerIp *uint32                                 `protobuf:"varint,3,opt,name=deprecated_game_server_ip,json=deprecatedGameServerIp" json:"deprecated_game_server_ip,omitempty"`
 	GameServerPort         *uint32                                 `protobuf:"varint,4,opt,name=game_server_port,json=gameServerPort" json:"game_server_port,omitempty"`
 	GameServerSteamId      *uint64                                 `protobuf:"fixed64,5,opt,name=game_server_steam_id,json=gameServerSteamId" json:"game_server_steam_id,omitempty"`
-	GameServerIp           *steammessages_base_proto.CMsgIPAddress `protobuf:"bytes,6,opt,name=game_server_ip,json=gameServerIp" json:"game_server_ip,omitempty"`
+	GameServerIp           *CMsgIPAddress `protobuf:"bytes,6,opt,name=game_server_ip,json=gameServerIp" json:"game_server_ip,omitempty"`
 }
 
 func (x *CMsgClientMMSSetLobbyGameServer) Reset() {
@@ -4145,7 +4145,7 @@ func (x *CMsgClientMMSSetLobbyGameServer) GetGameServerSteamId() uint64 {
 	return 0
 }
 
-func (x *CMsgClientMMSSetLobbyGameServer) GetGameServerIp() *steammessages_base_proto.CMsgIPAddress {
+func (x *CMsgClientMMSSetLobbyGameServer) GetGameServerIp() *CMsgIPAddress {
 	if x != nil {
 		return x.GameServerIp
 	}
@@ -4162,7 +4162,7 @@ type CMsgClientMMSLobbyGameServerSet struct {
 	DeprecatedGameServerIp *uint32                                 `protobuf:"varint,3,opt,name=deprecated_game_server_ip,json=deprecatedGameServerIp" json:"deprecated_game_server_ip,omitempty"`
 	GameServerPort         *uint32                                 `protobuf:"varint,4,opt,name=game_server_port,json=gameServerPort" json:"game_server_port,omitempty"`
 	GameServerSteamId      *uint64                                 `protobuf:"fixed64,5,opt,name=game_server_steam_id,json=gameServerSteamId" json:"game_server_steam_id,omitempty"`
-	GameServerIp           *steammessages_base_proto.CMsgIPAddress `protobuf:"bytes,6,opt,name=game_server_ip,json=gameServerIp" json:"game_server_ip,omitempty"`
+	GameServerIp           *CMsgIPAddress `protobuf:"bytes,6,opt,name=game_server_ip,json=gameServerIp" json:"game_server_ip,omitempty"`
 }
 
 func (x *CMsgClientMMSLobbyGameServerSet) Reset() {
@@ -4232,7 +4232,7 @@ func (x *CMsgClientMMSLobbyGameServerSet) GetGameServerSteamId() uint64 {
 	return 0
 }
 
-func (x *CMsgClientMMSLobbyGameServerSet) GetGameServerIp() *steammessages_base_proto.CMsgIPAddress {
+func (x *CMsgClientMMSLobbyGameServerSet) GetGameServerIp() *CMsgIPAddress {
 	if x != nil {
 		return x.GameServerIp
 	}
@@ -7055,7 +7055,7 @@ type CMsgClientRequestEncryptedAppTicketResponse struct {
 
 	AppId              *uint32                                        `protobuf:"varint,1,opt,name=app_id,json=appId" json:"app_id,omitempty"`
 	Eresult            *int32                                         `protobuf:"varint,2,opt,name=eresult,def=2" json:"eresult,omitempty"`
-	EncryptedAppTicket *encrypted_app_ticket_proto.EncryptedAppTicket `protobuf:"bytes,3,opt,name=encrypted_app_ticket,json=encryptedAppTicket" json:"encrypted_app_ticket,omitempty"`
+	EncryptedAppTicket *EncryptedAppTicket `protobuf:"bytes,3,opt,name=encrypted_app_ticket,json=encryptedAppTicket" json:"encrypted_app_ticket,omitempty"`
 }
 
 // Default values for CMsgClientRequestEncryptedAppTicketResponse fields.
@@ -7109,7 +7109,7 @@ func (x *CMsgClientRequestEncryptedAppTicketResponse) GetEresult() int32 {
 	return Default_CMsgClientRequestEncryptedAppTicketResponse_Eresult
 }
 
-func (x *CMsgClientRequestEncryptedAppTicketResponse) GetEncryptedAppTicket() *encrypted_app_ticket_proto.EncryptedAppTicket {
+func (x *CMsgClientRequestEncryptedAppTicketResponse) GetEncryptedAppTicket() *EncryptedAppTicket {
 	if x != nil {
 		return x.EncryptedAppTicket
 	}
@@ -8953,7 +8953,7 @@ type CMsgGSPlayerList_Player struct {
 	SteamId            *uint64                                 `protobuf:"varint,1,opt,name=steam_id,json=steamId" json:"steam_id,omitempty"`
 	DeprecatedPublicIp *uint32                                 `protobuf:"varint,2,opt,name=deprecated_public_ip,json=deprecatedPublicIp" json:"deprecated_public_ip,omitempty"`
 	Token              []byte                                  `protobuf:"bytes,3,opt,name=token" json:"token,omitempty"`
-	PublicIp           *steammessages_base_proto.CMsgIPAddress `protobuf:"bytes,4,opt,name=public_ip,json=publicIp" json:"public_ip,omitempty"`
+	PublicIp           *CMsgIPAddress `protobuf:"bytes,4,opt,name=public_ip,json=publicIp" json:"public_ip,omitempty"`
 }
 
 func (x *CMsgGSPlayerList_Player) Reset() {
@@ -9009,7 +9009,7 @@ func (x *CMsgGSPlayerList_Player) GetToken() []byte {
 	return nil
 }
 
-func (x *CMsgGSPlayerList_Player) GetPublicIp() *steammessages_base_proto.CMsgIPAddress {
+func (x *CMsgGSPlayerList_Player) GetPublicIp() *CMsgIPAddress {
 	if x != nil {
 		return x.PublicIp
 	}
@@ -9043,7 +9043,7 @@ type CMsgClientGamesPlayed_GamePlayed struct {
 	ControllerWorkshopFileId     *uint64                                 `protobuf:"varint,20,opt,name=controller_workshop_file_id,json=controllerWorkshopFileId,def=0" json:"controller_workshop_file_id,omitempty"`
 	LaunchSource                 *uint32                                 `protobuf:"varint,21,opt,name=launch_source,json=launchSource,def=0" json:"launch_source,omitempty"`
 	VrHmdRuntime                 *uint32                                 `protobuf:"varint,22,opt,name=vr_hmd_runtime,json=vrHmdRuntime" json:"vr_hmd_runtime,omitempty"`
-	GameIpAddress                *steammessages_base_proto.CMsgIPAddress `protobuf:"bytes,23,opt,name=game_ip_address,json=gameIpAddress" json:"game_ip_address,omitempty"`
+	GameIpAddress                *CMsgIPAddress `protobuf:"bytes,23,opt,name=game_ip_address,json=gameIpAddress" json:"game_ip_address,omitempty"`
 	ControllerConnectionType     *uint32                                 `protobuf:"varint,24,opt,name=controller_connection_type,json=controllerConnectionType,def=0" json:"controller_connection_type,omitempty"`
 }
 
@@ -9244,7 +9244,7 @@ func (x *CMsgClientGamesPlayed_GamePlayed) GetVrHmdRuntime() uint32 {
 	return 0
 }
 
-func (x *CMsgClientGamesPlayed_GamePlayed) GetGameIpAddress() *steammessages_base_proto.CMsgIPAddress {
+func (x *CMsgClientGamesPlayed_GamePlayed) GetGameIpAddress() *CMsgIPAddress {
 	if x != nil {
 		return x.GameIpAddress
 	}
@@ -14599,9 +14599,9 @@ var file_steammessages_clientserver_proto_goTypes = []interface{}{
 	(*CMsgClientClanState_NameInfo)(nil),                                             // 171: CMsgClientClanState.NameInfo
 	(*CMsgClientClanState_UserCounts)(nil),                                           // 172: CMsgClientClanState.UserCounts
 	(*CMsgClientClanState_Event)(nil),                                                // 173: CMsgClientClanState.Event
-	(*steammessages_base_proto.CMsgIPAddress)(nil),                                   // 174: CMsgIPAddress
-	(*steammessages_base_proto.CMsgAuthTicket)(nil),                                  // 175: CMsgAuthTicket
-	(*encrypted_app_ticket_proto.EncryptedAppTicket)(nil),                            // 176: EncryptedAppTicket
+	(*CMsgIPAddress)(nil),                                   // 174: CMsgIPAddress
+	(*CMsgAuthTicket)(nil),                                  // 175: CMsgAuthTicket
+	(*EncryptedAppTicket)(nil),                            // 176: EncryptedAppTicket
 }
 var file_steammessages_clientserver_proto_depIdxs = []int32{
 	129, // 0: CMsgGSPlayerList.players:type_name -> CMsgGSPlayerList.Player

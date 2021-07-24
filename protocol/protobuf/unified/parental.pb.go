@@ -7,7 +7,7 @@
 package unified
 
 import (
-	steammessages_unified_base_steamclient_proto "Protobufs/steam/steammessages_unified_base.steamclient.proto"
+	
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -1717,7 +1717,7 @@ var file_steammessages_parental_steamclient_proto_goTypes = []interface{}{
 	(*CParental_ParentalSettingsChange_Notification)(nil),           // 22: CParental_ParentalSettingsChange_Notification
 	(*CParental_ParentalUnlock_Notification)(nil),                   // 23: CParental_ParentalUnlock_Notification
 	(*CParental_ParentalLock_Notification)(nil),                     // 24: CParental_ParentalLock_Notification
-	(*steammessages_unified_base_steamclient_proto.NoResponse)(nil), // 25: NoResponse
+	(*NoResponse)(nil), // 25: NoResponse
 }
 var file_steammessages_parental_steamclient_proto_depIdxs = []int32{
 	0,  // 0: ParentalSettings.applist_base:type_name -> ParentalApp

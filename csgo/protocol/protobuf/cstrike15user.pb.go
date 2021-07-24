@@ -7,11 +7,11 @@
 package protobuf
 
 import (
-	cstrike15_gcmessages_proto "Protobufs/csgo/cstrike15_gcmessages.proto"
-	netmessages_proto "Protobufs/csgo/netmessages.proto"
+	
+	
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	_ "google.golang.org/protobuf/types/known/descriptorpb/descriptor.proto"
+	
 	reflect "reflect"
 	sync "sync"
 )
@@ -757,9 +757,9 @@ type CCSUsrMsg_HudMsg struct {
 	unknownFields protoimpl.UnknownFields
 
 	Channel     *int32                          `protobuf:"varint,1,opt,name=channel" json:"channel,omitempty"`
-	Pos         *netmessages_proto.CMsgVector2D `protobuf:"bytes,2,opt,name=pos" json:"pos,omitempty"`
-	Clr1        *netmessages_proto.CMsgRGBA     `protobuf:"bytes,3,opt,name=clr1" json:"clr1,omitempty"`
-	Clr2        *netmessages_proto.CMsgRGBA     `protobuf:"bytes,4,opt,name=clr2" json:"clr2,omitempty"`
+	Pos         *CMsgVector2D `protobuf:"bytes,2,opt,name=pos" json:"pos,omitempty"`
+	Clr1        *CMsgRGBA     `protobuf:"bytes,3,opt,name=clr1" json:"clr1,omitempty"`
+	Clr2        *CMsgRGBA     `protobuf:"bytes,4,opt,name=clr2" json:"clr2,omitempty"`
 	Effect      *int32                          `protobuf:"varint,5,opt,name=effect" json:"effect,omitempty"`
 	FadeInTime  *float32                        `protobuf:"fixed32,6,opt,name=fade_in_time,json=fadeInTime" json:"fade_in_time,omitempty"`
 	FadeOutTime *float32                        `protobuf:"fixed32,7,opt,name=fade_out_time,json=fadeOutTime" json:"fade_out_time,omitempty"`
@@ -807,21 +807,21 @@ func (x *CCSUsrMsg_HudMsg) GetChannel() int32 {
 	return 0
 }
 
-func (x *CCSUsrMsg_HudMsg) GetPos() *netmessages_proto.CMsgVector2D {
+func (x *CCSUsrMsg_HudMsg) GetPos() *CMsgVector2D {
 	if x != nil {
 		return x.Pos
 	}
 	return nil
 }
 
-func (x *CCSUsrMsg_HudMsg) GetClr1() *netmessages_proto.CMsgRGBA {
+func (x *CCSUsrMsg_HudMsg) GetClr1() *CMsgRGBA {
 	if x != nil {
 		return x.Clr1
 	}
 	return nil
 }
 
-func (x *CCSUsrMsg_HudMsg) GetClr2() *netmessages_proto.CMsgRGBA {
+func (x *CCSUsrMsg_HudMsg) GetClr2() *CMsgRGBA {
 	if x != nil {
 		return x.Clr2
 	}
@@ -949,7 +949,7 @@ type CCSUsrMsg_Fade struct {
 	Duration *int32                      `protobuf:"varint,1,opt,name=duration" json:"duration,omitempty"`
 	HoldTime *int32                      `protobuf:"varint,2,opt,name=hold_time,json=holdTime" json:"hold_time,omitempty"`
 	Flags    *int32                      `protobuf:"varint,3,opt,name=flags" json:"flags,omitempty"`
-	Clr      *netmessages_proto.CMsgRGBA `protobuf:"bytes,4,opt,name=clr" json:"clr,omitempty"`
+	Clr      *CMsgRGBA `protobuf:"bytes,4,opt,name=clr" json:"clr,omitempty"`
 }
 
 func (x *CCSUsrMsg_Fade) Reset() {
@@ -1005,7 +1005,7 @@ func (x *CCSUsrMsg_Fade) GetFlags() int32 {
 	return 0
 }
 
-func (x *CCSUsrMsg_Fade) GetClr() *netmessages_proto.CMsgRGBA {
+func (x *CCSUsrMsg_Fade) GetClr() *CMsgRGBA {
 	if x != nil {
 		return x.Clr
 	}
@@ -1388,7 +1388,7 @@ type CCSUsrMsg_Damage struct {
 	unknownFields protoimpl.UnknownFields
 
 	Amount            *int32                        `protobuf:"varint,1,opt,name=amount" json:"amount,omitempty"`
-	InflictorWorldPos *netmessages_proto.CMsgVector `protobuf:"bytes,2,opt,name=inflictor_world_pos,json=inflictorWorldPos" json:"inflictor_world_pos,omitempty"`
+	InflictorWorldPos *CMsgVector `protobuf:"bytes,2,opt,name=inflictor_world_pos,json=inflictorWorldPos" json:"inflictor_world_pos,omitempty"`
 	VictimEntindex    *int32                        `protobuf:"varint,3,opt,name=victim_entindex,json=victimEntindex" json:"victim_entindex,omitempty"`
 }
 
@@ -1431,7 +1431,7 @@ func (x *CCSUsrMsg_Damage) GetAmount() int32 {
 	return 0
 }
 
-func (x *CCSUsrMsg_Damage) GetInflictorWorldPos() *netmessages_proto.CMsgVector {
+func (x *CCSUsrMsg_Damage) GetInflictorWorldPos() *CMsgVector {
 	if x != nil {
 		return x.InflictorWorldPos
 	}
@@ -1670,7 +1670,7 @@ type CCSUsrMsg_SendPlayerItemDrops struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	EntityUpdates []*cstrike15_gcmessages_proto.CEconItemPreviewDataBlock `protobuf:"bytes,1,rep,name=entity_updates,json=entityUpdates" json:"entity_updates,omitempty"`
+	EntityUpdates []*CEconItemPreviewDataBlock `protobuf:"bytes,1,rep,name=entity_updates,json=entityUpdates" json:"entity_updates,omitempty"`
 }
 
 func (x *CCSUsrMsg_SendPlayerItemDrops) Reset() {
@@ -1705,7 +1705,7 @@ func (*CCSUsrMsg_SendPlayerItemDrops) Descriptor() ([]byte, []int) {
 	return file_cstrike15_usermessages_proto_rawDescGZIP(), []int{21}
 }
 
-func (x *CCSUsrMsg_SendPlayerItemDrops) GetEntityUpdates() []*cstrike15_gcmessages_proto.CEconItemPreviewDataBlock {
+func (x *CCSUsrMsg_SendPlayerItemDrops) GetEntityUpdates() []*CEconItemPreviewDataBlock {
 	if x != nil {
 		return x.EntityUpdates
 	}
@@ -1717,7 +1717,7 @@ type CCSUsrMsg_SendPlayerItemFound struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Iteminfo *cstrike15_gcmessages_proto.CEconItemPreviewDataBlock `protobuf:"bytes,1,opt,name=iteminfo" json:"iteminfo,omitempty"`
+	Iteminfo *CEconItemPreviewDataBlock `protobuf:"bytes,1,opt,name=iteminfo" json:"iteminfo,omitempty"`
 	Entindex *int32                                                `protobuf:"varint,2,opt,name=entindex" json:"entindex,omitempty"`
 }
 
@@ -1753,7 +1753,7 @@ func (*CCSUsrMsg_SendPlayerItemFound) Descriptor() ([]byte, []int) {
 	return file_cstrike15_usermessages_proto_rawDescGZIP(), []int{22}
 }
 
-func (x *CCSUsrMsg_SendPlayerItemFound) GetIteminfo() *cstrike15_gcmessages_proto.CEconItemPreviewDataBlock {
+func (x *CCSUsrMsg_SendPlayerItemFound) GetIteminfo() *CEconItemPreviewDataBlock {
 	if x != nil {
 		return x.Iteminfo
 	}
@@ -2694,7 +2694,7 @@ type CCSUsrMsg_ScoreLeaderboardData struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Data *cstrike15_gcmessages_proto.ScoreLeaderboardData `protobuf:"bytes,1,opt,name=data" json:"data,omitempty"`
+	Data *ScoreLeaderboardData `protobuf:"bytes,1,opt,name=data" json:"data,omitempty"`
 }
 
 func (x *CCSUsrMsg_ScoreLeaderboardData) Reset() {
@@ -2729,7 +2729,7 @@ func (*CCSUsrMsg_ScoreLeaderboardData) Descriptor() ([]byte, []int) {
 	return file_cstrike15_usermessages_proto_rawDescGZIP(), []int{37}
 }
 
-func (x *CCSUsrMsg_ScoreLeaderboardData) GetData() *cstrike15_gcmessages_proto.ScoreLeaderboardData {
+func (x *CCSUsrMsg_ScoreLeaderboardData) GetData() *ScoreLeaderboardData {
 	if x != nil {
 		return x.Data
 	}
@@ -2741,7 +2741,7 @@ type CCSUsrMsg_PlayerDecalDigitalSignature struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Data *cstrike15_gcmessages_proto.PlayerDecalDigitalSignature `protobuf:"bytes,1,opt,name=data" json:"data,omitempty"`
+	Data *PlayerDecalDigitalSignature `protobuf:"bytes,1,opt,name=data" json:"data,omitempty"`
 }
 
 func (x *CCSUsrMsg_PlayerDecalDigitalSignature) Reset() {
@@ -2776,7 +2776,7 @@ func (*CCSUsrMsg_PlayerDecalDigitalSignature) Descriptor() ([]byte, []int) {
 	return file_cstrike15_usermessages_proto_rawDescGZIP(), []int{38}
 }
 
-func (x *CCSUsrMsg_PlayerDecalDigitalSignature) GetData() *cstrike15_gcmessages_proto.PlayerDecalDigitalSignature {
+func (x *CCSUsrMsg_PlayerDecalDigitalSignature) GetData() *PlayerDecalDigitalSignature {
 	if x != nil {
 		return x.Data
 	}
@@ -3355,7 +3355,7 @@ type CCSUsrMsg_XpUpdate struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Data *cstrike15_gcmessages_proto.CMsgGCCstrike15V2_GC2ServerNotifyXPRewarded `protobuf:"bytes,1,opt,name=data" json:"data,omitempty"`
+	Data *CMsgGCCstrike15V2_GC2ServerNotifyXPRewarded `protobuf:"bytes,1,opt,name=data" json:"data,omitempty"`
 }
 
 func (x *CCSUsrMsg_XpUpdate) Reset() {
@@ -3390,7 +3390,7 @@ func (*CCSUsrMsg_XpUpdate) Descriptor() ([]byte, []int) {
 	return file_cstrike15_usermessages_proto_rawDescGZIP(), []int{48}
 }
 
-func (x *CCSUsrMsg_XpUpdate) GetData() *cstrike15_gcmessages_proto.CMsgGCCstrike15V2_GC2ServerNotifyXPRewarded {
+func (x *CCSUsrMsg_XpUpdate) GetData() *CMsgGCCstrike15V2_GC2ServerNotifyXPRewarded {
 	if x != nil {
 		return x.Data
 	}
@@ -5090,7 +5090,7 @@ type CCSUsrMsg_EndOfMatchAllPlayersData_PlayerData struct {
 	Name        *string                                                 `protobuf:"bytes,3,opt,name=name" json:"name,omitempty"`
 	Teamnumber  *int32                                                  `protobuf:"varint,4,opt,name=teamnumber" json:"teamnumber,omitempty"`
 	Nomination  *CCSUsrMsg_EndOfMatchAllPlayersData_Accolade            `protobuf:"bytes,5,opt,name=nomination" json:"nomination,omitempty"`
-	Items       []*cstrike15_gcmessages_proto.CEconItemPreviewDataBlock `protobuf:"bytes,6,rep,name=items" json:"items,omitempty"`
+	Items       []*CEconItemPreviewDataBlock `protobuf:"bytes,6,rep,name=items" json:"items,omitempty"`
 	Playercolor *int32                                                  `protobuf:"varint,7,opt,name=playercolor" json:"playercolor,omitempty"`
 	Isbot       *bool                                                   `protobuf:"varint,8,opt,name=isbot" json:"isbot,omitempty"`
 }
@@ -5162,7 +5162,7 @@ func (x *CCSUsrMsg_EndOfMatchAllPlayersData_PlayerData) GetNomination() *CCSUsrM
 	return nil
 }
 
-func (x *CCSUsrMsg_EndOfMatchAllPlayersData_PlayerData) GetItems() []*cstrike15_gcmessages_proto.CEconItemPreviewDataBlock {
+func (x *CCSUsrMsg_EndOfMatchAllPlayersData_PlayerData) GetItems() []*CEconItemPreviewDataBlock {
 	if x != nil {
 		return x.Items
 	}
@@ -5956,13 +5956,13 @@ var file_cstrike15_usermessages_proto_goTypes = []interface{}{
 	(*CCSUsrMsg_SurvivalStats_Damage)(nil),                                         // 78: CCSUsrMsg_SurvivalStats.Damage
 	(*CCSUsrMsg_EndOfMatchAllPlayersData_Accolade)(nil),                            // 79: CCSUsrMsg_EndOfMatchAllPlayersData.Accolade
 	(*CCSUsrMsg_EndOfMatchAllPlayersData_PlayerData)(nil),                          // 80: CCSUsrMsg_EndOfMatchAllPlayersData.PlayerData
-	(*netmessages_proto.CMsgVector2D)(nil),                                         // 81: CMsgVector2D
-	(*netmessages_proto.CMsgRGBA)(nil),                                             // 82: CMsgRGBA
-	(*netmessages_proto.CMsgVector)(nil),                                           // 83: CMsgVector
-	(*cstrike15_gcmessages_proto.CEconItemPreviewDataBlock)(nil),                   // 84: CEconItemPreviewDataBlock
-	(*cstrike15_gcmessages_proto.ScoreLeaderboardData)(nil),                        // 85: ScoreLeaderboardData
-	(*cstrike15_gcmessages_proto.PlayerDecalDigitalSignature)(nil),                 // 86: PlayerDecalDigitalSignature
-	(*cstrike15_gcmessages_proto.CMsgGCCstrike15V2_GC2ServerNotifyXPRewarded)(nil), // 87: CMsgGCCstrike15_v2_GC2ServerNotifyXPRewarded
+	(*CMsgVector2D)(nil),                                         // 81: CMsgVector2D
+	(*CMsgRGBA)(nil),                                             // 82: CMsgRGBA
+	(*CMsgVector)(nil),                                           // 83: CMsgVector
+	(*CEconItemPreviewDataBlock)(nil),                   // 84: CEconItemPreviewDataBlock
+	(*ScoreLeaderboardData)(nil),                        // 85: ScoreLeaderboardData
+	(*PlayerDecalDigitalSignature)(nil),                 // 86: PlayerDecalDigitalSignature
+	(*CMsgGCCstrike15V2_GC2ServerNotifyXPRewarded)(nil), // 87: CMsgGCCstrike15_v2_GC2ServerNotifyXPRewarded
 }
 var file_cstrike15_usermessages_proto_depIdxs = []int32{
 	71, // 0: CCSUsrMsg_VGUIMenu.subkeys:type_name -> CCSUsrMsg_VGUIMenu.Subkey

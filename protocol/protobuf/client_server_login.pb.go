@@ -7,7 +7,7 @@
 package protobuf
 
 import (
-	steammessages_base_proto "Protobufs/steam/steammessages_base.proto"
+	
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -255,11 +255,11 @@ type CMsgClientLogon struct {
 	ShouldRememberPassword            *bool                                   `protobuf:"varint,8,opt,name=should_remember_password,json=shouldRememberPassword,def=0" json:"should_remember_password,omitempty"`
 	WineVersion                       *string                                 `protobuf:"bytes,9,opt,name=wine_version,json=wineVersion" json:"wine_version,omitempty"`
 	Deprecated_10                     *uint32                                 `protobuf:"varint,10,opt,name=deprecated_10,json=deprecated10" json:"deprecated_10,omitempty"`
-	ObfuscatedPrivateIp               *steammessages_base_proto.CMsgIPAddress `protobuf:"bytes,11,opt,name=obfuscated_private_ip,json=obfuscatedPrivateIp" json:"obfuscated_private_ip,omitempty"`
+	ObfuscatedPrivateIp               *CMsgIPAddress `protobuf:"bytes,11,opt,name=obfuscated_private_ip,json=obfuscatedPrivateIp" json:"obfuscated_private_ip,omitempty"`
 	DeprecatedPublicIp                *uint32                                 `protobuf:"varint,20,opt,name=deprecated_public_ip,json=deprecatedPublicIp" json:"deprecated_public_ip,omitempty"`
 	QosLevel                          *uint32                                 `protobuf:"varint,21,opt,name=qos_level,json=qosLevel" json:"qos_level,omitempty"`
 	ClientSuppliedSteamId             *uint64                                 `protobuf:"fixed64,22,opt,name=client_supplied_steam_id,json=clientSuppliedSteamId" json:"client_supplied_steam_id,omitempty"`
-	PublicIp                          *steammessages_base_proto.CMsgIPAddress `protobuf:"bytes,23,opt,name=public_ip,json=publicIp" json:"public_ip,omitempty"`
+	PublicIp                          *CMsgIPAddress `protobuf:"bytes,23,opt,name=public_ip,json=publicIp" json:"public_ip,omitempty"`
 	MachineId                         []byte                                  `protobuf:"bytes,30,opt,name=machine_id,json=machineId" json:"machine_id,omitempty"`
 	LauncherType                      *uint32                                 `protobuf:"varint,31,opt,name=launcher_type,json=launcherType,def=0" json:"launcher_type,omitempty"`
 	UiMode                            *uint32                                 `protobuf:"varint,32,opt,name=ui_mode,json=uiMode,def=0" json:"ui_mode,omitempty"`
@@ -412,7 +412,7 @@ func (x *CMsgClientLogon) GetDeprecated_10() uint32 {
 	return 0
 }
 
-func (x *CMsgClientLogon) GetObfuscatedPrivateIp() *steammessages_base_proto.CMsgIPAddress {
+func (x *CMsgClientLogon) GetObfuscatedPrivateIp() *CMsgIPAddress {
 	if x != nil {
 		return x.ObfuscatedPrivateIp
 	}
@@ -440,7 +440,7 @@ func (x *CMsgClientLogon) GetClientSuppliedSteamId() uint64 {
 	return 0
 }
 
-func (x *CMsgClientLogon) GetPublicIp() *steammessages_base_proto.CMsgIPAddress {
+func (x *CMsgClientLogon) GetPublicIp() *CMsgIPAddress {
 	if x != nil {
 		return x.PublicIp
 	}
@@ -732,7 +732,7 @@ type CMsgClientLogonResponse struct {
 	CellIdPingThreshold         *uint32                                 `protobuf:"varint,12,opt,name=cell_id_ping_threshold,json=cellIdPingThreshold" json:"cell_id_ping_threshold,omitempty"`
 	DeprecatedUsePics           *bool                                   `protobuf:"varint,13,opt,name=deprecated_use_pics,json=deprecatedUsePics" json:"deprecated_use_pics,omitempty"`
 	VanityUrl                   *string                                 `protobuf:"bytes,14,opt,name=vanity_url,json=vanityUrl" json:"vanity_url,omitempty"`
-	PublicIp                    *steammessages_base_proto.CMsgIPAddress `protobuf:"bytes,15,opt,name=public_ip,json=publicIp" json:"public_ip,omitempty"`
+	PublicIp                    *CMsgIPAddress `protobuf:"bytes,15,opt,name=public_ip,json=publicIp" json:"public_ip,omitempty"`
 	ClientSuppliedSteamid       *uint64                                 `protobuf:"fixed64,20,opt,name=client_supplied_steamid,json=clientSuppliedSteamid" json:"client_supplied_steamid,omitempty"`
 	IpCountryCode               *string                                 `protobuf:"bytes,21,opt,name=ip_country_code,json=ipCountryCode" json:"ip_country_code,omitempty"`
 	ParentalSettings            []byte                                  `protobuf:"bytes,22,opt,name=parental_settings,json=parentalSettings" json:"parental_settings,omitempty"`
@@ -879,7 +879,7 @@ func (x *CMsgClientLogonResponse) GetVanityUrl() string {
 	return ""
 }
 
-func (x *CMsgClientLogonResponse) GetPublicIp() *steammessages_base_proto.CMsgIPAddress {
+func (x *CMsgClientLogonResponse) GetPublicIp() *CMsgIPAddress {
 	if x != nil {
 		return x.PublicIp
 	}
@@ -1859,7 +1859,7 @@ var file_steammessages_clientserver_login_proto_goTypes = []interface{}{
 	(*CMsgClientAccountInfo)(nil),                                // 12: CMsgClientAccountInfo
 	(*CMsgClientChallengeRequest)(nil),                           // 13: CMsgClientChallengeRequest
 	(*CMsgClientChallengeResponse)(nil),                          // 14: CMsgClientChallengeResponse
-	(*steammessages_base_proto.CMsgIPAddress)(nil),               // 15: CMsgIPAddress
+	(*CMsgIPAddress)(nil),               // 15: CMsgIPAddress
 }
 var file_steammessages_clientserver_login_proto_depIdxs = []int32{
 	15, // 0: CMsgClientLogon.obfuscated_private_ip:type_name -> CMsgIPAddress

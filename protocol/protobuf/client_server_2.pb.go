@@ -7,7 +7,7 @@
 package protobuf
 
 import (
-	steammessages_base_proto "Protobufs/steam/steammessages_base.proto"
+	
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -4868,7 +4868,7 @@ type CMsgGameServerData struct {
 	GamePort        *uint32                                 `protobuf:"varint,4,opt,name=game_port,json=gamePort" json:"game_port,omitempty"`
 	SourcetvPort    *uint32                                 `protobuf:"varint,5,opt,name=sourcetv_port,json=sourcetvPort" json:"sourcetv_port,omitempty"`
 	Name            *string                                 `protobuf:"bytes,22,opt,name=name" json:"name,omitempty"`
-	GameIpAddress   *steammessages_base_proto.CMsgIPAddress `protobuf:"bytes,23,opt,name=game_ip_address,json=gameIpAddress" json:"game_ip_address,omitempty"`
+	GameIpAddress   *CMsgIPAddress `protobuf:"bytes,23,opt,name=game_ip_address,json=gameIpAddress" json:"game_ip_address,omitempty"`
 	AppId           *uint32                                 `protobuf:"varint,6,opt,name=app_id,json=appId" json:"app_id,omitempty"`
 	Gamedir         *string                                 `protobuf:"bytes,7,opt,name=gamedir" json:"gamedir,omitempty"`
 	Version         *string                                 `protobuf:"bytes,8,opt,name=version" json:"version,omitempty"`
@@ -4961,7 +4961,7 @@ func (x *CMsgGameServerData) GetName() string {
 	return ""
 }
 
-func (x *CMsgGameServerData) GetGameIpAddress() *steammessages_base_proto.CMsgIPAddress {
+func (x *CMsgGameServerData) GetGameIpAddress() *CMsgIPAddress {
 	if x != nil {
 		return x.GameIpAddress
 	}
@@ -5088,7 +5088,7 @@ type CMsgGameServerRemove struct {
 	SteamId      *uint64                                 `protobuf:"fixed64,1,opt,name=steam_id,json=steamId" json:"steam_id,omitempty"`
 	DeprecatedIp *uint32                                 `protobuf:"varint,2,opt,name=deprecated_ip,json=deprecatedIp" json:"deprecated_ip,omitempty"`
 	QueryPort    *uint32                                 `protobuf:"varint,3,opt,name=query_port,json=queryPort" json:"query_port,omitempty"`
-	Ip           *steammessages_base_proto.CMsgIPAddress `protobuf:"bytes,4,opt,name=ip" json:"ip,omitempty"`
+	Ip           *CMsgIPAddress `protobuf:"bytes,4,opt,name=ip" json:"ip,omitempty"`
 }
 
 func (x *CMsgGameServerRemove) Reset() {
@@ -5144,7 +5144,7 @@ func (x *CMsgGameServerRemove) GetQueryPort() uint32 {
 	return 0
 }
 
-func (x *CMsgGameServerRemove) GetIp() *steammessages_base_proto.CMsgIPAddress {
+func (x *CMsgGameServerRemove) GetIp() *CMsgIPAddress {
 	if x != nil {
 		return x.Ip
 	}
@@ -11174,7 +11174,7 @@ type CMsgGMSClientServerQueryResponse_Server struct {
 	DeprecatedServerIp *uint32                                 `protobuf:"varint,1,opt,name=deprecated_server_ip,json=deprecatedServerIp" json:"deprecated_server_ip,omitempty"`
 	ServerPort         *uint32                                 `protobuf:"varint,2,opt,name=server_port,json=serverPort" json:"server_port,omitempty"`
 	AuthPlayers        *uint32                                 `protobuf:"varint,3,opt,name=auth_players,json=authPlayers" json:"auth_players,omitempty"`
-	ServerIp           *steammessages_base_proto.CMsgIPAddress `protobuf:"bytes,4,opt,name=server_ip,json=serverIp" json:"server_ip,omitempty"`
+	ServerIp           *CMsgIPAddress `protobuf:"bytes,4,opt,name=server_ip,json=serverIp" json:"server_ip,omitempty"`
 }
 
 func (x *CMsgGMSClientServerQueryResponse_Server) Reset() {
@@ -11230,7 +11230,7 @@ func (x *CMsgGMSClientServerQueryResponse_Server) GetAuthPlayers() uint32 {
 	return 0
 }
 
-func (x *CMsgGMSClientServerQueryResponse_Server) GetServerIp() *steammessages_base_proto.CMsgIPAddress {
+func (x *CMsgGMSClientServerQueryResponse_Server) GetServerIp() *CMsgIPAddress {
 	if x != nil {
 		return x.ServerIp
 	}
@@ -14072,7 +14072,7 @@ var file_steammessages_clientserver_2_proto_goTypes = []interface{}{
 	(*CMsgClientGetAuthorizedDevicesResponse_AuthorizedDevice)(nil),                      // 174: CMsgClientGetAuthorizedDevicesResponse.AuthorizedDevice
 	(*CMsgClientSharedLibraryLockStatus_LockedLibrary)(nil),                              // 175: CMsgClientSharedLibraryLockStatus.LockedLibrary
 	(*CMsgClientSharedLibraryStopPlaying_StopApp)(nil),                                   // 176: CMsgClientSharedLibraryStopPlaying.StopApp
-	(*steammessages_base_proto.CMsgIPAddress)(nil),                                       // 177: CMsgIPAddress
+	(*CMsgIPAddress)(nil),                                       // 177: CMsgIPAddress
 }
 var file_steammessages_clientserver_2_proto_depIdxs = []int32{
 	146, // 0: CMsgClientUCMAddScreenshot.tag:type_name -> CMsgClientUCMAddScreenshot.Tag

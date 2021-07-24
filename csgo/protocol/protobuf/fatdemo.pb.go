@@ -7,7 +7,7 @@
 package protobuf
 
 import (
-	netmessages_proto "Protobufs/csgo/netmessages.proto"
+	
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -641,9 +641,9 @@ type MLPlayerState struct {
 	Name        *string                       `protobuf:"bytes,4,opt,name=name" json:"name,omitempty"`
 	Clan        *string                       `protobuf:"bytes,5,opt,name=clan" json:"clan,omitempty"`
 	Team        *ETeam                        `protobuf:"varint,6,opt,name=team,enum=ETeam,def=0" json:"team,omitempty"`
-	Abspos      *netmessages_proto.CMsgVector `protobuf:"bytes,7,opt,name=abspos" json:"abspos,omitempty"`
-	Eyeangle    *netmessages_proto.CMsgQAngle `protobuf:"bytes,8,opt,name=eyeangle" json:"eyeangle,omitempty"`
-	EyeangleFwd *netmessages_proto.CMsgVector `protobuf:"bytes,9,opt,name=eyeangle_fwd,json=eyeangleFwd" json:"eyeangle_fwd,omitempty"`
+	Abspos      *CMsgVector `protobuf:"bytes,7,opt,name=abspos" json:"abspos,omitempty"`
+	Eyeangle    *CMsgQAngle `protobuf:"bytes,8,opt,name=eyeangle" json:"eyeangle,omitempty"`
+	EyeangleFwd *CMsgVector `protobuf:"bytes,9,opt,name=eyeangle_fwd,json=eyeangleFwd" json:"eyeangle_fwd,omitempty"`
 	Health      *int32                        `protobuf:"varint,10,opt,name=health" json:"health,omitempty"`
 	Armor       *int32                        `protobuf:"varint,11,opt,name=armor" json:"armor,omitempty"`
 	Flashed     *float32                      `protobuf:"fixed32,12,opt,name=flashed" json:"flashed,omitempty"`
@@ -736,21 +736,21 @@ func (x *MLPlayerState) GetTeam() ETeam {
 	return Default_MLPlayerState_Team
 }
 
-func (x *MLPlayerState) GetAbspos() *netmessages_proto.CMsgVector {
+func (x *MLPlayerState) GetAbspos() *CMsgVector {
 	if x != nil {
 		return x.Abspos
 	}
 	return nil
 }
 
-func (x *MLPlayerState) GetEyeangle() *netmessages_proto.CMsgQAngle {
+func (x *MLPlayerState) GetEyeangle() *CMsgQAngle {
 	if x != nil {
 		return x.Eyeangle
 	}
 	return nil
 }
 
-func (x *MLPlayerState) GetEyeangleFwd() *netmessages_proto.CMsgVector {
+func (x *MLPlayerState) GetEyeangleFwd() *CMsgVector {
 	if x != nil {
 		return x.EyeangleFwd
 	}
@@ -1202,8 +1202,8 @@ var file_fatdemo_proto_goTypes = []interface{}{
 	(*MLGameState)(nil),                  // 9: MLGameState
 	(*MLDemoHeader)(nil),                 // 10: MLDemoHeader
 	(*MLTick)(nil),                       // 11: MLTick
-	(*netmessages_proto.CMsgVector)(nil), // 12: CMsgVector
-	(*netmessages_proto.CMsgQAngle)(nil), // 13: CMsgQAngle
+	(*CMsgVector)(nil), // 12: CMsgVector
+	(*CMsgQAngle)(nil), // 13: CMsgQAngle
 }
 var file_fatdemo_proto_depIdxs = []int32{
 	3,  // 0: MLEvent.data:type_name -> MLDict

@@ -7,7 +7,7 @@
 package protobuf
 
 import (
-	steammessages_proto "Protobufs/dota2/steammessages.proto"
+	
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -2247,7 +2247,7 @@ type CMsgGCToGCForwardAccountDetails struct {
 	unknownFields protoimpl.UnknownFields
 
 	Steamid        *uint64                                                      `protobuf:"fixed64,1,opt,name=steamid" json:"steamid,omitempty"`
-	AccountDetails *steammessages_proto.CGCSystemMsg_GetAccountDetails_Response `protobuf:"bytes,2,opt,name=account_details,json=accountDetails" json:"account_details,omitempty"`
+	AccountDetails *CGCSystemMsg_GetAccountDetails_Response `protobuf:"bytes,2,opt,name=account_details,json=accountDetails" json:"account_details,omitempty"`
 	AgeSeconds     *uint32                                                      `protobuf:"varint,3,opt,name=age_seconds,json=ageSeconds" json:"age_seconds,omitempty"`
 }
 
@@ -2290,7 +2290,7 @@ func (x *CMsgGCToGCForwardAccountDetails) GetSteamid() uint64 {
 	return 0
 }
 
-func (x *CMsgGCToGCForwardAccountDetails) GetAccountDetails() *steammessages_proto.CGCSystemMsg_GetAccountDetails_Response {
+func (x *CMsgGCToGCForwardAccountDetails) GetAccountDetails() *CGCSystemMsg_GetAccountDetails_Response {
 	if x != nil {
 		return x.AccountDetails
 	}
@@ -5402,7 +5402,7 @@ var file_gcsdk_gcmessages_proto_goTypes = []interface{}{
 	(*CMsgSerializedSOCache_TypeCache)(nil),                                          // 67: CMsgSerializedSOCache.TypeCache
 	(*CMsgSerializedSOCache_Cache)(nil),                                              // 68: CMsgSerializedSOCache.Cache
 	(*CMsgSerializedSOCache_Cache_Version)(nil),                                      // 69: CMsgSerializedSOCache.Cache.Version
-	(*steammessages_proto.CGCSystemMsg_GetAccountDetails_Response)(nil),              // 70: CGCSystemMsg_GetAccountDetails_Response
+	(*CGCSystemMsg_GetAccountDetails_Response)(nil),              // 70: CGCSystemMsg_GetAccountDetails_Response
 }
 var file_gcsdk_gcmessages_proto_depIdxs = []int32{
 	4,  // 0: CMsgSOSingleObject.owner_soid:type_name -> CMsgSOIDOwner

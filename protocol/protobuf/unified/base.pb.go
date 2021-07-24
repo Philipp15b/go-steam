@@ -9,7 +9,7 @@ package unified
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	descriptor_proto "google.golang.org/protobuf/types/known/descriptorpb/descriptor.proto"
+	
 	reflect "reflect"
 	sync "sync"
 )
@@ -117,7 +117,7 @@ func (*NoResponse) Descriptor() ([]byte, []int) {
 
 var file_steammessages_unified_base_steamclient_proto_extTypes = []protoimpl.ExtensionInfo{
 	{
-		ExtendedType:  (*descriptor_proto.FieldOptions)(nil),
+		ExtendedType:  (*FieldOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50000,
 		Name:          "description",
@@ -125,7 +125,7 @@ var file_steammessages_unified_base_steamclient_proto_extTypes = []protoimpl.Ext
 		Filename:      "steammessages_unified_base.steamclient.proto",
 	},
 	{
-		ExtendedType:  (*descriptor_proto.ServiceOptions)(nil),
+		ExtendedType:  (*ServiceOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50000,
 		Name:          "service_description",
@@ -133,7 +133,7 @@ var file_steammessages_unified_base_steamclient_proto_extTypes = []protoimpl.Ext
 		Filename:      "steammessages_unified_base.steamclient.proto",
 	},
 	{
-		ExtendedType:  (*descriptor_proto.ServiceOptions)(nil),
+		ExtendedType:  (*ServiceOptions)(nil),
 		ExtensionType: (*EProtoExecutionSite)(nil),
 		Field:         50008,
 		Name:          "service_execution_site",
@@ -141,7 +141,7 @@ var file_steammessages_unified_base_steamclient_proto_extTypes = []protoimpl.Ext
 		Filename:      "steammessages_unified_base.steamclient.proto",
 	},
 	{
-		ExtendedType:  (*descriptor_proto.MethodOptions)(nil),
+		ExtendedType:  (*MethodOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50000,
 		Name:          "method_description",
@@ -149,7 +149,7 @@ var file_steammessages_unified_base_steamclient_proto_extTypes = []protoimpl.Ext
 		Filename:      "steammessages_unified_base.steamclient.proto",
 	},
 	{
-		ExtendedType:  (*descriptor_proto.EnumOptions)(nil),
+		ExtendedType:  (*EnumOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50000,
 		Name:          "enum_description",
@@ -157,7 +157,7 @@ var file_steammessages_unified_base_steamclient_proto_extTypes = []protoimpl.Ext
 		Filename:      "steammessages_unified_base.steamclient.proto",
 	},
 	{
-		ExtendedType:  (*descriptor_proto.EnumValueOptions)(nil),
+		ExtendedType:  (*EnumValueOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50000,
 		Name:          "enum_value_description",
@@ -166,13 +166,13 @@ var file_steammessages_unified_base_steamclient_proto_extTypes = []protoimpl.Ext
 	},
 }
 
-// Extension fields to descriptor_proto.FieldOptions.
+// Extension fields to FieldOptions.
 var (
 	// optional string description = 50000;
 	E_Description = &file_steammessages_unified_base_steamclient_proto_extTypes[0]
 )
 
-// Extension fields to descriptor_proto.ServiceOptions.
+// Extension fields to ServiceOptions.
 var (
 	// optional string service_description = 50000;
 	E_ServiceDescription = &file_steammessages_unified_base_steamclient_proto_extTypes[1]
@@ -180,19 +180,19 @@ var (
 	E_ServiceExecutionSite = &file_steammessages_unified_base_steamclient_proto_extTypes[2]
 )
 
-// Extension fields to descriptor_proto.MethodOptions.
+// Extension fields to MethodOptions.
 var (
 	// optional string method_description = 50000;
 	E_MethodDescription = &file_steammessages_unified_base_steamclient_proto_extTypes[3]
 )
 
-// Extension fields to descriptor_proto.EnumOptions.
+// Extension fields to EnumOptions.
 var (
 	// optional string enum_description = 50000;
 	E_EnumDescription = &file_steammessages_unified_base_steamclient_proto_extTypes[4]
 )
 
-// Extension fields to descriptor_proto.EnumValueOptions.
+// Extension fields to EnumValueOptions.
 var (
 	// optional string enum_value_description = 50000;
 	E_EnumValueDescription = &file_steammessages_unified_base_steamclient_proto_extTypes[5]
@@ -266,11 +266,11 @@ var file_steammessages_unified_base_steamclient_proto_msgTypes = make([]protoimp
 var file_steammessages_unified_base_steamclient_proto_goTypes = []interface{}{
 	(EProtoExecutionSite)(0),                  // 0: EProtoExecutionSite
 	(*NoResponse)(nil),                        // 1: NoResponse
-	(*descriptor_proto.FieldOptions)(nil),     // 2: google.protobuf.FieldOptions
-	(*descriptor_proto.ServiceOptions)(nil),   // 3: google.protobuf.ServiceOptions
-	(*descriptor_proto.MethodOptions)(nil),    // 4: google.protobuf.MethodOptions
-	(*descriptor_proto.EnumOptions)(nil),      // 5: google.protobuf.EnumOptions
-	(*descriptor_proto.EnumValueOptions)(nil), // 6: google.protobuf.EnumValueOptions
+	(*FieldOptions)(nil),     // 2: google.protobuf.FieldOptions
+	(*ServiceOptions)(nil),   // 3: google.protobuf.ServiceOptions
+	(*MethodOptions)(nil),    // 4: google.protobuf.MethodOptions
+	(*EnumOptions)(nil),      // 5: google.protobuf.EnumOptions
+	(*EnumValueOptions)(nil), // 6: google.protobuf.EnumValueOptions
 }
 var file_steammessages_unified_base_steamclient_proto_depIdxs = []int32{
 	2, // 0: description:extendee -> google.protobuf.FieldOptions

@@ -7,8 +7,8 @@
 package protobuf
 
 import (
-	base_gcmessages_proto "Protobufs/tf2/base_gcmessages.proto"
-	_ "Protobufs/tf2/steammessages.proto"
+	
+	
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -11036,7 +11036,7 @@ type CEconItemPreviewDataBlock struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Econitem *base_gcmessages_proto.CSOEconItem `protobuf:"bytes,1,opt,name=econitem" json:"econitem,omitempty"`
+	Econitem *CSOEconItem `protobuf:"bytes,1,opt,name=econitem" json:"econitem,omitempty"`
 }
 
 func (x *CEconItemPreviewDataBlock) Reset() {
@@ -11071,7 +11071,7 @@ func (*CEconItemPreviewDataBlock) Descriptor() ([]byte, []int) {
 	return file_tf_gcmessages_proto_rawDescGZIP(), []int{135}
 }
 
-func (x *CEconItemPreviewDataBlock) GetEconitem() *base_gcmessages_proto.CSOEconItem {
+func (x *CEconItemPreviewDataBlock) GetEconitem() *CSOEconItem {
 	if x != nil {
 		return x.Econitem
 	}
@@ -18109,7 +18109,7 @@ var file_tf_gcmessages_proto_goTypes = []interface{}{
 	(*CMsgGC_DailyCompetitiveStatsRollup_Response_RankBucketEntry)(nil),                             // 217: CMsgGC_DailyCompetitiveStatsRollup_Response.RankBucketEntry
 	(*CMsgGCDataCenterPing_Update_PingEntry)(nil),                                                   // 218: CMsgGCDataCenterPing_Update.PingEntry
 	(*CMsgGCChangeMatchPlayerTeamsRequest_Member)(nil),                                              // 219: CMsgGCChangeMatchPlayerTeamsRequest.Member
-	(*base_gcmessages_proto.CSOEconItem)(nil),                                                       // 220: CSOEconItem
+	(*CSOEconItem)(nil),                                                       // 220: CSOEconItem
 }
 var file_tf_gcmessages_proto_depIdxs = []int32{
 	3,   // 0: CMsgTFWorldStatus.event_match_group:type_name -> ETFMatchGroup

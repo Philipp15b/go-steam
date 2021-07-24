@@ -9,7 +9,7 @@ package protobuf
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	descriptor_proto "google.golang.org/protobuf/types/known/descriptorpb/descriptor.proto"
+	
 	reflect "reflect"
 	sync "sync"
 )
@@ -253,7 +253,7 @@ func (ENetworkDisconnectionReason) EnumDescriptor() ([]byte, []int) {
 
 var file_network_connection_proto_extTypes = []protoimpl.ExtensionInfo{
 	{
-		ExtendedType:  (*descriptor_proto.EnumValueOptions)(nil),
+		ExtendedType:  (*EnumValueOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         50500,
 		Name:          "network_connection_token",
@@ -262,7 +262,7 @@ var file_network_connection_proto_extTypes = []protoimpl.ExtensionInfo{
 	},
 }
 
-// Extension fields to descriptor_proto.EnumValueOptions.
+// Extension fields to EnumValueOptions.
 var (
 	// optional string network_connection_token = 50500;
 	E_NetworkConnectionToken = &file_network_connection_proto_extTypes[0]
@@ -595,7 +595,7 @@ func file_network_connection_proto_rawDescGZIP() []byte {
 var file_network_connection_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_network_connection_proto_goTypes = []interface{}{
 	(ENetworkDisconnectionReason)(0),          // 0: ENetworkDisconnectionReason
-	(*descriptor_proto.EnumValueOptions)(nil), // 1: google.protobuf.EnumValueOptions
+	(*EnumValueOptions)(nil), // 1: google.protobuf.EnumValueOptions
 }
 var file_network_connection_proto_depIdxs = []int32{
 	1, // 0: network_connection_token:extendee -> google.protobuf.EnumValueOptions

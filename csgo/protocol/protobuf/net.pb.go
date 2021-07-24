@@ -9,7 +9,7 @@ package protobuf
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	_ "google.golang.org/protobuf/types/known/descriptorpb/descriptor.proto"
+	
 	reflect "reflect"
 	sync "sync"
 )

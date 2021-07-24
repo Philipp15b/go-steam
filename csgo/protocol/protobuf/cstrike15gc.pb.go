@@ -7,8 +7,8 @@
 package protobuf
 
 import (
-	engine_gcmessages_proto "Protobufs/csgo/engine_gcmessages.proto"
-	_ "Protobufs/csgo/steammessages.proto"
+	
+	
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -9061,7 +9061,7 @@ type CMsgGCCStrike15_GotvSyncPacket struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Data *engine_gcmessages_proto.CEngineGotvSyncPacket `protobuf:"bytes,1,opt,name=data" json:"data,omitempty"`
+	Data *CEngineGotvSyncPacket `protobuf:"bytes,1,opt,name=data" json:"data,omitempty"`
 }
 
 func (x *CMsgGCCStrike15_GotvSyncPacket) Reset() {
@@ -9096,7 +9096,7 @@ func (*CMsgGCCStrike15_GotvSyncPacket) Descriptor() ([]byte, []int) {
 	return file_cstrike15_gcmessages_proto_rawDescGZIP(), []int{111}
 }
 
-func (x *CMsgGCCStrike15_GotvSyncPacket) GetData() *engine_gcmessages_proto.CEngineGotvSyncPacket {
+func (x *CMsgGCCStrike15_GotvSyncPacket) GetData() *CEngineGotvSyncPacket {
 	if x != nil {
 		return x.Data
 	}
@@ -14316,7 +14316,7 @@ var file_cstrike15_gcmessages_proto_goTypes = []interface{}{
 	(*CMsgGCCStrike15V2_Account_RequestCoPlays_Player)(nil),                 // 153: CMsgGCCStrike15_v2_Account_RequestCoPlays.Player
 	(*CMsgGCCStrike15V2_ClientPartyWarning_Entry)(nil),                      // 154: CMsgGCCStrike15_v2_ClientPartyWarning.Entry
 	(*CMsgGCCStrike15V2_ClientPerfReport_Entry)(nil),                        // 155: CMsgGCCStrike15_v2_ClientPerfReport.Entry
-	(*engine_gcmessages_proto.CEngineGotvSyncPacket)(nil),                   // 156: CEngineGotvSyncPacket
+	(*CEngineGotvSyncPacket)(nil),                   // 156: CEngineGotvSyncPacket
 }
 var file_cstrike15_gcmessages_proto_depIdxs = []int32{
 	6,   // 0: TournamentTeam.players:type_name -> TournamentPlayer

@@ -7,7 +7,7 @@
 package protobuf
 
 import (
-	_ "Protobufs/tf2/steammessages.proto"
+	
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"

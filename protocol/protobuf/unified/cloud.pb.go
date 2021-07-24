@@ -7,7 +7,7 @@
 package unified
 
 import (
-	steammessages_unified_base_steamclient_proto "Protobufs/steam/steammessages_unified_base.steamclient.proto"
+	
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -3058,7 +3058,7 @@ var file_steammessages_cloud_steamclient_proto_goTypes = []interface{}{
 	(*ClientCloudFileUploadBlockDetails_HTTPHeaders)(nil),           // 30: ClientCloudFileUploadBlockDetails.HTTPHeaders
 	(*CCloud_ClientFileDownload_Response_HTTPHeaders)(nil),          // 31: CCloud_ClientFileDownload_Response.HTTPHeaders
 	(*CCloud_EnumerateUserApps_Response_Apps)(nil),                  // 32: CCloud_EnumerateUserApps_Response.Apps
-	(*steammessages_unified_base_steamclient_proto.NoResponse)(nil), // 33: NoResponse
+	(*NoResponse)(nil), // 33: NoResponse
 }
 var file_steammessages_cloud_steamclient_proto_depIdxs = []int32{
 	29, // 0: CCloud_BeginHTTPUpload_Response.request_headers:type_name -> CCloud_BeginHTTPUpload_Response.HTTPHeaders
