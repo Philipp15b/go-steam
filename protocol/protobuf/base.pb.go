@@ -9,7 +9,7 @@ package protobuf
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	
+	descriptor_proto "google.golang.org/protobuf/types/descriptorpb"
 	reflect "reflect"
 	sync "sync"
 )
@@ -2088,7 +2088,7 @@ func (x *CBilling_Address) GetPhone() string {
 
 var file_steammessages_base_proto_extTypes = []protoimpl.ExtensionInfo{
 	{
-		ExtendedType:  (*MessageOptions)(nil),
+		ExtendedType:  (*descriptor_proto.MessageOptions)(nil),
 		ExtensionType: (*int32)(nil),
 		Field:         50000,
 		Name:          "msgpool_soft_limit",
@@ -2096,7 +2096,7 @@ var file_steammessages_base_proto_extTypes = []protoimpl.ExtensionInfo{
 		Filename:      "steammessages_base.proto",
 	},
 	{
-		ExtendedType:  (*MessageOptions)(nil),
+		ExtendedType:  (*descriptor_proto.MessageOptions)(nil),
 		ExtensionType: (*int32)(nil),
 		Field:         50001,
 		Name:          "msgpool_hard_limit",
@@ -2104,7 +2104,7 @@ var file_steammessages_base_proto_extTypes = []protoimpl.ExtensionInfo{
 		Filename:      "steammessages_base.proto",
 	},
 	{
-		ExtendedType:  (*FileOptions)(nil),
+		ExtendedType:  (*descriptor_proto.FileOptions)(nil),
 		ExtensionType: (*bool)(nil),
 		Field:         50000,
 		Name:          "force_php_generation",
@@ -2112,7 +2112,7 @@ var file_steammessages_base_proto_extTypes = []protoimpl.ExtensionInfo{
 		Filename:      "steammessages_base.proto",
 	},
 	{
-		ExtendedType:  (*FieldOptions)(nil),
+		ExtendedType:  (*descriptor_proto.FieldOptions)(nil),
 		ExtensionType: (*bool)(nil),
 		Field:         50020,
 		Name:          "php_output_always_number",
@@ -2121,7 +2121,7 @@ var file_steammessages_base_proto_extTypes = []protoimpl.ExtensionInfo{
 	},
 }
 
-// Extension fields to MessageOptions.
+// Extension fields to descriptor_proto.MessageOptions.
 var (
 	// optional int32 msgpool_soft_limit = 50000;
 	E_MsgpoolSoftLimit = &file_steammessages_base_proto_extTypes[0]
@@ -2129,13 +2129,13 @@ var (
 	E_MsgpoolHardLimit = &file_steammessages_base_proto_extTypes[1]
 )
 
-// Extension fields to FileOptions.
+// Extension fields to descriptor_proto.FileOptions.
 var (
 	// optional bool force_php_generation = 50000;
 	E_ForcePhpGeneration = &file_steammessages_base_proto_extTypes[2]
 )
 
-// Extension fields to FieldOptions.
+// Extension fields to descriptor_proto.FieldOptions.
 var (
 	// optional bool php_output_always_number = 50020;
 	E_PhpOutputAlwaysNumber = &file_steammessages_base_proto_extTypes[3]
@@ -2627,9 +2627,9 @@ var file_steammessages_base_proto_goTypes = []interface{}{
 	(*CCommunity_ClanAnnouncementInfo)(nil), // 14: CCommunity_ClanAnnouncementInfo
 	(*CClanEventData)(nil),                  // 15: CClanEventData
 	(*CBilling_Address)(nil),                // 16: CBilling_Address
-	(*MessageOptions)(nil), // 17: google.protobuf.MessageOptions
-	(*FileOptions)(nil),    // 18: google.protobuf.FileOptions
-	(*FieldOptions)(nil),   // 19: google.protobuf.FieldOptions
+	(*descriptor_proto.MessageOptions)(nil), // 17: google.protobuf.MessageOptions
+	(*descriptor_proto.FileOptions)(nil),    // 18: google.protobuf.FileOptions
+	(*descriptor_proto.FieldOptions)(nil),   // 19: google.protobuf.FieldOptions
 }
 var file_steammessages_base_proto_depIdxs = []int32{
 	2,  // 0: CMsgIPAddressBucket.original_ip_address:type_name -> CMsgIPAddress
