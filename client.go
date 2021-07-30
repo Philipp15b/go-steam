@@ -245,7 +245,7 @@ func (c *Client) writeLoop() {
 		err := msg.Serialize(c.writeBuf)
 		if err != nil {
 			c.writeBuf.Reset()
-			c.Fatalf("Error serializing message %v: %v", msg, err)
+			c.Errorf("Error serializing message %v: %v", msg, err)
 			return
 		}
 

@@ -155,7 +155,7 @@ func (s *Social) RequestFriendListInfo(ids []steamid.SteamId, requestedInfo stea
 
 // Requests persona state for a list of specified SteamIds
 func (s *Social) RequestNicknames() {
-	s.client.Write(protocol.NewClientMsgProtobuf(steamlang.EMsg_ClientPlayerNicknameList, &protobuf.CMsgClientChatGetFriendMessageHistoryForOfflineMessages{}))
+	s.client.Write(protocol.NewClientMsgProtobuf(steamlang.EMsg_ClientPlayerNicknameList, nil))
 }
 
 // Requests persona state for a specified SteamId
