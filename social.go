@@ -222,7 +222,7 @@ func (s *Social) UnbanChatMember(room steamid.SteamId, user steamid.SteamId) {
 }
 
 type UnhandledPacketEvent struct {
-	packet *protocol.Packet
+	Packet *protocol.Packet
 }
 
 func (s *Social) HandlePacket(packet *protocol.Packet) {
