@@ -155,11 +155,11 @@ func (s *Social) RequestFriendListInfo(ids []steamid.SteamId, requestedInfo stea
 
 type EmptyProtoBuf struct{}
 
-func (*EmptyProtoBuf) Reset()
+func (*EmptyProtoBuf) Reset() {}
 func (m *EmptyProtoBuf) String() string {
 	return proto.CompactTextString(m)
 }
-func (*EmptyProtoBuf) ProtoMessage()
+func (*EmptyProtoBuf) ProtoMessage() {}
 
 // Requests persona state for a list of specified SteamIds
 func (s *Social) RequestNicknames() {
