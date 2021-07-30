@@ -153,9 +153,17 @@ func (s *Social) RequestFriendListInfo(ids []steamid.SteamId, requestedInfo stea
 	}))
 }
 
+type EmptyProtoBuf struct{}
+
+func (*EmptyProtoBuf) Reset()
+func (m *EmptyProtoBuf) String() string {
+	return proto.CompactTextString(m)
+}
+func (*EmptyProtoBuf) ProtoMessage()
+
 // Requests persona state for a list of specified SteamIds
-func (s *Social) RequestNicknames(requestedInfo steamlang.EClientPersonaStateFlag) {
-	s.client.Write(protocol.NewClientMsgProtobuf(steamlang.EMsg_ClientPlayerNicknameList, nil))
+func (s *Social) RequestNicknames() {
+	s.client.Write(protocol.NewClientMsgProtobuf(steamlang.EMsg_ClientPlayerNicknameList, &EmptyProtoBuf{}))
 }
 
 // Requests persona state for a specified SteamId
