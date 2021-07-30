@@ -24,19 +24,21 @@ type Social struct {
 	avatar       []byte
 	personaState steamlang.EPersonaState
 
-	Friends *socialcache.FriendsList
-	Groups  *socialcache.GroupsList
-	Chats   *socialcache.ChatsList
+	Friends   *socialcache.FriendsList
+	Nicknames *socialcache.NicknamesList
+	Groups    *socialcache.GroupsList
+	Chats     *socialcache.ChatsList
 
 	client *Client
 }
 
 func newSocial(client *Client) *Social {
 	return &Social{
-		Friends: socialcache.NewFriendsList(),
-		Groups:  socialcache.NewGroupsList(),
-		Chats:   socialcache.NewChatsList(),
-		client:  client,
+		Friends:   socialcache.NewFriendsList(),
+		Groups:    socialcache.NewGroupsList(),
+		Chats:     socialcache.NewChatsList(),
+		Nicknames: socialcache.NewNicknamesList(),
+		client:    client,
 	}
 }
 
@@ -110,6 +112,15 @@ func (s *Social) AddFriend(id steamid.SteamId) {
 	}))
 }
 
+// Adds a friend to your friends list or accepts a friend. You'll receive a FriendStateEvent
+// for every new/changed friend
+func (s *Social) NicknameFriend(id steamid.SteamId, nickname string) {
+	s.client.Write(protocol.NewClientMsgProtobuf(steamlang.EMsg_AMClientSetPlayerNickname, &protobuf.CMsgClientSetPlayerNickname{
+		Steamid:  proto.Uint64(id.ToUint64()),
+		Nickname: &nickname,
+	}))
+}
+
 // Removes a friend from your friends list
 func (s *Social) RemoveFriend(id steamid.SteamId) {
 	s.client.Write(protocol.NewClientMsgProtobuf(steamlang.EMsg_ClientRemoveFriend, &protobuf.CMsgClientRemoveFriend{
@@ -140,6 +151,11 @@ func (s *Social) RequestFriendListInfo(ids []steamid.SteamId, requestedInfo stea
 		PersonaStateRequested: proto.Uint32(uint32(requestedInfo)),
 		Friends:               friends,
 	}))
+}
+
+// Requests persona state for a list of specified SteamIds
+func (s *Social) RequestNicknames(requestedInfo steamlang.EClientPersonaStateFlag) {
+	s.client.Write(protocol.NewClientMsgProtobuf(steamlang.EMsg_ClientPlayerNicknameList, nil))
 }
 
 // Requests persona state for a specified SteamId
@@ -218,6 +234,10 @@ func (s *Social) HandlePacket(packet *protocol.Packet) {
 		s.handleClanState(packet)
 	case steamlang.EMsg_ClientFriendsList:
 		s.handleFriendsList(packet)
+	case steamlang.EMsg_ClientPlayerNicknameList:
+		s.handleNicknameList(packet)
+	case steamlang.EMsg_AMClientSetPlayerNickname:
+		s.handleNicknameResponse(packet)
 	case steamlang.EMsg_ClientFriendMsgIncoming:
 		s.handleFriendMsg(packet)
 	case steamlang.EMsg_ClientAccountInfo:
@@ -294,6 +314,19 @@ func (s *Social) handleFriendsList(packet *protocol.Packet) {
 		s.RequestFriendListInfo(friends, protocol.EClientPersonaStateFlag_DefaultInfoRequest)
 		s.client.Emit(&FriendsListEvent{})
 	}
+}
+
+func (s *Social) handleNicknameList(packet *protocol.Packet) {
+	list := new(protobuf.CMsgClientPlayerNicknameList)
+	packet.ReadProtoMsg(list)
+	for _, friend := range list.GetNicknames() {
+		steamId := steamid.SteamId(friend.GetSteamid())
+		s.Nicknames.Add(socialcache.Nickname{
+			SteamId:  steamId,
+			Nickname: friend.GetNickname(),
+		})
+	}
+	s.client.Emit(&NicknameListEvent{})
 }
 
 func (s *Social) handlePersonaState(packet *protocol.Packet) {
@@ -440,6 +473,14 @@ func (s *Social) handleFriendResponse(packet *protocol.Packet) {
 		Result:      steamlang.EResult(body.GetEresult()),
 		SteamId:     steamid.SteamId(body.GetSteamIdAdded()),
 		PersonaName: body.GetPersonaNameAdded(),
+	})
+}
+
+func (s *Social) handleNicknameResponse(packet *protocol.Packet) {
+	body := new(protobuf.CMsgClientSetPlayerNicknameResponse)
+	packet.ReadProtoMsg(body)
+	s.client.Emit(&NicknameSetEvent{
+		Result: steamlang.EResult(body.GetEresult()),
 	})
 }
 
