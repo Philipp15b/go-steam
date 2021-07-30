@@ -153,11 +153,6 @@ func (s *Social) RequestFriendListInfo(ids []steamid.SteamId, requestedInfo stea
 	}))
 }
 
-// Requests persona state for a list of specified SteamIds
-func (s *Social) RequestNicknames() {
-	s.client.Write(protocol.NewClientMsgProtobuf(steamlang.EMsg_ClientPlayerNicknameList, nil))
-}
-
 // Requests persona state for a specified SteamId
 func (s *Social) RequestFriendInfo(id steamid.SteamId, requestedInfo steamlang.EClientPersonaStateFlag) {
 	s.RequestFriendListInfo([]steamid.SteamId{id}, requestedInfo)
@@ -226,6 +221,10 @@ func (s *Social) UnbanChatMember(room steamid.SteamId, user steamid.SteamId) {
 	}, make([]byte, 0)))
 }
 
+type UnhandledPacketEvent struct {
+	packet *protocol.Packet
+}
+
 func (s *Social) HandlePacket(packet *protocol.Packet) {
 	switch packet.EMsg {
 	case steamlang.EMsg_ClientPersonaState:
@@ -236,7 +235,7 @@ func (s *Social) HandlePacket(packet *protocol.Packet) {
 		s.handleFriendsList(packet)
 	case steamlang.EMsg_ClientPlayerNicknameList:
 		s.handleNicknameList(packet)
-	case steamlang.EMsg_AMClientSetPlayerNickname:
+	case steamlang.EMsg_AMClientSetPlayerNicknameResponse:
 		s.handleNicknameResponse(packet)
 	case steamlang.EMsg_ClientFriendMsgIncoming:
 		s.handleFriendMsg(packet)
@@ -260,6 +259,8 @@ func (s *Social) HandlePacket(packet *protocol.Packet) {
 		s.handleProfileInfoResponse(packet)
 	case steamlang.EMsg_ClientFSGetFriendMessageHistoryResponse:
 		s.handleFriendMessageHistoryResponse(packet)
+	default:
+		s.client.Emit(&UnhandledPacketEvent{packet})
 	}
 }
 
