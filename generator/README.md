@@ -5,7 +5,19 @@ We generate Go code from SteamKit protocol descriptors, namely `steamlang` files
 ## Dependencies
 1. Get SteamKit submodule: `git submodule update --init --recursive`.
 2. Install [`protoc`](https://developers.google.com/protocol-buffers/docs/downloads), the protocol buffer compiler.
+
+    ```
+    ✗ protoc --version
+    libprotoc 3.17.1
+    ```
+
 3. Install `proco-gen-go`: `go get google.golang.org/protobuf/protoc-gen-go/`
+
+    ```
+    ✗ protoc-gen-go --version
+    protoc-gen-go v1.27.1
+    ```
+
 4. Install the .NET Core SDK (3.1 or later).
 
 ## Execute generator
