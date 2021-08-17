@@ -11,7 +11,7 @@ We generate Go code from SteamKit protocol descriptors, namely `steamlang` files
     libprotoc 3.17.1
     ```
 
-3. Install `proco-gen-go`: `go get google.golang.org/protobuf/protoc-gen-go/`
+3. Install `protoc-gen-go`: `go get google.golang.org/protobuf/cmd/protoc-gen-go`
 
     ```
     ✗ protoc-gen-go --version
