@@ -3,6 +3,7 @@ package steam
 import (
 	"time"
 
+	"github.com/Philipp15b/go-steam/v2/protocol/protobuf"
 	"github.com/Philipp15b/go-steam/v2/protocol/steamlang"
 	"github.com/Philipp15b/go-steam/v2/steamid"
 )
@@ -49,6 +50,7 @@ type PersonaStateEvent struct {
 	ClanTag                string
 	OnlineSessionInstances uint32
 	PersonaSetByUser       bool
+	RichPresence           []*protobuf.CMsgClientPersonaState_Friend_KV
 }
 
 // Fired when a clan's state has been changed
