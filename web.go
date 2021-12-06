@@ -11,11 +11,11 @@ import (
 	"strconv"
 	"sync/atomic"
 
-	"github.com/Philipp15b/go-steam/v2/cryptoutil"
-	"github.com/Philipp15b/go-steam/v2/protocol"
-	"github.com/Philipp15b/go-steam/v2/protocol/protobuf"
-	"github.com/Philipp15b/go-steam/v2/protocol/steamlang"
-	"github.com/golang/protobuf/proto"
+	"github.com/Philipp15b/go-steam/v3/cryptoutil"
+	"github.com/Philipp15b/go-steam/v3/protocol"
+	"github.com/Philipp15b/go-steam/v3/protocol/protobuf"
+	"github.com/Philipp15b/go-steam/v3/protocol/steamlang"
+	"google.golang.org/protobuf/proto"
 )
 
 type Web struct {

@@ -5,8 +5,8 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"github.com/Philipp15b/go-steam/v2/protocol/steamlang"
-	"github.com/golang/protobuf/proto"
+	"github.com/Philipp15b/go-steam/v3/protocol/steamlang"
+	"google.golang.org/protobuf/proto"
 )
 
 // TODO: Headers are always deserialized twice.

@@ -66,8 +66,8 @@ func cleanGlob(pattern string) {
 
 func buildSteamLanguage() {
 	print("# Building Steam Language")
-	execute("dotnet", "run", "-c", "release", "-p", "./GoSteamLanguageGenerator", "./SteamKit", "../protocol/steamlang")
-	execute("gofmt", "-w", "../protocol/steamlang/enums.go", "../protocol/steamlang/messages.go")
+	execute("dotnet", []string{"run", "-c", "release", "-p", "./GoSteamLanguageGenerator", "./SteamKit", "../protocol/steamlang"})
+	execute("gofmt", []string{"-w", "../protocol/steamlang/enums.go", "../protocol/steamlang/messages.go"})
 }
 
 func buildProto() {
@@ -80,12 +80,26 @@ func buildProto() {
 }
 
 func buildProtoMap(srcSubdir string, files map[string]string, outDir string) {
-	os.MkdirAll(outDir, os.ModePerm)
+	_ = os.MkdirAll(outDir, os.ModePerm)
+
+	var opt []string
+
+	opt = append(opt, "--go_opt=Mgoogle/protobuf/descriptor.proto=google/protobuf/descriptor.proto")
+
+	for proto := range files {
+		opt = append(opt, "--go_opt=Msteammessages.proto=Protobufs/"+srcSubdir+"/steammessages.proto")
+		opt = append(opt, "--go_opt=M"+proto+"=Protobufs/"+srcSubdir+"/"+proto)
+	}
+
+	if srcSubdir == "dota2" {
+		opt = append(opt, "--go_opt=Mecon_shared_enums.proto=Protobufs/"+srcSubdir+"/econ_shared_enums.proto")
+	}
+
 	for proto, out := range files {
 		full := filepath.Join(outDir, out)
 		print("# Building: " + full)
-		compileProto("Protobufs", srcSubdir, proto, full)
-		fixProto(full)
+		compileProto("Protobufs", srcSubdir, proto, full, opt)
+		fixProto(outDir, full)
 	}
 }
 
@@ -124,10 +138,12 @@ var tf2ProtoFiles = map[string]string{
 }
 
 var dotaProtoFiles = map[string]string{
-	"base_gcmessages.proto":  "base.pb.go",
-	"econ_gcmessages.proto":  "econ.pb.go",
-	"gcsdk_gcmessages.proto": "gcsdk.pb.go",
-	"gcsystemmsgs.proto":     "system.pb.go",
+	"base_gcmessages.proto":   "base.pb.go",
+	"econ_shared_enums.proto": "econ_shared_enum.pb.go",
+	"econ_gcmessages.proto":   "econ.pb.go",
+	"gcsdk_gcmessages.proto":  "gcsdk.pb.go",
+	"gcsystemmsgs.proto":      "system.pb.go",
+	"steammessages.proto":     "steam.pb.go",
 }
 
 var csgoProtoFiles = map[string]string{
@@ -145,16 +161,34 @@ var csgoProtoFiles = map[string]string{
 	"uifontfile_format.proto":      "uifontfile.pb.go",
 }
 
-func compileProto(srcBase, srcSubdir, proto, target string) {
+func compileProto(srcBase, srcSubdir, proto, target string, opt []string) {
 	outDir, _ := filepath.Split(target)
 	err := os.MkdirAll(outDir, os.ModePerm)
 	if err != nil {
 		panic(err)
 	}
-	execute("protoc", "--go_out="+outDir, "-I="+srcBase+"/"+srcSubdir, "-I="+srcBase, filepath.Join(srcBase, srcSubdir, proto))
-	out := strings.Replace(filepath.Join(outDir, proto), ".proto", ".pb.go", 1)
-	err = forceRename(out, target)
+
+	args := []string{
+		"-I=" + srcBase,
+		"-I=" + srcBase + "/google",
+		"-I=" + srcBase + "/" + srcSubdir,
+		"--go_out=" + outDir,
+	}
+	args = append(args, opt...)
+	args = append(args, proto)
+
+	execute("protoc", args)
+
+	dir := outDir + "Protobufs/" + srcSubdir + "/" + proto
+	file := filepath.Join(dir, strings.Replace(proto, ".proto", ".pb.go", 1))
+
+	err = forceRename(file, target)
 	if err != nil {
+		panic(err)
+	}
+
+	// clean stuff
+	if err := os.RemoveAll(outDir + "/Protobufs"); err != nil {
 		panic(err)
 	}
 }
@@ -167,11 +201,10 @@ func forceRename(from, to string) error {
 }
 
 var pkgRegex = regexp.MustCompile(`(package \w+)`)
-var pkgCommentRegex = regexp.MustCompile(`(?s)(\/\*.*?\*\/\n)package`)
 var unusedImportCommentRegex = regexp.MustCompile("// discarding unused import .*\n")
 var fileDescriptorVarRegex = regexp.MustCompile(`fileDescriptor\d+`)
 
-func fixProto(path string) {
+func fixProto(outDir, path string) {
 	// goprotobuf is really bad at dependencies, so we must fix them manually...
 	// It tries to load each dependency of a file as a seperate package (but in a very, very wrong way).
 	// Because we want some files in the same package, we'll remove those imports to local files.
@@ -189,8 +222,11 @@ func fixProto(path string) {
 
 	importsToRemove := make([]*ast.ImportSpec, 0)
 	for _, i := range f.Imports {
+		if strings.Contains(i.Path.Value, "google/protobuf/descriptor.proto") {
+			continue
+		}
 		// We remove all local imports
-		if i.Path.Value == "\".\"" {
+		if strings.Contains(i.Path.Value, ".proto") {
 			importsToRemove = append(importsToRemove, i)
 		}
 	}
@@ -199,7 +235,7 @@ func fixProto(path string) {
 		// remove the package name from all types
 		file = bytes.Replace(file, []byte(itr.Name.Name+"."), []byte{}, -1)
 		// and remove the import itself
-		file = bytes.Replace(file, []byte(fmt.Sprintf("import %v %v\n", itr.Name.Name, itr.Path.Value)), []byte{}, -1)
+		file = bytes.Replace(file, []byte(fmt.Sprintf("%v %v", itr.Name.Name, itr.Path.Value)), []byte{}, -1)
 	}
 
 	// remove warnings
@@ -210,7 +246,7 @@ func fixProto(path string) {
 
 	// fix the google dependency;
 	// we just reuse the one from protoc-gen-go
-	file = bytes.Replace(file, []byte("google/protobuf"), []byte("github.com/golang/protobuf/protoc-gen-go/descriptor"), -1)
+	file = bytes.Replace(file, []byte("google/protobuf/descriptor.proto"), []byte("google.golang.org/protobuf/types/descriptorpb"), -1)
 
 	// we need to prefix local variables created by protoc-gen-go so that they don't clash with others in the same package
 	filename := strings.Split(filepath.Base(path), ".")[0]
@@ -274,13 +310,15 @@ func (w *quotedWriter) Write(p []byte) (n int, err error) {
 	return
 }
 
-func execute(command string, args ...string) {
+func execute(command string, args []string) {
 	if printCommands {
 		print(command + " " + strings.Join(args, " "))
 	}
+
 	cmd := exec.Command(command, args...)
 	cmd.Stdout = newQuotedWriter(os.Stdout)
 	cmd.Stderr = newQuotedWriter(os.Stderr)
+
 	err := cmd.Run()
 	if err != nil {
 		printerr(err.Error())

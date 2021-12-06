@@ -22,9 +22,9 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/Philipp15b/go-steam/v2"
-	"github.com/Philipp15b/go-steam/v2/netutil"
-	"github.com/Philipp15b/go-steam/v2/protocol"
+	"github.com/Philipp15b/go-steam/v3"
+	"github.com/Philipp15b/go-steam/v3/netutil"
+	"github.com/Philipp15b/go-steam/v3/protocol"
 	"github.com/davecgh/go-spew/spew"
 )
 
@@ -41,6 +41,7 @@ func Default() *GsBot {
 		log.New(os.Stdout, "", 0),
 	}
 }
+
 // This module handles authentication. It logs on automatically after a ConnectedEvent
 // and saves the sentry data to a file which is also used for logon if available.
 // If you're logging on for the first time Steam may require an authcode. You can then
