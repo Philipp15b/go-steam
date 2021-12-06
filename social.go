@@ -365,6 +365,7 @@ func (s *Social) handlePersonaState(packet *protocol.Packet) {
 			ClanTag:                friend.GetClanTag(),
 			OnlineSessionInstances: friend.GetOnlineSessionInstances(),
 			PersonaSetByUser:       friend.GetPersonaSetByUser(),
+			RichPresence:           friend.GetRichPresence(),
 		})
 	}
 }
