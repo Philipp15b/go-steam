@@ -4,7 +4,7 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/Philipp15b/go-steam/v2/steamid"
+	"github.com/Philipp15b/go-steam/v3/steamid"
 )
 
 // nickname list is a thread safe map
