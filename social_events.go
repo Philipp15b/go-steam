@@ -9,6 +9,7 @@ import (
 )
 
 type FriendsListEvent struct{}
+type NicknameListEvent struct{}
 
 type FriendStateEvent struct {
 	SteamId      steamid.SteamId `json:",string"`
@@ -80,6 +81,11 @@ type FriendAddedEvent struct {
 	Result      steamlang.EResult
 	SteamId     steamid.SteamId `json:",string"`
 	PersonaName string
+}
+
+// Fired in response to adding a friend to your friends list
+type NicknameSetEvent struct {
+	Result steamlang.EResult
 }
 
 // Fired when the client receives a message from either a friend or a chat room
