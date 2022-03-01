@@ -18,25 +18,25 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Philipp15b/go-steam/v2"
-	"github.com/Philipp15b/go-steam/v2/gsbot"
-	"github.com/Philipp15b/go-steam/v2/protocol/steamlang"
+	"github.com/Philipp15b/go-steam/v3"
+	"github.com/Philipp15b/go-steam/v3/gsbot"
+	"github.com/Philipp15b/go-steam/v3/protocol/steamlang"
 )
 
 const usage string = "usage: gsbot [username] [-p password] [-a authcode] [-t twofactorcode] [-l loginkey]"
 
 func main() {
-	if len(os.Args) < 3 || len(os.Args) % 2 != 0 {
+	if len(os.Args) < 3 || len(os.Args)%2 != 0 {
 		fmt.Println(usage)
 		return
 	}
 
 	details := &steam.LogOnDetails{
-		Username: os.Args[1],
+		Username:               os.Args[1],
 		ShouldRememberPassword: true,
 	}
 
-	for i := 2; i < len(os.Args) - 1; i += 2 {
+	for i := 2; i < len(os.Args)-1; i += 2 {
 		switch os.Args[i] {
 		case "-p":
 			details.Password = os.Args[i+1]

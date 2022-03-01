@@ -3,8 +3,8 @@ package steam
 import (
 	"crypto/rsa"
 
-	"github.com/Philipp15b/go-steam/v2/cryptoutil"
-	"github.com/Philipp15b/go-steam/v2/protocol/steamlang"
+	"github.com/Philipp15b/go-steam/v3/cryptoutil"
+	"github.com/Philipp15b/go-steam/v3/protocol/steamlang"
 )
 
 var publicKeys = map[steamlang.EUniverse][]byte{

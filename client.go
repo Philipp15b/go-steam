@@ -13,12 +13,12 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/Philipp15b/go-steam/v2/cryptoutil"
-	"github.com/Philipp15b/go-steam/v2/netutil"
-	"github.com/Philipp15b/go-steam/v2/protocol"
-	"github.com/Philipp15b/go-steam/v2/protocol/protobuf"
-	"github.com/Philipp15b/go-steam/v2/protocol/steamlang"
-	"github.com/Philipp15b/go-steam/v2/steamid"
+	"github.com/Philipp15b/go-steam/v3/cryptoutil"
+	"github.com/Philipp15b/go-steam/v3/netutil"
+	"github.com/Philipp15b/go-steam/v3/protocol"
+	"github.com/Philipp15b/go-steam/v3/protocol/protobuf"
+	"github.com/Philipp15b/go-steam/v3/protocol/steamlang"
+	"github.com/Philipp15b/go-steam/v3/steamid"
 )
 
 // Represents a client to the Steam network.
@@ -65,18 +65,25 @@ func NewClient() *Client {
 		events:   make(chan interface{}, 3),
 		writeBuf: new(bytes.Buffer),
 	}
+
 	client.Auth = &Auth{client: client}
 	client.RegisterPacketHandler(client.Auth)
+
 	client.Social = newSocial(client)
 	client.RegisterPacketHandler(client.Social)
+
 	client.Web = &Web{client: client}
 	client.RegisterPacketHandler(client.Web)
+
 	client.Notifications = newNotifications(client)
 	client.RegisterPacketHandler(client.Notifications)
+
 	client.Trading = &Trading{client: client}
 	client.RegisterPacketHandler(client.Trading)
+
 	client.GC = newGC(client)
 	client.RegisterPacketHandler(client.GC)
+
 	return client
 }
 

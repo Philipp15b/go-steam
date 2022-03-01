@@ -1,10 +1,9 @@
-module github.com/Philipp15b/go-steam/v2
+module github.com/Philipp15b/go-steam/v3
 
-go 1.16
+go 1.17
 
 require (
+	github.com/Philipp15b/go-steam/v2 v2.0.2
 	github.com/davecgh/go-spew v1.1.1
-	github.com/golang/protobuf v1.4.2
+	google.golang.org/protobuf v1.27.1
 )
-
-retract v2.0.0
