@@ -6,9 +6,13 @@ import (
 	"crypto/rand"
 	"encoding/binary"
 	"fmt"
+	"github.com/Philipp15b/go-steam/v3/appticket"
+	"google.golang.org/protobuf/proto"
 	"hash/crc32"
 	"io/ioutil"
+	"log"
 	"net"
+	"os"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -49,6 +53,12 @@ type Client struct {
 
 	ConnectionTimeout time.Duration
 
+	connectTime     time.Time
+	connectionCount int
+	gcTokens        [][]byte
+	gcTokensMutex   sync.Mutex
+	publicIp        uint32
+
 	mutex     sync.RWMutex // guarding conn and writeChan
 	conn      connection
 	writeChan chan protocol.IMsg
@@ -64,6 +74,7 @@ func NewClient() *Client {
 	client := &Client{
 		events:   make(chan interface{}, 3),
 		writeBuf: new(bytes.Buffer),
+		gcTokens: make([][]byte, 0),
 	}
 
 	client.Auth = &Auth{client: client}
@@ -292,6 +303,14 @@ func (c *Client) handlePacket(packet *protocol.Packet) {
 		c.handleMulti(packet)
 	case steamlang.EMsg_ClientCMList:
 		c.handleClientCMList(packet)
+	case steamlang.EMsg_ClientGameConnectTokens:
+		c.handleGameClientToken(packet)
+	case steamlang.EMsg_ClientGetAppOwnershipTicketResponse:
+		c.handleGetAppOwnershipTicketResponse(packet)
+	case steamlang.EMsg_ClientAuthListAck:
+		c.handleClientAuthListAck(packet)
+	case steamlang.EMsg_ClientTicketAuthComplete:
+		c.handleClientTicketAuthComplete(packet)
 	}
 
 	c.handlersMutex.RLock()
@@ -380,12 +399,170 @@ func (c *Client) handleClientCMList(packet *protocol.Packet) {
 	l := make([]*netutil.PortAddr, 0)
 	for i, ip := range body.GetCmAddresses() {
 		l = append(l, &netutil.PortAddr{
-			readIp(ip),
-			uint16(body.GetCmPorts()[i]),
+			IP:   readIp(ip),
+			Port: uint16(body.GetCmPorts()[i]),
 		})
 	}
 
 	c.Emit(&ClientCMListEvent{l})
+}
+
+func (c *Client) handleGameClientToken(packet *protocol.Packet) {
+	body := new(protobuf.CMsgClientGameConnectTokens)
+	packet.ReadProtoMsg(body)
+
+	c.gcTokensMutex.Lock()
+	defer c.gcTokensMutex.Unlock()
+
+	c.gcTokens = append(c.gcTokens, body.Tokens...)
+}
+
+func (c *Client) pullGcToken() []byte {
+	c.gcTokensMutex.Lock()
+	defer c.gcTokensMutex.Unlock()
+
+	if len(c.gcTokens) == 0 {
+		return nil
+	}
+	token := c.gcTokens[0]
+	c.gcTokens = c.gcTokens[1:len(c.gcTokens)]
+
+	return token
+}
+
+func (c *Client) handleGetAppOwnershipTicketResponse(packet *protocol.Packet) {
+	body := new(protobuf.CMsgClientGetAppOwnershipTicketResponse)
+	packet.ReadProtoMsg(body)
+	if body.GetEresult() != uint32(steamlang.EResult_OK) {
+		log.Fatalf("CMsgClientGetAppOwnershipTicketResponse error: %+#v", body)
+		// TODO: Add event
+		return
+	}
+
+	ioutil.WriteFile(c.generateAppTicketFileCacheName(body.GetAppId()), body.GetTicket(), 0744)
+	ticket, err := appticket.NewAppTicket(body.GetTicket())
+	if err != nil {
+		log.Fatalf("CMsgClientGetAppOwnershipTicketResponse invalid ticket: %v\n %+#v", err, body)
+		// TODO: Add event?
+		return
+	}
+
+	c.onVaildAppOwnershipTicket(ticket)
+}
+
+func (c *Client) generateAppTicketFileCacheName(appId uint32) string {
+	return fmt.Sprintf("appOwnershipTicket_%d_%d.bin", c.steamId, appId)
+}
+
+func (c *Client) GetAppOwnershipTicket(appId uint32) {
+	cachedTickedFileName := c.generateAppTicketFileCacheName(appId)
+
+	appTicket, err := ioutil.ReadFile(cachedTickedFileName)
+	if err == nil {
+		parsedTicket, err := appticket.NewAppTicket(appTicket)
+
+		if err == nil && parsedTicket.IsExpired(time.Now().Add(time.Minute)) == false {
+			go c.onVaildAppOwnershipTicket(parsedTicket)
+			return
+		} else {
+			os.Remove(cachedTickedFileName)
+		}
+	}
+
+	c.Write(protocol.NewClientMsgProtobuf(steamlang.EMsg_ClientGetAppOwnershipTicket, &protobuf.CMsgClientGetAppOwnershipTicket{
+		AppId: proto.Uint32(appId),
+	}))
+}
+
+func (c *Client) onVaildAppOwnershipTicket(appticket *appticket.AppTicket) {
+	c.Emit(&AppOwnershipTicket{AppOwnershipTicket: appticket})
+}
+
+func (c *Client) createAuthToken(gameConnectToken []byte) []byte {
+	var buf1 [4]byte
+	var buf2 [28]byte
+
+	timestamp := uint32(time.Now().Sub(c.connectTime).Milliseconds())
+
+	binary.LittleEndian.PutUint32(buf1[0:], uint32(len(gameConnectToken)))
+
+	binary.LittleEndian.PutUint32(buf2[0:], 6*4)
+	binary.LittleEndian.PutUint32(buf2[4:], 1)
+	binary.LittleEndian.PutUint32(buf2[8:], 2)
+	binary.BigEndian.PutUint32(buf2[12:], c.publicIp)
+	binary.LittleEndian.PutUint32(buf2[16:], 0)
+	binary.LittleEndian.PutUint32(buf2[20:], timestamp)
+	binary.LittleEndian.PutUint32(buf2[24:], 1)
+
+	result := make([]byte, 0)
+	result = append(result, buf1[:]...)
+	result = append(result, gameConnectToken...)
+	result = append(result, buf2[:]...)
+
+	return result
+}
+
+func (c *Client) handleClientAuthListAck(packet *protocol.Packet) {
+	c.Emit(&TicketAuthAck{})
+}
+
+func (c *Client) handleClientTicketAuthComplete(packet *protocol.Packet) {
+	c.Emit(&TicketAuthComplete{})
+}
+
+func (c *Client) AuthSessionTicket(ticket *appticket.AppTicket) ([]byte, error) {
+	var buf1 [4]byte
+	var buf2 [32]byte
+
+	gcToken := c.pullGcToken()
+	if gcToken == nil {
+		return gcToken, fmt.Errorf("empty gc token")
+	}
+
+	bufTicket := ticket.OriginalBuffer()
+
+	c.connectionCount++
+
+	timestamp := uint32(time.Now().Sub(c.connectTime).Milliseconds())
+
+	binary.LittleEndian.PutUint32(buf1[:], uint32(len(gcToken)))
+
+	binary.LittleEndian.PutUint32(buf2[0:], 24)
+	binary.LittleEndian.PutUint32(buf2[4:], 1)
+	binary.LittleEndian.PutUint32(buf2[8:], 2)
+	binary.BigEndian.PutUint32(buf2[12:], c.publicIp)
+	binary.LittleEndian.PutUint32(buf2[16:], 0)
+	binary.LittleEndian.PutUint32(buf2[20:], timestamp)
+	binary.LittleEndian.PutUint32(buf2[24:], uint32(c.connectionCount))
+	binary.LittleEndian.PutUint32(buf2[28:], uint32(len(bufTicket)))
+
+	result := make([]byte, 0)
+	result = append(result, buf1[:]...)
+	result = append(result, gcToken...)
+	result = append(result, buf2[:]...)
+	result = append(result, bufTicket...)
+
+	gameId := uint64(ticket.AppId)
+
+	tokensLeft := uint32(len(c.gcTokens))
+
+	authToken := c.createAuthToken(gcToken)
+	ticketCrc := crc32.ChecksumIEEE(authToken)
+
+	authList := new(protobuf.CMsgClientAuthList)
+	authList.TokensLeft = &tokensLeft
+	authList.AppIds = []uint32{ticket.AppId}
+	authList.Tickets = []*protobuf.CMsgAuthTicket{
+		&protobuf.CMsgAuthTicket{
+			Gameid:    &gameId,
+			Ticket:    gcToken,
+			TicketCrc: &ticketCrc,
+		},
+	}
+
+	c.Write(protocol.NewClientMsgProtobuf(steamlang.EMsg_ClientAuthList, authList))
+
+	return result, nil
 }
 
 func readIp(ip uint32) net.IP {
