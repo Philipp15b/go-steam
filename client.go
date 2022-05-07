@@ -421,6 +421,9 @@ func (c *Client) pullGcToken() []byte {
 	c.gcTokensMutex.Lock()
 	defer c.gcTokensMutex.Unlock()
 
+	if len(c.gcTokens) == 0 {
+		return nil
+	}
 	token := c.gcTokens[0]
 	c.gcTokens = c.gcTokens[1:len(c.gcTokens)]
 
@@ -507,11 +510,14 @@ func (c *Client) handleClientTicketAuthComplete(packet *protocol.Packet) {
 	c.Emit(&TicketAuthComplete{})
 }
 
-func (c *Client) AuthSessionTicket(ticket *appticket.AppTicket) []byte {
+func (c *Client) AuthSessionTicket(ticket *appticket.AppTicket) ([]byte, error) {
 	var buf1 [4]byte
 	var buf2 [32]byte
 
 	gcToken := c.pullGcToken()
+	if gcToken == nil {
+		return gcToken, fmt.Errorf("empty gc token")
+	}
 
 	bufTicket := ticket.OriginalBuffer()
 
@@ -556,7 +562,7 @@ func (c *Client) AuthSessionTicket(ticket *appticket.AppTicket) []byte {
 
 	c.Write(protocol.NewClientMsgProtobuf(steamlang.EMsg_ClientAuthList, authList))
 
-	return result
+	return result, nil
 }
 
 func readIp(ip uint32) net.IP {
