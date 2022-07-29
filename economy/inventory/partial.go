@@ -52,7 +52,7 @@ func GetFullInventory(getFirst func() (*PartialInventory, error), getNext func(s
 	result := &first.Inventory
 	var next *PartialInventory
 	for latest := first; latest.More; latest = next {
-		next, err := getNext(uint(latest.MoreStart))
+		next, err = getNext(uint(latest.MoreStart))
 		if err != nil {
 			return nil, err
 		}
