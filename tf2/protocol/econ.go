@@ -20,8 +20,21 @@ type MsgGCCraft struct {
 }
 
 func (m *MsgGCCraft) Serialize(w io.Writer) error {
-	m.numItems = int16(len(m.Items))
-	return binary.Write(w, binary.LittleEndian, m)
+	err := binary.Write(w, binary.LittleEndian, int16(-2))
+	if err != nil {
+		return err
+	}
+	err = binary.Write(w, binary.LittleEndian, int16(len(m.Items)))
+	if err != nil {
+		return err
+	}
+	for _, id := range m.Items {
+		err = binary.Write(w, binary.LittleEndian, id)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 type MsgGCDeleteItem struct {
@@ -46,6 +59,11 @@ func (m *MsgGCNameItem) Serialize(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = w.Write([]byte(m.Name))
+	for _, char := range m.Name {
+		err = binary.Write(w, binary.LittleEndian, int8(char))
+		if err != nil {
+			return err
+		}
+	}
 	return err
 }
