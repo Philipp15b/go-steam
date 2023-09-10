@@ -1,6 +1,7 @@
 package steam
 
 import (
+	"context"
 	"crypto/aes"
 	"crypto/cipher"
 	"encoding/binary"
@@ -31,6 +32,36 @@ type tcpConnection struct {
 
 func dialTCP(laddr, raddr *net.TCPAddr) (*tcpConnection, error) {
 	conn, err := net.DialTCP("tcp", laddr, raddr)
+	if err != nil {
+		return nil, err
+	}
+
+	return &tcpConnection{
+		conn: conn,
+	}, nil
+}
+
+// dialTCPContext is the same as dialTCP, but is context aware.
+func dialTCPContext(ctx context.Context, laddr, raddr *net.TCPAddr) (*tcpConnection, error) {
+
+	// TODO add DialTCPContext once it's available.
+	// Currently a workaround.
+	ok := make(chan struct{})
+	var (
+		conn *net.TCPConn
+		err  error
+	)
+	go func() {
+		conn, err = net.DialTCP("tcp", laddr, raddr)
+		close(ok)
+	}()
+
+	select {
+	case <-ctx.Done():
+		return nil, ctx.Err()
+	case <-ok:
+	}
+
 	if err != nil {
 		return nil, err
 	}

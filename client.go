@@ -3,8 +3,10 @@ package steam
 import (
 	"bytes"
 	"compress/gzip"
+	"context"
 	"crypto/rand"
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"hash/crc32"
 	"io/ioutil"
@@ -170,6 +172,58 @@ func (c *Client) ConnectToBind(addr *netutil.PortAddr, local *net.TCPAddr) error
 	conn, err := dialTCP(local, addr.ToTCPAddr())
 	if err != nil {
 		c.Fatalf("Connect failed: %v", err)
+		return err
+	}
+	c.conn = conn
+	c.writeChan = make(chan protocol.IMsg, 5)
+
+	go c.readLoop()
+	go c.writeLoop()
+
+	return nil
+}
+
+// ConnectContext connects to a random Steam server and returns its address.
+// If this client is already connected, it is disconnected first.
+// This method tries to use an address from the Steam Directory and falls
+// back to the built-in server list if the Steam Directory can't be reached.
+// If you want to connect to a specific server, use `ConnectTo`. Context
+// aware.
+func (c *Client) ConnectContext(ctx context.Context) (*netutil.PortAddr, error) {
+	var server *netutil.PortAddr
+
+	// try to initialize the directory cache
+	if !steamDirectoryCache.IsInitialized() {
+		_ = steamDirectoryCache.Initialize()
+	}
+	if steamDirectoryCache.IsInitialized() {
+		server = steamDirectoryCache.GetRandomCM()
+	} else {
+		server = GetRandomCM()
+	}
+
+	err := c.ConnectToContext(ctx, server)
+	return server, err
+}
+
+// ConnectToContext connects to a specific server.
+// You may want to use one of the `GetRandom*CM()` functions in this package.
+// If this client is already connected, it is disconnected first. Context
+// aware.
+func (c *Client) ConnectToContext(ctx context.Context, addr *netutil.PortAddr) error {
+	return c.ConnectToBindContext(ctx, addr, nil)
+}
+
+// ConnectToBindContext connects to a specific server, and binds to a specified local IP
+// If this client is already connected, it is disconnected first. Context aware.
+func (c *Client) ConnectToBindContext(ctx context.Context, addr *netutil.PortAddr, local *net.TCPAddr) error {
+	c.Disconnect()
+
+	conn, err := dialTCPContext(ctx, local, addr.ToTCPAddr())
+	if err != nil {
+		if !(errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded)) {
+			c.Fatalf("Connect failed: %v", err)
+		}
 		return err
 	}
 	c.conn = conn
