@@ -221,7 +221,7 @@ func (c *Client) ConnectToBindContext(ctx context.Context, addr *netutil.PortAdd
 
 	conn, err := dialTCPContext(ctx, local, addr.ToTCPAddr())
 	if err != nil {
-		if !errors.Is(err, context.Canceled) {
+		if !(errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded)) {
 			c.Fatalf("Connect failed: %v", err)
 		}
 		return err

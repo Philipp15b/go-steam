@@ -58,7 +58,6 @@ func dialTCPContext(ctx context.Context, laddr, raddr *net.TCPAddr) (*tcpConnect
 
 	select {
 	case <-ctx.Done():
-		close(ok)
 		return nil, ctx.Err()
 	case <-ok:
 	}
