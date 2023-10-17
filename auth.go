@@ -40,7 +40,9 @@ type LogOnDetails struct {
 
 // Log on with the given details. You must always specify username and
 // password OR username and loginkey. For the first login, don't set an authcode or a hash and you'll
-//  receive an error (EResult_AccountLogonDenied)
+//
+//	receive an error (EResult_AccountLogonDenied)
+//
 // and Steam will send you an authcode. Then you have to login again, this time with the authcode.
 // Shortly after logging in, you'll receive a MachineAuthUpdateEvent with a hash which allows
 // you to login without using an authcode in the future.
@@ -110,7 +112,9 @@ func (a *Auth) handleLogOnResponse(packet *protocol.Packet) {
 	if result == steamlang.EResult_OK {
 		atomic.StoreInt32(&a.client.sessionId, msg.Header.Proto.GetClientSessionid())
 		atomic.StoreUint64(&a.client.steamId, msg.Header.Proto.GetSteamid())
-		a.client.Web.webLoginKey = *body.WebapiAuthenticateUserNonce
+		if body.WebapiAuthenticateUserNonce != nil {
+			a.client.Web.webLoginKey = *body.WebapiAuthenticateUserNonce
+		}
 
 		go a.client.heartbeatLoop(time.Duration(body.GetOutOfGameHeartbeatSeconds()))
 
